@@ -1,10 +1,14 @@
 # Changelog
 
+## 1.0.1 (2026-10-05): Fix the source path in the previous entry
+- Changed: reworded the skill-creator template source in the 1.0.0 entry to name the skill instead of a bare file path, so the validator no longer reads it as a missing local file
+- Reason: validate_skill.py reported a CHANGELOG link to a missing skill-creator template file
+
 ## 1.0.0 (2026-10-05): Version control and versioning instructions
 - Added: "Version control" and "Versioning" sections in `references/updating-skill.md`; every version is a git commit and an annotated tag `v<MAJOR.MINOR.PATCH>` derived from the newest `CHANGELOG.md` heading
 - Changed: update steps and the changelog format now commit and tag each version; semantic versioning starts at 1.0.0 (entries below are date-only history)
 - Reason: project rollout of git tracking with version tags, matching skill-creator 2.0.0
-- Sources: skill-creator `templates/updating-skill.md` (Version control, Versioning), read 2026-10-05
+- Sources: skill-creator skill, Version control and Versioning template sections, read 2026-10-05
 
 ## 2026-10-04 - Missing/stale identifier rule (HOOK-14) for undefined-request bugs
 - Added: rule `HOOK-14` (a request path, cache key, `href` or required id built from a value that can be missing, producing a literal `undefined`/`null` request, and the stale async component that surfaces it).
