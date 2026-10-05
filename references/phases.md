@@ -1,0 +1,96 @@
+# Phases in detail
+
+The short version is in SKILL.md; the enforcement (files, gates) is in harness.md. This file is the how-to for each phase. FOCUSED mode runs the same phases, limited to the categories mapped in `00-scope.md`.
+
+## Contents
+1. Research
+2. Plan
+3. Approval
+4. Implement
+5. Verify
+6. Key design rules (quick reference)
+
+## 1. Research
+
+**1a. Design language** → `01-design.md`. Find the project's DESIGN.md (any casing or folder; in a monorepo, the closest one to the page) and read all of it plus what it links to. Build the digest by topic with section references, list Gaps, list conflicts (design-md.md). Map each rule to its code name (CSS var, Tailwind class, primitive). Sample 2–3 of the app's best pages to see how the language is applied. Only these tokens and primitives may be used later.
+
+**1b. Surface** → `02-inventory.md`. Trace from the route entry through the render tree, everything it opens (dialogs, sheets, menus, toasts, confirms), the data it reads (down to the query/API) and writes (down to the handler), shared state, and styles (static-audit.md §2). For > ~15 files, read groups with read-only subagents that return findings in the ledger format; you still own the ledger.
+
+**1c. The job.** List what users come here to do, in priority order, and name the single primary action. This list, not the current DOM order or database schema, decides the visual hierarchy and structure. For new features: define the mental model first (Sweller/Miller 3–4 chunks) before touching code. If no primary action can be named, that's the first finding (HIE-01).
+
+**1d. Static audit** → `03-findings.md`. Read every inventory file fully (or inspect the proposed new feature specs/files) and run the per-file pass, then the cross-file passes, then the grep recipes (static-audit.md). Check DESIGN.md rules first (each violation cites the rule as `DM-n`), then evaluate **every rule in the catalog in strict sequential order from LAY-01 to THM-03**. For new feature UI implementations: verify that the proposed design violates zero rules from the catalog before implementation starts. Every single rule in scope must be verified against code. Fill the mutation audit block for every write (mutations-forms.md §4), the hook audit for every component (react-hooks.md §6), the scroll containment check (scroll-containment.md), the human design pass (human-design-theory.md), and the accessibility checklist for all interactive controls, forms, and announcements (accessibility.md §9).
+
+**1e. Runtime evidence (optional).** If the app runs, `scripts/ui_audit.mjs` gives overflow/wrapping at many widths, layout shift, console errors, loading and pending-button behaviour. Pass the project's breakpoints and minimums (`--widths`, `--min-font`, `--min-target`). Add confirmed issues to the ledger; never close a category because the script found nothing. If the app can't run, say so.
+
+**1f. Falsify and complete coverage ledger.** Re-open each finding and try to prove it wrong (harness.md §3). FULL: build `04-coverage.md` detailing **every single rule ID in exact sequential order** (`LAY-01` through `THM-03`) without omitting, skipping, or jumping IDs, recording each as either a finding ID (`VIOLATION`), concrete line-referenced code proof (`PASS`), or explicit justified `N/A`. Verify Gate G1 passing conditions before writing `PLAN.md`.
+
+## 2. Plan
+
+Write `PLAN.md` from plan-template.md. It must have:
+- the mode, the verbatim request, the finding counts
+- DESIGN.md digest summary, gaps with the defaults used, conflicts as questions
+- findings summarized by category with IDs (evidence stays in the ledger)
+- declutter table for every visible element (if redesigning) or cognitive chunking architecture (if designing a new UI feature)
+- wireframes at phone, tablet and desktop (the project's breakpoints if defined) and each dialog on phone and desktop
+- layout mechanics per region (grid/flex, container vs media query, what collapses when)
+- copy table, consistency table, pagination contract (if any), loading/pending table (with matching skeletons mirroring final UI - never reusing legacy skeletons), mutations table
+- proposed new tokens/shared components/DESIGN.md changes (not done yet)
+- what won't change
+- slices, each listing the finding IDs it closes and its "done when" check; a Deferred list with reasons
+
+Keep scope honest: a declutter isn't permission to rebuild data flow. Backend changes are listed with files, params, response shape and all callers. Then Gate G2.
+
+## 3. Approval
+
+Present a short summary: mode, the top findings, the wireframes, the declutter decisions, copy changes, backend changes, the slices. Ask Approve / Change / Reject (use AskUserQuestion or ExitPlanMode in Claude Code; otherwise plain text). On "change", update the plan and ask again. Record the approval quote in `PLAN.md`. If the user said up front "don't wait", record that quote instead, but still write the plan first. Then Gate G3.
+
+## 4. Implement
+
+Typical slice order: structure → hierarchy & spacing → shared pieces (Spinner, Button `loading`, Skeleton, Pagination, EmptyState) → pagination backend + callers → pagination URL state + UI → skeletons & pending buttons (redesign skeletons to mirror the new UI; replace any legacy skeletons) → dialogs → mutations, forms & errors (with field labels & `aria-describedby`) → hooks → accessibility & keyboard (focus rings, accessible names, live regions, `scroll-margin`) → human cognitive & emotional experience (chunking, progressive disclosure, recognition over recall, calm attention) → soulful finish (concentric radii, tactile depression, optical alignment, calm crossfades) → other states & copy → remaining fixes.
+
+Rules:
+- **Tokens and primitives only.** No new hex, no arbitrary `p-[13px]`, no new fonts; use the project's components and their variants (`cn()`/`cva` the way the codebase does).
+- **Preserve behaviour.** Keep handlers, props, data hooks, routes, test ids, accessible names. If a test selects by text you changed, update it and log it.
+- **Only fix ledger findings.** Something new turns up → add it to the ledger first (with evidence), then fix it if in scope; otherwise defer. In FOCUSED mode, out-of-scope items are never touched.
+- **One version of each pattern** - use the shared canonical component, don't restyle a one-off.
+- **Deviations**: small and sensible → do it and log it in `05-progress.md`; large (new structure, new dependency, another feature) → stop and ask.
+- **After each slice**: typecheck/lint the touched files, look at a phone and a desktop width if the app runs, set finding statuses to `fixed`, log the slice with command output. Then next slice. After all slices, Gate G4.
+
+## 5. Verify
+
+Produce `06-verify.md`:
+1. **Build checks** run now - typecheck, lint, tests from `package.json`. Paste results. Name pre-existing failures.
+2. **Per finding**: how it's verified - re-read the changed code (quote the new line), command output, or screenshot. A finding without a verification line is still open.
+3. **DESIGN.md compliance**: each digest rule → followed / n.a. / broken (fix or approved exception). Grep the diff for raw hex, arbitrary values (`-[`), new font names.
+4. **Responsive**: if the app runs, re-run `ui_audit.mjs` with the same options: zero page overflow, no wrapped short labels, no undersized targets, CLS ≤ 0.1, no new console errors; compare with before. Otherwise, re-read the layout code against RSP rules at each breakpoint.
+5. **Dialogs**: each one at phone and desktop - focus in, Esc closes, internal scroll, footer reachable.
+6. **States**: empty, loading, error, pending and permission branches exist and match the plan (force them in the running app where possible).
+7. **Pagination** (if in scope): page 2 and back; filter resets page; `?page=9999`; page size above the max is clamped; bar fits at 320px.
+8. **Checklists**: anti-slop, ux-copy, loading-states, consistency, accessibility (accessibility.md §9), and soulful design checklists (soulful-design.md §5) - any "yes" gets fixed, unless DESIGN.md asks for it.
+9. **Fresh eyes** (large runs): a subagent reads only PLAN.md, 03-findings.md and the diff, and reports findings marked fixed that the diff doesn't fix.
+
+Then Gate G5 and the final report.
+
+## 6. Key design rules (quick reference)
+
+Defaults; DESIGN.md wins where it says otherwise.
+- **Hierarchy with soul & craft**: Spend boldness in one focal anchor (North Star); quiet the secondary before enlarging the primary (HIE-01, HIE-09). Eliminate competing eyebrow badges and icon clutter (HIE-10). Use a modular type scale with optical leading (HIE-11). Build depth through surface luminance tiers and hairline borders, not muddy drop shadow soup (HIE-12). Exactly one primary action per view (HIE-02).
+- **Proximity carries meaning**: inside group < between groups < between sections. Never one uniform gap.
+- **Not everything is a card**; never cards in cards.
+- **No holes**: auto-fit/minmax grids, max widths on wide screens, text ≤ ~75ch.
+- **Fluid, not two sizes**: rem-based `clamp()` (max ≤ 2.5× min); media queries for the page, container queries for components.
+- **Short text never wraps awkwardly**: `whitespace-nowrap` on buttons/tabs/badges/headers, truncation + title for long values, `min-w-0` on flex/grid text children, `text-wrap: balance` on headings.
+- **Mobile touch & viewport ergonomics**: Sticky bottom bars and sheets include `env(safe-area-inset-bottom)` padding (`RSP-14`); interactive targets use `touch-action: manipulation` (`RSP-15`); scrollable drawers/panels contain overscroll (`DLG-10`).
+- **Dialogs are responsive**: `dvh` max height, internal scroll, sticky footer, sheet or full-screen on phones.
+- **Lists paginated on the server**, previous data kept while loading, one shared pagination bar.
+- **Every data region has a matching skeleton** (redesigned in lockstep with any layout changes; never reuse legacy skeletons); every action button shows a round spinner, is disabled and keeps its size while pending.
+- **Actions are deduplicated**: exactly one canonical action button per task on screen (HIE-08); never duplicate submit buttons at top and bottom of a short card or form.
+- **Inputs respect user autonomy**: never block paste (`FRM-15`), ensure checkboxes/radios share unified hit targets (`FRM-16`), avoid mobile autoFocus disruptions (`FRM-17`), and maintain scroll scroller bounds without phantom leaks (`LAY-11`, `LAY-12`).
+- **Shared components over duplicate forms**: unify create and edit forms across pages into a single polymorphic component sharing one validation schema (CON-06, FRM-14).
+- **Every mutation**: pending, error shown, success feedback, fresh data after, safe destructive flow.
+- **Micro-interactions provide purposeful feedback**: buttons react on press within 100ms (`active:scale-[0.98]`), transitions use composited properties only (`transform`, `opacity`) under 250ms, and all motion respects `motion-reduce` (motion.md).
+- **Human cognitive & emotional experience (HUM-01..HUM-08)**: Chunk complex screens into 3–5 items maximum (Sweller/Miller); bridge Gulf of Execution with visible signifiers and natural mapping (Norman); bridge Gulf of Evaluation with instant <100ms perceptible feedback; honor Gestalt proximity (labels close to fields, far from neighbors); eliminate hidden modal state traps (Raskin); prioritize recognition over recall with autocomplete and summaries (Nielsen); keep routine telemetry in calm periphery (Weiser); provide affirming completion summaries and compassionate error recovery (Kahneman).
+- **Soulful craft & tactile finish**: Active press depression (`active:scale-[0.98]`) on all controls within 100ms (SOUL-01); concentric nested corner radii R_inner = R_outer - P (SOUL-02); optical alignment for asymmetric icons and badges (SOUL-03); state continuity with 1:1 skeleton twins and calm crossfades without CLS (SOUL-04); depth through tonal surface luminance and crisp hairlines rather than muddy shadow soup (SOUL-06); unpretentious, dignified human voice (SOUL-08).
+- **Accessibility is structural (WCAG 2.2 AA)**: Native HTML controls over div hacks (A11Y-01); all icon-only buttons have accessible names (A11Y-02); visible focus rings with ≥ 3:1 contrast against neighbors (A11Y-03); focus not obscured by sticky bars (A11Y-12); targets ≥ 24×24px (44×44 touch) (A11Y-05); form inputs linked with `htmlFor` and `aria-describedby` (FRM-01, A11Y-18); color never the sole status signal (A11Y-06).
+- **Identifiers used before they exist (HOOK-14)**: never build a request path, cache key, `href` or required id from a value that can be `undefined`/`null` (a URL like `/api/x/undefined` is the tell); guard the boundary and treat the literal `'undefined'`/`'null'` as absent, and gate an asynchronously loaded component on the key it was loaded for (`loadedKey === currentKey`) so it never mounts against a changed prop.
+- **Copy says what happens**: verb + object buttons, cause + fix errors, what + action empty states.
