@@ -35,6 +35,7 @@ For each pattern with more than one variant:
 1. If DESIGN.md defines it → that's canonical.
 2. Else if a shared primitive exists (`components/ui/*`) → canonical is the primitive used properly.
 3. Else → the variant used most on the app's best pages.
+4. If a pattern changes and a shared primitive (`components/ui/*`) or a better existing usage already implements it, reuse/extend that canonical version instead of restyling a one-off (CON-07); cite it by file:line.
 
 Record it in the plan's consistency table: pattern → canonical → where it's defined → variants found (file:line) → action.
 
@@ -71,6 +72,7 @@ A common source of drift is copy-pasting an entire form between a "Create" page 
 
 - [ ] Each pattern in the surface has exactly one variant, matching the canonical version.
 - [ ] Shared components used instead of one-off styling.
+- [ ] Changed patterns reuse the shared primitive or the best existing usage (CON-07), not a one-off restyle.
 - [ ] Repeated forms and components across routes/dialogs extracted into a unified single source of truth (CON-06, FRM-14).
 - [ ] Dates/numbers/currency formatted through one helper.
 - [ ] Terminology consistent with DESIGN.md / the app.

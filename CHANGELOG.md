@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.1.0 (2026-10-05): AI UI slop patterns (fonts, placeholder people, generic templates), purposeful motion, and cross-app consistency checks
+- Added:
+  - Rule `SLOP-06`: typography slop (single font default e.g. Inter without deliberate pairing or modular rhythm)
+  - Rule `SLOP-07`: AI/placeholder people as content (generated avatars, anime/3D mascots, stock faces; missing/placeholder alt)
+  - Rule `CON-07`: reference existing best-in-class usage before reinventing (patterns must reuse/extend canonical shared primitives or best existing usage instead of one-off restyling)
+- Changed:
+  - `SLOP-03`: extended to explicitly forbid generic SaaS page templates (hero → features grid → social-proof stats → testimonials → FAQ)
+  - `MOT-03`: extended to forbid bounce/fade animations applied to every hover and scroll entry with no functional intent
+  - `references/anti-slop.md`: documented typography and people/media slop sections
+  - `references/motion.md`: added non-functional hover/scroll bounce to banned motion tells and checklist
+  - `references/consistency.md`: added canonical cross-app usage step and CON-07 checklist item
+  - `references/static-audit.md`: added grep recipes for SLOP-06, SLOP-07, CON-07
+  - `references/phases.md` §5 & `references/harness.md` §5: formalized closed-loop re-audit against SLOP and MOT rules before G5 passes
+- Reason: user requested researching latest design systems (2025/2026), AI slop patterns, and cross-app UI consistency
+- Sources: Hallmark guide (rohitraj.tech), SmoothUI "AI Design Slop" (smoothui.dev), vibecodekit AI-slop community test, read 2026-10-05
+
 ## 1.0.1 (2026-10-05): Fix the source path in the previous entry
 - Changed: reworded the skill-creator template source in the 1.0.0 entry to name the skill instead of a bare file path, so the validator no longer reads it as a missing local file
 - Reason: validate_skill.py reported a CHANGELOG link to a missing skill-creator template file

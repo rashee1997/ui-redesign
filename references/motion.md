@@ -174,6 +174,7 @@ Under **WCAG 2.2 Success Criterion 2.3.3 (Animation from Interactions)**:
 - ✘ Wobbly spinners or spinning wrappers that aren't centered.
 - ✘ Elastic bouncy buttons that jiggle after clicking.
 - ✘ Continuous looping animations (pulsing badges, glowing borders) that distract from content.
+- ✘ Bounce/fade animations applied to every hover and scroll entry with no functional intent (motion not tied to a user action).
 
 ### Motion audit checklist
 - [ ] Every interactive control (button, tab, menu item) provides instant active/press feedback within 100ms.
@@ -182,3 +183,4 @@ Under **WCAG 2.2 Success Criterion 2.3.3 (Animation from Interactions)**:
 - [ ] No `transition: all` on containers with layout dimensions.
 - [ ] Popovers and dropdowns animate from their trigger attachment point (`transform-origin`).
 - [ ] All animated transitions include `motion-reduce:transition-none` or equivalent reduced-motion fallback.
+- [ ] No uniform bounce/fade on every hover and scroll with no functional intent (MOT-03).

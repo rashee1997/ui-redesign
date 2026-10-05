@@ -215,14 +215,16 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 ## SLOP - Visual slop → anti-slop.md
 - SLOP-01 Values outside tokens (hex, arbitrary sizes, new fonts)
 - SLOP-02 Decorative gradients, glows, colored left borders, glass effects
-- SLOP-03 Template structures (icon-card rows, stat banners, eyebrow labels, badge above title)
+- SLOP-03 Template structures (icon-card rows, stat banners, eyebrow labels, badge above title, the generic SaaS page template: hero → features grid → social-proof stats → testimonials → FAQ)
 - SLOP-04 More than one place competing for boldness
 - SLOP-05 Emoji as icons; mixed icon sets; icons on every label
+- SLOP-06 Typography slop: defaulting to one font (e.g. Inter) with no deliberate type pairing/hierarchy, or one type scale with no modular rhythm
+- SLOP-07 AI/placeholder people as content: generated avatars (e.g. dicebear/multiavatar), anime/3D mascots, stock faces; content images lacking a real or meaningful `alt`
 
 ## MOT - Motion & micro-interactions → motion.md
 - MOT-01 No `prefers-reduced-motion` handling
 - MOT-02 `transition: all`; animating layout properties (width/height/top/left)
-- MOT-03 Same entrance animation on every section; hover lift on non-interactive cards
+- MOT-03 Same entrance animation on every section; hover lift on non-interactive cards; bounce/fade animations on every hover and scroll entry with no functional intent
 - MOT-04 Feedback animations over ~200–300ms; bounce/elastic easing
 - MOT-05 Wrong `transform-origin` (popovers growing from the wrong corner, spinner wobble)
 - MOT-06 Interactive elements lack micro-interaction feedback on press/active, hover, or focus-visible (dead-feeling controls)

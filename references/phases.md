@@ -66,7 +66,7 @@ Produce `06-verify.md`:
 5. **Dialogs**: each one at phone and desktop - focus in, Esc closes, internal scroll, footer reachable.
 6. **States**: empty, loading, error, pending and permission branches exist and match the plan (force them in the running app where possible).
 7. **Pagination** (if in scope): page 2 and back; filter resets page; `?page=9999`; page size above the max is clamped; bar fits at 320px.
-8. **Checklists**: anti-slop, ux-copy, loading-states, consistency, accessibility (accessibility.md §9), and soulful design checklists (soulful-design.md §5) - any "yes" gets fixed, unless DESIGN.md asks for it.
+8. **Checklists**: anti-slop, ux-copy, loading-states, consistency, accessibility (accessibility.md §9), and soulful design checklists (soulful-design.md §5) - any "yes" gets fixed, unless DESIGN.md asks for it. Re-audit every changed surface against the SLOP and MOT rules its slices touched (a loop, not a one-shot pass): any regression is fixed and re-verified before G5.
 9. **Fresh eyes** (large runs): a subagent reads only PLAN.md, 03-findings.md and the diff, and reports findings marked fixed that the diff doesn't fix.
 
 Then Gate G5 and the final report.

@@ -123,6 +123,7 @@ If you catch yourself thinking one of these, stop and do the step.
 | "Typecheck probably passes" | Run it in this message and paste the result. |
 | "Should work now" / "Looks good" | Evidence before claims. Say what you ran and what it returned. |
 | "The id is always there by the time the effect runs" | It is not: a URL change or a stale async component renders the effect with `undefined` first (a request to `…/undefined`). Guard the id and gate the component on the key it loaded for (HOOK-14). |
+| "The checklists passed once, so it's done" | The audit is a loop, not a one-shot pass: re-audit each changed surface against the SLOP and MOT rules its slices touched and fix any regression before G5. |
 
 ## 6. Context resets and long runs
 

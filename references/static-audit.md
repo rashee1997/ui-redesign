@@ -162,7 +162,9 @@ rg -n "\.del\(|invalidate|bump|version.*cache" $P                 # cache invali
 
 # Layout / slop
 rg -n "h-screen|100vh|w-\[\d|min-w-\[\d|h-\[\d" $P
-rg -n "#[0-9a-fA-F]{3,8}\b|-\[[^\]]+\]" $P                              # raw values
+rg -n "#[0-9a-fA-F]{3,8}\b|-\[[^\]]+\]" $P                              # raw values (SLOP-01)
+rg -n "font-family|Inter\b|sans-serif\b" $P                              # single/default font, no pairing (SLOP-06)
+rg -n "dicebear|multiavatar|avataaars|unsplash|\bstock\b|placeholder" $P # AI/placeholder people as content (SLOP-07)
 rg -n "bg-gradient|from-(purple|violet|indigo)|shadow-\w+/\d+|uppercase tracking" $P
 rg -n "key=\{(i|index|idx)\}" $P
 rg -n "toLocaleDateString|toFixed\(|new Date\(.*\)\.to" $P
@@ -191,9 +193,11 @@ rg -n "duration-\[?[3-9]\d{2,}\]?" $P                                   # sluggi
 rg -n "<(button|Button)" $P | rg -v "active:"                           # missing press micro-feedback (MOT-06)
 rg -n "(animate-|transition)" $P | rg -v "motion-reduce:"               # missing reduced motion fallback (MOT-01)
 
-# Duplicate actions & shared form sprawl (HIE-08, CON-06, FRM-14)
-rg -n "type=[\"']submit[\"']" $P                                        # multiple submit buttons on same view?
-rg -n "useForm\b|z\.object\(" $P                                         # duplicate form definitions across routes?
+# Duplicate actions & shared form sprawl (HIE-08, CON-06, CON-07)
+rg -n "type=[\"']submit[\"']" $P                                        # multiple submit buttons on same view? (HIE-08)
+rg -n "useForm\b|z\.object\(" $P                                         # duplicate form definitions across routes? (CON-06, CON-07)
+# Shared-primitive reuse vs one-off variants (CON-01, CON-02, CON-07)
+rg -n "components/ui/" $P                                                # shared primitives; one-off variants are candidates
 
 # Hierarchy & depth (HIE-09..HIE-12)
 rg -n "shadow-(lg|xl|2xl)" $P                                                # shadow soup instead of surface luminance (HIE-12)

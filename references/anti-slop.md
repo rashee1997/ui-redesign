@@ -33,6 +33,7 @@
 - Monospace for normal data labels.
 - Too many sizes/weights on one screen (more than ~4 sizes, ~2–3 weights).
 - A new font that isn't in DESIGN.md.
+- Defaults to a single font (e.g. Inter) with no deliberate type pairing/hierarchy, or one type scale with no modular rhythm (SLOP-06).
 
 ## Motion tells
 - The same fade-and-slide-up on every section as it scrolls in.
@@ -47,6 +48,9 @@
 - An icon before every label, heading and list item.
 - Icons scaled far above their design size (chunky).
 - Mixed icon sets.
+
+## People & media slop
+- AI/placeholder people used as real content: generated avatars (e.g. `dicebear`/`multiavatar`), anime/3D mascots, stock faces; content `<img>` with missing or placeholder `alt` (SLOP-07).
 
 ## What to do instead
 - Take the density and personality from DESIGN.md's Overview and the good existing pages.
