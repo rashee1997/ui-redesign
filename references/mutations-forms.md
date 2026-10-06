@@ -47,8 +47,9 @@ React 19: `useOptimistic` inside a transition/action rolls back automatically wh
 
 **Server actions (Next.js)**: return a typed result (`{ ok: true, data } | { ok: false, fieldErrors, formError }`) rather than throwing for expected failures; read it with `useActionState`; pending from `useFormStatus` (inside the form) or the action state's `isPending`; call `revalidatePath`/`revalidateTag` in the action after a successful write; validate input on the server with the same schema as the client.
 
-**Consistency (MUT-11)**: one way to call the API in the surface (the project's hook/client), one toast helper, one error-to-message mapper.
+**Complete child query cache invalidation (MUT-13)**: When a mutation alters an entity's lifecycle, versions, or status, client-side cache invalidation (`invalidateQueries`) must invalidate all associated child and telemetry queries (audit logs, approval histories, activity feeds, related counts), not just the primary entity query.
 
+**Consistency (MUT-11)**: one way to call the API in the surface (the project's hook/client), one toast helper, one error-to-message mapper.
 ## 2. Forms and validation
 
 **Fields**
@@ -74,11 +75,11 @@ React 19: `useOptimistic` inside a transition/action rolls back automatically wh
 - Keep all input on error. Don't reset until success.
 - Long or multi-step forms: warn on navigation/close with unsaved changes (router guard / `beforeunload` / dialog `onOpenChange` interception). Consider draft persistence for very long forms.
 
-**Submission & actions (HIE-08, FRM-09)**
+**Submission & actions (HIE-08, FRM-09, FRM-18)**
 - Enter submits single-line forms; ⌘/Ctrl+Enter in textareas where that's the convention. Submit button is `type="submit"`; other buttons are `type="button"` (a common bug: a "Cancel" or icon button inside a form submits it).
+- **Explicit `type="button"` on non-submitting form controls (FRM-18)**: Every `<button>` or `<Button>` nested inside a `<form>` that is NOT the intended primary submit action MUST explicitly specify `type="button"`. Utility buttons (file pickers, preview toggles, clear buttons, collapsible triggers, tab switchers) that omit `type` default to `type="submit"` in HTML5. If a subcomponent mounts early in the form, pressing Enter in ANY text input activates that button and fires an accidental premature submission before the user completes subsequent fields. In complex modal forms, explicitly guard against accidental Enter submission on text inputs (`onKeyDown={(e) => { if (e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'TEXTAREA') e.preventDefault(); }}`).
 - **Single submit action (HIE-08)**: Exactly one submit button per form. Never duplicate "Save" at top and bottom of a short form. On long multi-screen forms, use a scroll-aware sticky footer bar that activates only when the form action scrolls out of view.
 - Buttons provide instant active/press micro-feedback (`active:scale-[0.98]`, motion.md §2A).
-- Required/optional marked one consistent way (mark the minority).
 
 **Controlled inputs** (FRM-13): `value` always paired with `onChange` (or use `defaultValue`); no heavy work per keystroke; debounce search.
 

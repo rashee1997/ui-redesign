@@ -105,6 +105,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - PAG-11 Summary aggregate uses different filters than the list it summarizes (tombstone/soft-deleted rows counted in one, excluded in the other)
 - PAG-12 Entity status/enum value missing from a breakdown split, count, or filter option (parts don't cover all states)
 - PAG-13 Breakdown parts don't sum to the stated total (no "other" bucket for the remainder)
+- PAG-14 Soft-delete / archive queries retain active-only filters (e.g. is_current, is_active, archived_at null), causing soft-deleted or obsolete records to return zero rows and vanish from the archive view
 
 ## MUT - Mutations → mutations-forms.md §1
 - MUT-01 Double submit possible (no pending guard on button and handler)
@@ -119,6 +120,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - MUT-10 Request not cancelled/ignored when the component unmounts or inputs change (race)
 - MUT-11 Same mutation implemented differently in different places (direct fetch here, hook there)
 - MUT-12 Server-side cache holding derived counts/summaries not invalidated on mutation (client queries refreshed, cached aggregate stays stale)
+- MUT-13 Cache invalidation on mutation misses child/telemetry queries (primary entity query refreshed, but audit logs, approval histories, activity feeds, or related sub-resources stay stale)
 
 ## FRM - Forms & validation → mutations-forms.md §2
 - FRM-01 Field without a visible label (placeholder used as label); label not linked (`htmlFor`)
@@ -138,6 +140,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - FRM-15 Paste blocked on input (`onPaste` with `preventDefault`) on verification codes, passwords, or IDs
 - FRM-16 Checkbox or radio control and its label render separate disjoint hit targets with dead zone in between
 - FRM-17 `autoFocus` applied unconditionally on mobile / initial load, causing viewport shift and keyboard layout jump
+- FRM-18 Non-submitting buttons inside forms lack explicit `type="button"` (utility buttons like file pickers, preview toggles, clear buttons default to `type="submit"`, causing premature submission on click or input Enter keypress; multi-field modal forms lack Enter key suppression on inputs)
 
 ## ERR - Error handling → mutations-forms.md §3
 - ERR-01 Raw error messages/codes/stack shown to users
@@ -200,6 +203,8 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - CON-04 Terminology differs ("delete"/"remove", "workspace"/"project")
 - CON-05 Same action behaves differently (confirm here, not there; toast here, inline there)
 - CON-06 Duplicate component or form implementations across routes/pages instead of a shared component (e.g. copy-pasted create vs edit forms, duplicate modal vs page form implementations causing schema/behavior drift)
+- CON-07 Patterns reinvented instead of reusing or extending canonical shared primitives or best existing usage
+- CON-08 Static/hardcoded item props across workbench views (orchestrating view provides a selector/picker, but child components remain bound to root/default/current items like items[0] or currentVersion instead of dynamically reacting to the active selected variant)
 
 ## CPY - Copy → ux-copy.md
 - CPY-01 Buttons without verb + object ("Submit", "OK", "Yes")

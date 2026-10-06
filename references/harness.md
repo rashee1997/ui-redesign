@@ -124,6 +124,8 @@ If you catch yourself thinking one of these, stop and do the step.
 | "Should work now" / "Looks good" | Evidence before claims. Say what you ran and what it returned. |
 | "The id is always there by the time the effect runs" | It is not: a URL change or a stale async component renders the effect with `undefined` first (a request to `…/undefined`). Guard the id and gate the component on the key it loaded for (HOOK-14). |
 | "The checklists passed once, so it's done" | The audit is a loop, not a one-shot pass: re-audit each changed surface against the SLOP and MOT rules its slices touched and fix any regression before G5. |
+| "The child component can just read the root/default item" | It cannot: when the user selects a revision/item in a picker, hardcoded props leave headers, badges, facts, and approval panels frozen on the old item (CON-08). |
+| "Buttons without type default to standard buttons" | In HTML forms, `<button>` without type defaults to `type="submit"`, causing utility buttons (file pickers, preview toggles) to fire premature form submissions on click or input Enter (FRM-18). |
 
 ## 6. Context resets and long runs
 

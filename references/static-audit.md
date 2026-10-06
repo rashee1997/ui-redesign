@@ -207,6 +207,12 @@ rg -n "text-\[\d+px\]" $P                                                    # a
 rg -n "shadow-(lg|xl|2xl)" $P                                                # heavy drop shadows instead of hairline border + luminance (SOUL-06)
 rg -n "rounded-[a-z0-9]+" $P                                                 # check nested radii for concentricity: R_inner = R_outer - P (SOUL-02)
 rg -n "<(Play|Chevron|Arrow)" $P                                             # check optical alignment compensation on directional icons (SOUL-03)
+
+# Dynamic item binding & form button safety (CON-08, FRM-18, PAG-14, MUT-13)
+rg -n "<(button|Button)[^>]*" $P | rg -v "type="                            # button inside form without explicit type="button"? (FRM-18)
+rg -n "items\[0\]|versions\[0\]|approvals\[0\]|currentVersion" $P           # static/hardcoded item props in master-detail/workbench? (CON-08)
+rg -n "includeObsolete|is_obsolete|status.*obsolete" $P                     # archive query: does it incorrectly filter is_current/is_active? (PAG-14)
+rg -n "invalidateQueries" $P                                                # mutation invalidation: does it miss audit-logs or child telemetry? (MUT-13)
 ```
 
 If `rg` isn't installed, use `grep -rnE` with the same patterns.

@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.2.0 (2026-10-06): Dynamic workbench item binding, non-submitting form button safety, archive query filter parity, and complete child query invalidation
+- Added:
+  - Rule `CON-08`: Dynamic item binding across workbench views (orchestrating view provides a selector/picker, but child components remain bound to root/default/current items like items[0] or currentVersion instead of dynamically reacting to the active selected variant)
+  - Rule `FRM-18`: Explicit `type="button"` on non-submitting form controls (utility buttons like file pickers, preview toggles, clear buttons default to `type="submit"`, causing premature submission on click or input Enter keypress; multi-field modal forms lack Enter key suppression on inputs)
+  - Rule `PAG-14`: Soft-delete / archive queries retain active-only filters (e.g. `is_current: true`, `is_active: true`, `archived_at: null`), causing soft-deleted or obsolete records to return zero rows and vanish from the archive view
+  - Rule `MUT-13`: Cache invalidation on mutation misses child/telemetry queries (primary entity query refreshed, but audit logs, approval histories, activity feeds, or related sub-resources stay stale)
+- Changed:
+  - `references/rule-catalog.md`: appended `CON-08`, `FRM-18`, `PAG-14`, and `MUT-13`.
+  - `references/consistency.md`: documented dynamic item binding across workbench views and added checklist item.
+  - `references/mutations-forms.md`: documented complete child query cache invalidation (MUT-13) and explicit `type="button"` / Enter suppression on form controls (FRM-18).
+  - `references/pagination.md`: documented soft-delete and archive query filter parity (PAG-14) and added checklist item.
+  - `references/static-audit.md`: added grep candidate finders for CON-08, FRM-18, PAG-14, and MUT-13.
+  - `references/phases.md` §6: added quick-reference bullets for dynamic item binding, explicit button types, archive query filter parity, and complete child invalidation.
+  - `references/harness.md` §5: added red flags against hardcoded child item props and untyped buttons in forms.
+  - `references/plan-template.md`: added sample findings for CON-08, FRM-18, PAG-14, and MUT-13.
+- Reason: user requested updating the skill to audit and prevent these bug classes (hardcoded child props across workbenches, untyped buttons auto-submitting forms, soft-delete archive queries hiding obsolete records, and stale child telemetry).
+
 ## 1.1.0 (2026-10-05): AI UI slop patterns (fonts, placeholder people, generic templates), purposeful motion, and cross-app consistency checks
 - Added:
   - Rule `SLOP-06`: typography slop (single font default e.g. Inter without deliberate pairing or modular rhythm)

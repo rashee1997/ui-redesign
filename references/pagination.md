@@ -111,6 +111,12 @@ return { items, hasNextPage, nextCursor: hasNextPage && last ? encodeCursor({ cr
 ```
 Cursor = base64url of a small JSON with a version field; treat it as opaque on the client; reject malformed cursors with a 400.
 
+### Soft-delete and archive query filter parity (PAG-14)
+
+When endpoints support filtering or viewing soft-deleted, archived, or obsolete records (e.g. `include_obsolete=true`, `status='obsolete'`, or dedicated archive tabs):
+- **The problem**: The base SQL or ORM query retains active-only where-clauses (e.g. `where: { is_current: true }`, `where: { is_active: true }`, or `where: { archived_at: null }`). When an entity is soft-deleted, its active markers are cleared. Requiring active markers in an archive query causes all deleted records to return 0 rows. The record vanishes from both active and archive views!
+- **The fix**: When `include_obsolete` or `status === 'obsolete'` is requested, explicitly clear active-only filters from the query (`where: {}` rather than requiring `is_current: true`). Ensure soft-deleted records remain discoverable and restorable in archive tabs.
+
 ## 5. Frontend: data fetching and URL state
 
 - **Page state lives in the URL** (`?page=3&pageSize=20&sort=…&q=…`) so refresh, back button and shared links work. Next.js App Router: read `searchParams` in the server page, or `useSearchParams` + `router.replace`/`<Link>` on the client. Use the project's existing helper if it has one (nuqs, a `useQueryState`, etc.).
@@ -179,3 +185,4 @@ Copy: "Previous", "Next", "Rows per page", "Page 5 of 16", "21–40 of 312 invoi
 - [ ] One shared Pagination component used by every list in the surface.
 - [ ] Fixed-size page buttons, `aria-current`, `nav` with label, disabled ends, compact mode on phones, no wrap/overflow at 320px.
 - [ ] Out-of-range page and last-row delete handled.
+- [ ] Archive and soft-delete queries omit active-only filters (e.g. `is_current: true`, `is_active: true`), preventing obsolete records from returning zero rows and disappearing from archive views (PAG-14).

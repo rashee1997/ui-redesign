@@ -77,6 +77,7 @@ Legacy structure: <one line naming the current layout, e.g. "stacked cards with 
 ### Consistency & component sharing
 - [P2] 3 spinner kinds (Loader2, CSS ring, "Loading..." text) → one `Spinner`
 - [P1] CON-06 invoices/new/page.tsx:40 & invoices/[id]/edit/page.tsx:42 - separate copy-pasted create and edit forms → extract shared `<InvoiceForm mode="create" | "edit" />` (FRM-14)
+- [P1] CON-08 document-view.tsx:285 - version selector switches canvas but header and facts panel remain statically bound to currentVersion → dynamically bind activeVersion across all child panels and workflows
 ### Motion & micro-interactions
 - [P2] MOT-06 invoice-form.tsx:110 - buttons lack active/press micro-feedback → add `active:scale-[0.98]` and 100ms transition
 - [P2] MOT-07 filter-bar.tsx:65 - collapsible panel snaps open abruptly → smooth CSS grid row transition (motion.md §2D)
@@ -96,6 +97,7 @@ Legacy structure: <one line naming the current layout, e.g. "stacked cards with 
 - [P2] SOUL-06 surface.tsx:32 - muddy drop shadow (shadow-xl) → replace with tonal luminance tier and crisp hairline border
 ### Pagination
 - [P1] server/invoices.ts:12 - query has no limit; page slices on the client → backend pagination
+- [P1] PAG-14 get-documents.ts:92 - archive query retains is_current: true filter, excluding all soft-deleted records → remove active-only filters from archive queries
 ### Loading & pending
 - [P2] app/invoices/page.tsx:3 - `if (isLoading) return null` → table skeleton
 - [P1] LDG-11 invoices-table.tsx:24 - legacy 3-column skeleton reused for new 5-column layout → redesign InvoiceTableSkeleton to match new table
@@ -107,6 +109,8 @@ Legacy structure: <one line naming the current layout, e.g. "stacked cards with 
 - F-015 [P1] FRM-15 auth-code.tsx:20 - `onPaste` blocks pasting verification code → remove `e.preventDefault()`
 - F-016 [P2] FRM-16 terms-checkbox.tsx:15 - checkbox and label have unclickable dead zone between them → wrap in unified `<label className="cursor-pointer">`
 - F-017 [P2] FRM-17 search-input.tsx:10 - unconditional `autoFocus` triggers abrupt mobile keyboard pop and screen zoom → restrict to desktop or user-intent click
+- F-018 [P1] FRM-18 file-preview.tsx:46 - preview toggle button inside form lacks type="button", causing accidental submit on click/Enter → add explicit type="button" and suppress input Enter submission
+- F-019 [P1] MUT-13 use-mutations.ts:75 - mutation invalidation refreshes parent document but omits audit-log query → add complete child telemetry invalidation
 - F-020 [P2] HOOK-03 customer-search.tsx:31 - fetch in effect without abort → out-of-order results
 ### Accessibility (A11Y)
 - [P1] A11Y-01 actions.tsx:14 - `<div onClick={onDelete}>` used as button → replace with native `<button type="button">`

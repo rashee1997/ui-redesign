@@ -59,6 +59,14 @@ A common source of drift is copy-pasting an entire form between a "Create" page 
      - Route containers (`/invoices/new/page.tsx`, `/invoices/[id]/edit/page.tsx`, `<InvoiceSheet>`) orchestrate data fetching and submit mutations, delegating form rendering to the shared component.
   4. **When NOT to share**: If two forms share less than ~50% of their fields, have distinct lifecycles, or serve different user personas, keep them separate rather than creating an unreadable tangle of `if (mode === ...)` conditions.
 
+### Dynamic item binding across workbench views (CON-08)
+
+When redesigning master-detail views, split workbenches, or entity pages with version/item switchers (e.g. revision selector, item picker, tabbed variants):
+- **The problem**: The orchestrating view introduces or preserves an item selector (e.g. version picker dropdown), and updates one primary surface (e.g. the canvas viewer), but child subcomponents (header strip, metadata fact panels, approvals/workflow panels, status chips, lifecycle steppers, download links) remain statically bound to a default or root item (`effectiveCurrentVersion`, `items[0]`, `document.approvals[0]`). The user selects a different version or item, but surrounding panels display stale, hardcoded data from the old item.
+- **The fix**:
+  1. Derive `activeItem` from the user's selection (`selectedId || defaultItem.id`), and pass `activeItem` to ALL child components (headers, facts, drawers, lifecycle calculators, action bars).
+  2. Resolve sub-resources dynamically for the active item (e.g. `getApprovalForItem(approvals, activeItem.id)`). If the active item has no sub-resource yet (e.g. a new draft revision without an approval chain), render the uninitiated state with an initiation CTA, never the previous item's sub-resource.
+  3. Update headings and status badges dynamically: if viewing an obsolete or superseded item, display "Obsolete revision" with strikethrough, not "Current revision" with an "Approved" badge.
 ## 4. Behaviour consistency (not just looks)
 
 - Same action, same result: delete always confirms (or always offers undo); Esc always closes; Enter always submits forms.
@@ -73,7 +81,8 @@ A common source of drift is copy-pasting an entire form between a "Create" page 
 - [ ] Each pattern in the surface has exactly one variant, matching the canonical version.
 - [ ] Shared components used instead of one-off styling.
 - [ ] Changed patterns reuse the shared primitive or the best existing usage (CON-07), not a one-off restyle.
-- [ ] Repeated forms and components across routes/dialogs extracted into a unified single source of truth (CON-06, FRM-14).
-- [ ] Dates/numbers/currency formatted through one helper.
-- [ ] Terminology consistent with DESIGN.md / the app.
-- [ ] Out-of-scope inconsistencies listed as follow-ups.
+ - [ ] Repeated forms and components across routes/dialogs extracted into a unified single source of truth (CON-06, FRM-14).
+- [ ] Entity/version selectors propagate active item state to all child panels, fact grids, headers, and workflows without hardcoded defaults (CON-08).
+ - [ ] Dates/numbers/currency formatted through one helper.
+ - [ ] Terminology consistent with DESIGN.md / the app.
+ - [ ] Out-of-scope inconsistencies listed as follow-ups.
