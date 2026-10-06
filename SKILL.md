@@ -59,8 +59,10 @@ Read only what the current step needs.
 | RSP, DLG - responsive, wrapping, dialogs, scroll containment | `responsive-fluid.md`, `scroll-containment.md` |
 | LDG, STA - loading, skeletons, pending buttons, states | `loading-states.md` |
 | PAG - lists, pagination | `pagination.md` |
+| TAB - tables, data grids | `tables-data-grids.md` |
 | MUT, FRM, ERR - mutations, forms, errors | `mutations-forms.md` |
-| HOOK - React hooks | `react-hooks.md` |
+| UPL - file uploads, drag-and-drop | `file-uploads.md` |
+| NOT - toasts, notifications, alerts | `notifications-toasts.md` |
 | A11Y - accessibility, keyboard, contrast, ARIA | `accessibility.md` |
 | CON - consistency | `consistency.md` |
 | SLOP, CPY - visual slop, copy | `anti-slop.md`, `ux-copy.md` |
@@ -74,7 +76,7 @@ Read only what the current step needs.
 ## Non-negotiables
 
 - **Scope is respected.** FOCUSED touches only the named problems; FULL leaves no catalog category or individual rule ID unchecked.
-- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage.md` must account for every rule ID individually in exact numerical sequence (`LAY-01` to `THM-03`, including `HUM-01` to `HUM-08`) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
+- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage.md` must account for every rule ID individually in exact numerical sequence (`LAY-01` to `THM-03`, including `TAB-01` to `TAB-07`, `UPL-01` to `UPL-06`, `NOT-01` to `NOT-05`, and `HUM-01` to `HUM-08`) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
 - **Every file in the surface is read in full** - child components, dialogs, hooks, and the API/server code behind lists and mutations.
 - **Every finding has a rule, quoted evidence, one fix, a severity and a status.** No finding without proof; no fix without a finding.
 - **Declutter before restructure.** A layout redesign decides Keep / Remove / Merge / Demote / Defer / Move for every visible element.

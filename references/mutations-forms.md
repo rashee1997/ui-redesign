@@ -89,6 +89,14 @@ React 19: `useOptimistic` inside a transition/action rolls back automatically wh
 - Share the Zod schema (`entitySchema`) and form hook (`useForm({ resolver: zodResolver(entitySchema), defaultValues: initialData ?? defaultValues })`).
 - Toggle button label ("Create [Entity]" vs "Save changes") and conditionally render edit-only audit/status fields based on `mode`.
 
+### Form input edge cases & interaction bugs
+- **Accidental number stepping on mouse wheel (FRM-19)**: Native `<input type="number">` elements increment/decrement their value when a user scrolls the page while the cursor hovers over the field. Suppress this with `onWheel={(e) => e.currentTarget.blur()}` or by employing controlled text inputs with numeric masking (`inputMode="numeric"`).
+- **Mobile virtual keyboard occlusion (FRM-20)**: Inputs positioned in the lower half of mobile screens are easily obscured when the virtual keyboard expands. On mobile touch viewports, wire input focus handlers to ensure visible clearance (`e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })`).
+- **Date picker UTC timezone day-shift (FRM-21)**: Date-only pickers (birth dates, expiry dates, issue dates) MUST store and transmit calendar dates as local date strings (`YYYY-MM-DD`). Never convert local calendar dates via `date.toISOString()`, which produces UTC midnight (`2026-10-06T00:00:00.000Z`) and silently shifts the date backwards by one full day (`2026-10-05`) in negative GMT timezones (e.g. Americas).
+- **Silent character limit truncation (FRM-22)**: Fields with `maxLength` restrictions MUST display a live character count counter (`{value.length}/{maxLength}`) and indicate when approaching the limit. Silently dropping typed characters without feedback leads users to believe their keyboard or browser froze.
+- **Password field visibility toggle (FRM-23)**: Password inputs MUST include an accessible show/hide toggle button with `type="button"`, an accessible label (`aria-label={showPassword ? "Hide password" : "Show password"}`), and appropriate `aria-pressed` or icon feedback.
+- **Multi-step wizard unsaved draft loss (FRM-24)**: Stepper or wizard forms spanning multiple screens MUST persist intermediate steps (in URL query parameters or `sessionStorage`) and attach a `beforeunload` warning when dirty, preventing page reloads or back navigation from wiping progress.
+
 ## 3. Error handling
 
 Map failures to what the user can do (ERR-03):
@@ -111,6 +119,8 @@ Rules:
 - Announce errors: `role="alert"` for blocking errors, `aria-live="polite"` for toasts/status (ERR-05).
 - Route-level: `error.tsx` / error boundary with a retry (`reset()`), local boundaries around independent widgets so one failure doesn't blank the page (STA-08).
 - `try { … } catch { }` with nothing in the catch, `.catch(() => {})`, and `catch (e) { console.error(e) }` with no UI are always findings unless a comment proves the failure is intentionally ignored.
+- **Session expiration data preservation (ERR-08)**: If a form submission fails due to an expired session (HTTP 401 Unauthorized), the client MUST NOT perform a hard redirect to `/login` that destroys entered form state. It MUST cache entered form inputs in session storage or open an in-place re-authentication modal, resuming submission upon successful login.
+- **Multi-tab authentication desync (ERR-09)**: The client must synchronize authentication state across tabs using `window.addEventListener('storage', ...)` or a `BroadcastChannel`. Logging out or switching roles in Tab A must promptly notify Tab B to lock sensitive inputs or prompt for refresh, avoiding unexpected crashes or permission errors.
 
 ## 4. Audit procedure for one mutation
 

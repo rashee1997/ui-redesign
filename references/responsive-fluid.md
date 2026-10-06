@@ -113,11 +113,19 @@ Dialog layout rules:
 - Width: `width: min(100% - 2rem, 32rem)` (size by content: confirm ~28rem, form ~32–40rem, complex ~48–56rem).
 - Height: `max-height: min(90dvh, 48rem)`; header and footer fixed, body scrolls (`overflow-y: auto`). Use `dvh`, not `vh` (mobile browser bars).
 - Footer actions: sticky at the bottom; on phones full-width stacked, primary last (closest to thumb) - or follow the project's existing order.
-- Accessibility: focus moves in on open, Tab stays inside, Esc closes, focus returns to the trigger, background inert, scroll lock without layout jump (`scrollbar-gutter: stable`).
+- Accessibility: focus moves in on open, Tab stays inside, Esc closes, focus returns to the trigger, background inert.
+- **Prevent modal scroll-lock layout shift (DLG-11)**: When a dialog or sheet opens and locks body scroll (`overflow: hidden` on `body`), removing the native vertical scrollbar causes the background page to lurch horizontally by 15px. Prevent this using `html { scrollbar-gutter: stable; }` or dynamic scrollbar-width compensation padding on `body`.
+- **Z-index layering & overlay containment (DLG-12)**: Maintain an explicit, unified z-index scale (e.g. sticky navigation `z-10` < dropdown/popover `z-30` < dialog modal `z-50` < toast alerts `z-[60]`). Avoid arbitrary `z-[9999]` hacks, and ensure popovers and submenus are not clipped by parent containers with `overflow: hidden` (render popovers via Radix/floating-ui portals).
+- **Tooltip hover traps & mobile access (DLG-13)**: Tooltips MUST NOT render directly beneath the cursor (blocking clicks on the trigger), MUST NOT dismiss immediately when moving pointer into interactive tooltip content, and MUST NOT be the only access to essential info on mobile devices (provide tap-to-inspect or inline help).
+- **Tooltip tautology (DLG-14)**: Never attach a tooltip that merely echoes the exact text of a visible button or link (e.g. a "Save" button with a tooltip saying "Save"). Tooltips are strictly reserved for explaining icon-only buttons, keyboard shortcuts, or truncated text.
 - Prevent scroll chaining: Dialog and sheet bodies, side panels, and scrolling drawers must set `overscroll-behavior: contain` (`overscroll-contain`) so scrolling inside does not chain to the document behind (`DLG-10`).
 - Forms in dialogs: don't close on backdrop click if there are unsaved changes; confirm discard (`DLG-06`).
 - Dialog body content follows the same wrapping and `min-w-0` rules.
 
+### Search, filter & combobox interaction rules
+- **Search query race conditions (NAV-06)**: When debouncing search or firing async queries on filter changes, abort in-flight requests (`abortController.abort()` or TanStack Query automatic cancellation). An earlier, slow query (e.g. "ca") resolving after a fast subsequent query (e.g. "car") must never overwrite the newer result set.
+- **Search input clear affordance (NAV-07)**: Every search input MUST provide an instant clear (`x`) button when a query is present. Clicking clear must wipe the input, reset search parameters, trigger re-fetch, and retain keyboard focus on the input.
+- **Combobox listbox scroll into view (NAV-08)**: When navigating a combobox, command palette, or autocomplete menu with ArrowUp/ArrowDown keys, the highlighted option (`aria-selected="true"`) MUST automatically scroll into the visible viewport of the listbox (`element.scrollIntoView({ block: 'nearest' })`).
 ## 7. Touch, viewport and safe-area details
 
 - Tap targets ≥ 24×24 CSS px (WCAG 2.5.8), or spaced so a 24px circle around each doesn't overlap another. Aim for 40–44px for primary touch controls.

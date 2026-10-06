@@ -53,7 +53,7 @@ Source: <path to the project's DESIGN.md + linked files> | none, derived from co
 Legacy structure: <one line naming the current layout, e.g. "stacked cards with a stat row on top">
 
 ## 5. Findings
-*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 21 catalog categories and every rule ID have been individually audited in 04-coverage.md (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed).*
+*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 25 catalog categories and every rule ID have been individually audited in 04-coverage.md (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed).*
 ### Breaks DESIGN.md rules
 - [P2] file:line - <what> - breaks <rule, §section> → <fix>
 ### Hierarchy & clutter
@@ -98,6 +98,27 @@ Legacy structure: <one line naming the current layout, e.g. "stacked cards with 
 ### Pagination
 - [P1] server/invoices.ts:12 - query has no limit; page slices on the client → backend pagination
 - [P1] PAG-14 get-documents.ts:92 - archive query retains is_current: true filter, excluding all soft-deleted records → remove active-only filters from archive queries
+### Tables & data grids (TAB)
+- [P2] TAB-01 documents-table.tsx:42 - Amount column header is left-aligned while currency cells are right-aligned → align header right with `text-right`
+- [P1] TAB-02 equipment-table.tsx:18 - sticky table header lacks background, letting scrolled rows bleed through text → add `bg-background border-b border-border`
+- [P1] TAB-03 user-table.tsx:30 - select-all checkbox ambiguously selects only current page without declaring scope or offering dataset selection → add scope label and dataset banner
+- [P2] TAB-04 invoice-table.tsx:88 - row Edit and Delete buttons hidden behind `group-hover:opacity-100`, unreachable on touch → replace with persistent kebab menu button
+- [P2] TAB-05 asset-table.tsx:15 - wide table scrolls horizontally with no shadow affordance or frozen key column → add scroll shadow cues and freeze Asset ID column (`sticky left-0`)
+- [P2] TAB-06 log-table.tsx:64 - UUIDs truncated with ellipsis without tooltip or inspection affordance → add tooltip and one-click copy button
+- [P2] TAB-07 sort-header.tsx:22 - sortable column lacks ascending/descending chevron when sorted → add explicit chevron indicator and `aria-sort`
+### File uploads & drag-and-drop (UPL)
+- [P0] UPL-01 document-uploader.tsx:35 - missing window `dragover`/`drop` `preventDefault`, so dropping file outside zone navigates tab away and erases form → add window drop containment effect
+- [P1] UPL-02 avatar-picker.tsx:50 - `<input type="file">` does not reset `e.target.value = ''`, so re-selecting same file fails to fire `onChange` → reset value after selection
+- [P1] UPL-03 certificate-preview.tsx:28 - `URL.createObjectURL` generated for preview without `URL.revokeObjectURL` cleanup on unmount → revoke URL in effect destructor
+- [P2] UPL-04 dropzone.tsx:14 - upload area gives no indication of accepted file formats or size limits → add upfront subtitle "PDF, PNG, JPG up to 25 MB"
+- [P1] UPL-05 batch-uploader.tsx:80 - single file error aborts entire 10-file upload batch without retry → isolate failed file with retry action and preserve successful uploads
+- [P2] UPL-06 large-upload.tsx:44 - 100 MB video upload shows indeterminate spinner without progress bar or cancel button → add percentage/byte progress and AbortController button
+### Toasts, notifications & alerts (NOT)
+- [P1] NOT-01 payment-form.tsx:90 - critical transaction error code auto-dismisses after 3 seconds → render as persistent inline `<Alert variant="destructive">`
+- [P2] NOT-02 undo-toast.tsx:25 - "Undo" toast auto-dismisses while user moves pointer toward it → pause timer on `:hover` and `:focus-within` with minimum 8s duration
+- [P2] NOT-03 bulk-delete.tsx:60 - deleting 15 items fires 15 separate toasts filling the screen → combine into single summary toast "15 items deleted"
+- [P2] NOT-04 notification-host.tsx:18 - toasts anchored top-right cover primary Save and Publish buttons → anchor to bottom-right (desktop) / bottom-center (mobile)
+- [P2] NOT-05 bell-icon.tsx:20 - notification count badge does not decrement when notifications are read → synchronize badge count state on read
 ### Loading & pending
 - [P2] app/invoices/page.tsx:3 - `if (isLoading) return null` → table skeleton
 - [P1] LDG-11 invoices-table.tsx:24 - legacy 3-column skeleton reused for new 5-column layout → redesign InvoiceTableSkeleton to match new table
@@ -112,6 +133,19 @@ Legacy structure: <one line naming the current layout, e.g. "stacked cards with 
 - F-018 [P1] FRM-18 file-preview.tsx:46 - preview toggle button inside form lacks type="button", causing accidental submit on click/Enter → add explicit type="button" and suppress input Enter submission
 - F-019 [P1] MUT-13 use-mutations.ts:75 - mutation invalidation refreshes parent document but omits audit-log query → add complete child telemetry invalidation
 - F-020 [P2] HOOK-03 customer-search.tsx:31 - fetch in effect without abort → out-of-order results
+- F-021 [P2] FRM-19 quantity-input.tsx:18 - mouse wheel while hovering number input changes quantity accidentally → add `onWheel={(e) => e.currentTarget.blur()}`
+- F-022 [P2] FRM-20 mobile-form.tsx:95 - virtual keyboard covers active form input on mobile viewports → add smooth `scrollIntoView` on focus
+- F-023 [P1] FRM-21 date-picker.tsx:40 - date picker converts local date to UTC midnight ISO string, shifting date back 1 day in Americas → store local `YYYY-MM-DD` string
+- F-024 [P2] FRM-22 bio-textarea.tsx:30 - input with maxLength=200 silently drops typed characters without counter → add visible `{count}/200` counter
+- F-025 [P2] FRM-23 password-input.tsx:25 - password field lacks show/hide toggle → add toggle button with `aria-label`
+- F-026 [P1] FRM-24 onboarding-wizard.tsx:55 - reloading step 3 resets wizard back to step 1 losing all inputs → persist step state in sessionStorage with draft recovery
+- F-027 [P2] DLG-11 modal.tsx:40 - opening dialog removes scrollbar causing 15px layout lurch → apply `scrollbar-gutter: stable`
+- F-028 [P2] DLG-12 popover.tsx:18 - popover menu rendered inside `overflow-hidden` card is clipped at border → render menu via Radix Portal
+- F-029 [P3] DLG-14 save-button.tsx:12 - "Save" button has redundant tooltip "Save" with no added info → remove redundant tooltip
+- F-030 [P1] NAV-06 search-bar.tsx:34 - async search does not abort stale in-flight query, displaying outdated results → attach AbortController to search queries
+- F-031 [P2] NAV-07 search-bar.tsx:28 - search input lacks instant clear (`x`) button → add clear button that resets query and preserves focus
+- F-032 [P2] NAV-08 combobox.tsx:75 - keyboard arrow navigation does not scroll highlighted option into view → add `scrollIntoView({ block: 'nearest' })`
+- F-033 [P1] ERR-08 submit-handler.ts:45 - 401 response hard-redirects to login losing completed form → preserve form inputs in sessionStorage and prompt with in-place modal
 ### Accessibility (A11Y)
 - [P1] A11Y-01 actions.tsx:14 - `<div onClick={onDelete}>` used as button → replace with native `<button type="button">`
 - [P1] A11Y-02 toolbar.tsx:28 - icon-only button lacks accessible name → add `aria-label="Filter documents"` and `aria-hidden="true"` on SVG

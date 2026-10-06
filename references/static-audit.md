@@ -65,6 +65,30 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - Input autonomy: Is paste blocked on any field (`FRM-15`)? Do checkbox/radio controls share a single continuous hit target with labels without dead zones (`FRM-16`)? Is `autoFocus` triggering aggressive mobile zoom/keyboard shifts (`FRM-17`)?
 - Form deduplication: Is this form nearly identical to another form in another route (e.g. create vs edit) instead of sharing a single polymorphic component (FRM-14, CON-06)? Is there exactly one submit button (HIE-08)?
 
+**Tables & data grids** - TAB (tables-data-grids.md)
+- Header vs cell alignment: Are text columns left-aligned and numeric/currency columns right-aligned with `tabular-nums` in both `<th>` and `<td>` (`TAB-01`)?
+- Sticky header background: Does `sticky top-0` define an opaque `bg-background` and hairline border, or do scrolling rows bleed through (`TAB-02`)?
+- Multi-select scope: Does the select-all checkbox clarify page vs total dataset scope, and does selection survive page navigation (`TAB-03`)?
+- Row actions discoverability: Are action buttons hidden behind `group-hover` with no persistent button on touch/keyboard (`TAB-04`)?
+- Horizontal scrolling cues: Does the table show a scroll shadow affordance and freeze the primary ID column on wide views (`TAB-05`)?
+- Truncated cells: Do truncated text cells (IDs, emails, hashes, error traces) provide a tooltip or copy affordance (`TAB-06`)?
+- Sort chevrons: Do sortable headers display explicit direction arrows and `aria-sort` (`TAB-07`)?
+
+**File uploads & drag-and-drop** - UPL (file-uploads.md)
+- Drop containment: Does `window`/`document` listen for `dragover`/`drop` and call `e.preventDefault()`, or will an accidental missed drop navigate the browser tab away (`UPL-01`)?
+- File input reset: Does the file input clear `e.target.value = ''` so selecting the exact same file fires `onChange` (`UPL-02`)?
+- Object URL cleanup: Is `URL.revokeObjectURL(url)` invoked in effect cleanup when previews are replaced or unmounted (`UPL-03`)?
+- Upfront constraints: Does the resting dropzone UI state accepted extensions/MIME types and max file sizes upfront (`UPL-04`)?
+- Multi-file batch status: Do multi-file uploads show per-file progress and allow retrying failed files without restarting the batch (`UPL-05`)?
+- Determinate progress: Do uploads >1 MB display percentage/byte progress metrics and an active Abort button (`UPL-06`)?
+
+**Toasts, notifications & alerts** - NOT (notifications-toasts.md)
+- Persistent critical errors: Do actionable errors, error codes, and recovery steps stay persistent instead of auto-dismissing on short timers (`NOT-01`)?
+- Interactive toast pause: Do toasts with "Undo" or "View" buttons pause timers on `:hover` and `:focus-within` with ≥8s duration (`NOT-02`)?
+- Batch aggregation: Do batch actions emit a single aggregated summary toast instead of a waterfall of individual toasts (max 3 stacked) (`NOT-03`)?
+- Viewport occlusion: Are toasts anchored where they do not obscure top action headers or mobile tab bars (`NOT-04`)?
+- Badge counter sync: Do unread notification badges decrement synchronously when opened or read (`NOT-05`)?
+
 **Scroll containment & mobile viewport** - LAY-11, LAY-12, RSP-14, RSP-15, DLG-10 (scroll-containment.md, responsive-fluid.md)
 - Does any absolute or `sr-only` element lack a positioned ancestor inside its scroller (`LAY-11`)?
 - Are there nested scrollers competing for scroll events (`LAY-12`)?
@@ -72,6 +96,17 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - Do tap targets use `touch-action: manipulation` (`RSP-15`)?
 - Do scrolling dialogs/sheets/drawers set `overscroll-behavior: contain` (`DLG-10`)?
 
+
+**Dialogs, tooltips & search navigation** - DLG, NAV
+- Does opening a modal cause a 15px layout shift from removing the scrollbar (`scrollbar-gutter: stable`, `DLG-11`)?
+- Are overlay z-indexes coordinated, and are popovers free from parent `overflow-hidden` clipping (`DLG-12`)?
+- Do tooltips avoid rendering directly under the cursor, and is tooltip info available on mobile touch devices (`DLG-13`)?
+- Do tooltips avoid repeating the exact visible button text without added context (`DLG-14`)?
+- Do search/filter queries cancel in-flight requests to prevent stale race conditions (`NAV-06`)?
+- Do search inputs provide an instant one-click clear (`x`) button (`NAV-07`)?
+- Does keyboard arrow navigation in comboboxes scroll active highlighted options into view (`NAV-08`)?
+- Does form submission on expired sessions preserve user input instead of hard-redirecting to login (`ERR-08`)?
+- Is session logout synchronized across tabs (`ERR-09`)?
 **Motion & micro-interactions** - MOT (motion.md)
 - Do interactive controls provide immediate press feedback within 100ms (`active:scale-[0.98]`, MOT-06)?
 - Do state transitions (expand/collapse, tabs, switches, popovers) transition smoothly without layout thrash on height/width (MOT-07, MOT-08)?
@@ -146,6 +181,32 @@ rg -n "preventDefault\(\)" $P | rg -i "paste"                               # bl
 rg -n "autoFocus\b" $P                                                      # unconditional autoFocus (FRM-17)
 rg -n "safe-area-inset|overscroll-contain|touch-manipulation" $P            # mobile viewport & containment (RSP-14, RSP-15, DLG-10)
 rg -n "sr-only\b|absolute\b" $P                                             # uncontained absolute/sr-only scroll leaks (LAY-11)
+rg -n "type=[\"']number[\"']" $P | rg -v "onWheel"                            # unhandled number wheel step (FRM-19)
+rg -n "toISOString\(\)" $P                                                    # potential UTC day-shift on date pickers (FRM-21)
+rg -n "maxLength=" $P                                                         # silent character limit cutoff (FRM-22)
+rg -n "type=[\"']password[\"']" $P                                            # password visibility toggle (FRM-23)
+
+# Tables & data grids (TAB)
+rg -n "<table|<Table|<thead|<tbody|<th\b|<td\b" $P
+rg -n "sticky.*top-0" $P | rg -v "bg-"                                        # transparent sticky headers (TAB-02)
+rg -n "group-hover:(opacity-100|flex|inline-flex|block)" $P                   # hover-only row actions (TAB-04)
+rg -n "aria-sort" $P                                                          # sort indicators (TAB-07)
+
+# File uploads (UPL)
+rg -n "type=[\"']file[\"']" $P
+rg -n "onDrop|onDragOver" $P
+rg -n "createObjectURL" $P | rg -v "revokeObjectURL"                          # unrevoked object URLs (UPL-03)
+
+# Toasts & notifications (NOT)
+rg -n "toast\.(success|error|info|warning|custom)" $P
+rg -n "toast\.error.*duration:\s*[1-9]\d{2,3}\b" $P                           # vanishing error toasts <10s (NOT-01)
+rg -n "forEach.*toast\." $P                                                   # toast storm on batch operations (NOT-03)
+
+# Dialogs, overlays & search (DLG-11..14, NAV-06..08)
+rg -n "scrollbar-gutter" $P                                                   # modal scroll-lock layout shift (DLG-11)
+rg -n "z-\[\d+\]|z-50|z-40|z-30" $P                                          # z-index layering conflicts (DLG-12)
+rg -n "<Tooltip|<TooltipContent" $P                                           # tooltip tautology & hover traps (DLG-13, DLG-14)
+rg -n "useDebounce|useQuery.*search|abortController" $P                       # search race conditions & cancellation (NAV-06)
 
 # Loading / states
 rg -n "isLoading|isPending|isFetching|status ===|loading\b" $P

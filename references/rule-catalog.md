@@ -4,10 +4,10 @@ Every finding cites one rule ID from here (or a DESIGN.md rule). In FULL mode ev
 
 These are defaults: when DESIGN.md or the codebase's own primitives decide something differently, they win (design-md.md). Details and fixes live in the linked guides.
 
-Sources: this skill's own guides, Vercel Web Interface Guidelines, Christopher Alexander (A Pattern Language), Don Norman (The Design of Everyday Things, Emotional Design), Rauno Freiberg (Invisible Details), Emil Kowalski (Animations on the Web), impeccable (harden/distill/layout/audit), WCAG 2.2, TanStack Query and React docs, Front-End Checklist (thedaviddias), Jef Raskin (The Humane Interface), John Sweller (Cognitive Load Theory), Mark Weiser (Calm Technology), Daniel Kahneman (Peak-End Rule), Editorial Web Typography & Visual Hierarchy Research.
+Sources: this skill's own guides, Vercel Web Interface Guidelines, Christopher Alexander (A Pattern Language), Don Norman (The Design of Everyday Things, Emotional Design), Rauno Freiberg (Invisible Details), Emil Kowalski (Animations on the Web), impeccable (harden/distill/layout/audit), WCAG 2.2, TanStack Query and React docs, Front-End Checklist (thedaviddias), Jef Raskin (The Humane Interface), John Sweller (Cognitive Load Theory), Mark Weiser (Calm Technology), Daniel Kahneman (Peak-End Rule), Roman Kamushken (Data Table UI Design), BuiltUX (Toast Notification Doctrine), Editorial Web Typography & Visual Hierarchy Research.
 
 ## Contents
-LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A11Y · NAV · CON · CPY · SLOP · MOT · SOUL · HUM · PERF · I18N · THM
+LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR · NOT · HOOK · A11Y · NAV · CON · CPY · SLOP · MOT · SOUL · HUM · PERF · I18N · THM
 
 ---
 
@@ -67,6 +67,10 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - DLG-08 Menus/popovers clipped by `overflow:hidden` parent or off-screen on phones
 - DLG-09 Native `alert()` / `confirm()` / `prompt()` used for UI
 - DLG-10 Scrollable panels, sheets, or sidebar drawers lack `overscroll-behavior: contain`, allowing scroll chaining to outer document
+- DLG-11 Modal body scroll-lock (`overflow: hidden` on body) removes scrollbar, causing 15px horizontal layout shift (missing `scrollbar-gutter: stable` or scrollbar width compensation)
+- DLG-12 Uncoordinated z-index layers or parent `overflow: hidden` clips popovers, menus, or renders toasts underneath dialogs
+- DLG-13 Tooltip appears directly under mouse cursor blocking clicks on the trigger, closes when cursor moves to interactive tooltip content, or lacks mobile touch alternative
+- DLG-14 Tooltip tautology: tooltip redundantly repeats the exact visible text of the button or label without adding context or shortcut
 
 ## STA - States & edge content → loading-states.md, ux-copy.md
 - STA-01 No empty state, or empty state with no next action
@@ -107,6 +111,15 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - PAG-13 Breakdown parts don't sum to the stated total (no "other" bucket for the remainder)
 - PAG-14 Soft-delete / archive queries retain active-only filters (e.g. is_current, is_active, archived_at null), causing soft-deleted or obsolete records to return zero rows and vanish from the archive view
 
+## TAB - Tables & data grids → tables-data-grids.md
+- TAB-01 Header vs. cell data alignment mismatch (text columns left-aligned, numeric/currency columns right-aligned with `tabular-nums`, date columns consistent; header alignment must match cell alignment)
+- TAB-02 Sticky table header has transparent or semi-transparent background, allowing scrolling table rows to bleed through header text
+- TAB-03 Multi-select header checkbox scope ambiguous (page vs dataset); page navigation silently wipes selection without persistent state or confirmation
+- TAB-04 Row-level actions hidden with mouse-hover-only visibility (`opacity-0 group-hover:opacity-100`, `hidden group-hover:flex`), making them unreachable on touch and invisible to keyboard navigation
+- TAB-05 Horizontally scrolling table lacks scroll gradient/shadow edge affordance or lacks frozen key identifier column (`sticky left-0`)
+- TAB-06 Truncated data cells (IDs, emails, hashes, error logs) lack tooltip, popover, or copy button for inspecting full content
+- TAB-07 Clickable sortable headers lack clear active direction indicators (chevrons) or fail to communicate sort state to assistive tech (`aria-sort`)
+
 ## MUT - Mutations → mutations-forms.md §1
 - MUT-01 Double submit possible (no pending guard on button and handler)
 - MUT-02 No user-visible error when the write fails (swallowed, console only)
@@ -141,6 +154,20 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - FRM-16 Checkbox or radio control and its label render separate disjoint hit targets with dead zone in between
 - FRM-17 `autoFocus` applied unconditionally on mobile / initial load, causing viewport shift and keyboard layout jump
 - FRM-18 Non-submitting buttons inside forms lack explicit `type="button"` (utility buttons like file pickers, preview toggles, clear buttons default to `type="submit"`, causing premature submission on click or input Enter keypress; multi-field modal forms lack Enter key suppression on inputs)
+- FRM-19 Number input (`type="number"`) accidentally steps up/down when mouse wheel scrolls over it while focused or hovered
+- FRM-20 Mobile virtual keyboard obscures active form input without automatic smooth `scrollIntoView`
+- FRM-21 Date picker converts calendar date to UTC midnight ISO string, causing one-day shift backwards in negative GMT timezones
+- FRM-22 Silent character limit truncation: input with `maxLength` lacks visible character count counter or boundary feedback
+- FRM-23 Password field lacks accessible show/hide visibility toggle with descriptive `aria-label` and `type="button"`
+- FRM-24 Multi-step wizard form loses entered draft state on page reload or back navigation without persistence or warning
+
+## UPL - File uploads & drag-and-drop → file-uploads.md
+- UPL-01 Uncontained file drop: missing `dragover`/`drop` `preventDefault` on window/document allows missed drop to navigate tab away to raw file, destroying form and session
+- UPL-02 File input does not clear `e.target.value = ''` after selection/upload, preventing re-selecting the exact same file from firing `onChange`
+- UPL-03 `URL.createObjectURL(file)` preview lacks `URL.revokeObjectURL(url)` cleanup on file change or component unmount (memory leak)
+- UPL-04 Dropzone or file picker fails to state accepted formats (extensions/MIME types) and maximum file size upfront in resting UI
+- UPL-05 Multi-file batch upload treats failures as all-or-nothing without per-file progress, error badge, or individual retry
+- UPL-06 Large file upload (>1 MB) displays indeterminate spinner without percentage/byte progress or lacks Cancel/Abort button
 
 ## ERR - Error handling → mutations-forms.md §3
 - ERR-01 Raw error messages/codes/stack shown to users
@@ -150,6 +177,15 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - ERR-05 Errors not announced (`role="alert"` / `aria-live`)
 - ERR-06 Route-level `error.tsx`/error boundary missing or unhelpful
 - ERR-07 Network offline/timeout not handled (spinner forever)
+- ERR-08 Session expiry (401) on form submit redirects to login and permanently discards entered user form data without draft recovery
+- ERR-09 Multi-tab authentication desync: session expiration or logout in another tab crashes current tab actions without in-place re-auth modal
+
+## NOT - Toasts, notifications & alerts → notifications-toasts.md
+- NOT-01 Auto-dismissing critical or actionable error messages on a short timer (<10s) before user can read, copy, or act
+- NOT-02 Interactive toast ("Undo", "View", "Retry") fails to pause auto-dismiss timer on mouse hover and keyboard focus; duration <8s
+- NOT-03 Batch mutation fires N individual floating toasts instead of single aggregated summary toast, or container exceeds 3 visible toasts
+- NOT-04 Toast container occludes primary navigation bars, top-right header action buttons (Save/Publish), or mobile tab bars
+- NOT-05 Notification badge count fails to decrement or clear synchronously when notification center is opened or items read
 
 ## HOOK - React hooks → react-hooks.md
 - HOOK-01 Missing/wrong dependency arrays; `exhaustive-deps` disabled
@@ -195,6 +231,9 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · MUT · FRM · ERR · HOOK · A1
 - NAV-03 `<title>` doesn't match the view
 - NAV-04 Links can't be opened in a new tab (button/onClick navigation)
 - NAV-05 Redirects/guards that flash protected content before redirecting
+- NAV-06 Search/filter async query race condition: slow earlier request resolves after fast later request, displaying stale search results
+- NAV-07 Search input lacks instant clear (`x`) button, or clearing fails to reset active results and focus
+- NAV-08 Combobox or autocomplete dropdown navigating with Arrow keys fails to scroll active highlighted option into listbox view
 
 ## CON - Consistency → consistency.md
 - CON-01 More than one variant of a pattern in the surface (buttons, tables, empty states, dialogs, badges, page headers)

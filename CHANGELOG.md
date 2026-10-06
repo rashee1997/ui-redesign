@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.3.0 (2026-10-06): Production data table integrity, file upload drag-and-drop safety, persistent notification architecture, and expanded form/dialog/search edge cases
+- Added:
+  - Category `TAB` (Tables & Data Grids) with rules `TAB-01` to `TAB-07` and reference guide `references/tables-data-grids.md` (header/cell alignment parity, opaque sticky headers, select-all page vs dataset scope clarity, persistent row actions on touch/keyboard, horizontal scroll cues and frozen key columns, cell truncation tooltips, active sort direction chevrons)
+  - Category `UPL` (File Uploads & Drag-and-Drop) with rules `UPL-01` to `UPL-06` and reference guide `references/file-uploads.md` (global drop window containment preventing tab takeover, file input value reset for re-selection, object URL memory leak revocation, upfront visible format/size limits, per-file batch progress/retry, determinate upload progress and abort controllers)
+  - Category `NOT` (Toasts, Notifications & Alerts) with rules `NOT-01` to `NOT-05` and reference guide `references/notifications-toasts.md` (persistent alerts for critical errors, interactive toast hover/focus pause with ≥8s duration, batch mutation single summary aggregation with max 3 stack cap, zero occlusion of primary headers/tab bars, synchronous unread badge counter decrements)
+  - Rules `FRM-19` to `FRM-24`: mouse wheel stepping on number inputs, mobile virtual keyboard input occlusion, date picker UTC timezone day-shift, silent character limit truncation, password field show/hide visibility toggle, and multi-step wizard draft state loss
+  - Rules `DLG-11` to `DLG-14`: modal scroll-lock 15px layout shift (`scrollbar-gutter: stable`), z-index layering scale and portal containment, tooltip cursor hover traps and mobile access, and tooltip tautology
+  - Rules `NAV-06` to `NAV-08`: search/filter async query race condition cancellation, search input instant clear button, and combobox active-descendant keyboard scroll into view
+  - Rules `ERR-08` to `ERR-09`: session timeout form submission data preservation, and multi-tab authentication state desynchronization
+- Changed:
+  - `references/rule-catalog.md`: added `TAB`, `UPL`, `NOT` to Contents and catalog; updated Sources with Roman Kamushken and BuiltUX; appended new rules across categories.
+  - `references/mutations-forms.md`: documented `FRM-19`..`FRM-24` and `ERR-08`..`ERR-09`.
+  - `references/responsive-fluid.md`: documented `DLG-11`..`DLG-14` and `NAV-06`..`NAV-08`.
+  - `SKILL.md`: updated "Which reference, when" router table and non-negotiables strict sequential range.
+  - `references/harness.md`: added red flags for `TAB-02`, `UPL-01`, `NOT-01`, and `FRM-21`.
+  - `references/phases.md`: updated static audit, coverage ledger, implement slice order, and §6 Key design rules.
+  - `references/static-audit.md`: added per-file passes and grep candidate recipes for all new rules.
+  - `references/plan-template.md`: updated category count to 25 and added findings subsections and sample findings.
+- Reason: user requested deep web research of modern UI/UX bug classes and interaction flaws, adding them as strict law of the book dedicated categories and catalog expansions.
+- Sources: Vercel Web Interface Guidelines, Roman Kamushken (Data Table UI Design 2026), BuiltUX (Toast Notifications & Snackbars in Production UX 2026), W3C ARIA Authoring Practices Guide (Combobox), WCAG 2.2, research conducted 2026-10-06.
+
 ## 1.2.0 (2026-10-06): Dynamic workbench item binding, non-submitting form button safety, archive query filter parity, and complete child query invalidation
 - Added:
   - Rule `CON-08`: Dynamic item binding across workbench views (orchestrating view provides a selector/picker, but child components remain bound to root/default/current items like items[0] or currentVersion instead of dynamically reacting to the active selected variant)
