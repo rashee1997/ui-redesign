@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.0 (2026-10-06): Automated audit and plan evaluation script (evaluate_audit.py) with self-reflection rubric and microtasks verification
+- Added:
+  - Script `scripts/evaluate_audit.py`: automated audit validator that verifies ledger file integrity, 100% Gate G1 rule catalog coverage, finding consistency, full wireframes across phone/tablet/desktop, and fine-grained microtasks decomposition matching qhsedocks-sdd standards.
+  - Structured Self-Reflection Rubric: outputs actionable reflection questions for cognitive load, responsive wireframe rigor, zero-unhandled-state resilience, and microtask atomicity/falsifiability.
+- Changed:
+  - `SKILL.md`: updated "Which reference, when" router table to include `scripts/evaluate_audit.py`.
+- Reason: user requested full wireframes in redesign plans, microtasks implementation plan matching qhsedocks-sdd parity, and an automated self-evaluation Python script to check audit correctness and output self-reflection prompts.
+
 ## 1.3.1 (2026-10-06): Fix HOOK router entry in SKILL.md and replace em dashes with hyphens
 - Changed:
   - `SKILL.md`: restored `| HOOK - React hooks | react-hooks.md |` to the "Which reference, when" router table after it was displaced during router table category expansion.

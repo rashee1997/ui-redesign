@@ -72,7 +72,7 @@ Read only what the current step needs.
 | HUM - human design theory (for humans, not robots) | `human-design-theory.md` |
 | Writing the plan | `plan-template.md` |
 | Updating this skill (not a UI) | `updating-skill.md` |
-| Optional runtime evidence | `scripts/ui_audit.mjs` (app running), `scripts/scan_patterns.mjs` - see static-audit.md §6 |
+| Optional runtime evidence & plan evaluation | `scripts/ui_audit.mjs`, `scripts/scan_patterns.mjs`, `scripts/evaluate_audit.py` |
 
 ## Non-negotiables
 
