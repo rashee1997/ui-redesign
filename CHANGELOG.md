@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.1 (2026-10-06): Advanced Actor-Critic AI self-reflection prompt architecture with dynamic telemetry injection
+- Added:
+  - Dynamic audit telemetry injection in `scripts/evaluate_audit.py`: extracts surface name, inventory counts, finding severities, category distribution, wireframe indicators, and microtask counts directly into the prompt.
+  - 5-Axis Orthogonal Self-Critique Protocol based on Reflexion (Shinn et al.) & Self-Refine (Madaan et al.): Factual Grounding & Proof Integrity, Negative Space & Unnoticed Regressions, Cognitive Load & Human Design Laws, Wireframe Rigor & Responsive Truth, and Microtask Atomicity & Falsifiability.
+  - CLI flags `--prompt-only` and `--json` for programmatic evaluator workflows.
+- Reason: user requested deep research into AI self-reflection prompting and updating the evaluation script using research-backed critique structures.
+- Sources: Reflexion (Shinn et al., 2023), Self-Refine (Madaan et al., 2023), SurePrompts Self-Refine Guide, Prompt Engineering Guide.
+
 ## 1.4.0 (2026-10-06): Automated audit and plan evaluation script (evaluate_audit.py) with self-reflection rubric and microtasks verification
 - Added:
   - Script `scripts/evaluate_audit.py`: automated audit validator that verifies ledger file integrity, 100% Gate G1 rule catalog coverage, finding consistency, full wireframes across phone/tablet/desktop, and fine-grained microtasks decomposition matching qhsedocks-sdd standards.
