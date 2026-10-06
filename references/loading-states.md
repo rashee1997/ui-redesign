@@ -115,7 +115,12 @@ export function Spinner({ className, ...props }: React.ComponentProps<'svg'>) {
 
 Then give the project's Button a `loading` prop (or a `LoadingButton` wrapper) that applies the grid-stack pattern above, and replace every hand-made pending button in the surface with it. Propose this in the plan; if the Button is shared app-wide, list the other call sites that would benefit but only change the ones in scope unless approved.
 
-## 6. Checklist
+## 6. Post-mutation transitions & state recovery (STA-07, STA-09, STA-10)
+
+- **Post-deletion navigation (STA-09)**: Deleting, archiving, or disposing an entity from its detail view MUST automatically redirect the user to the parent collection/list route with an affirmative confirmation toast. Leaving the user on a deleted resource URL produces a confusing 404 or blank dead end.
+- **Success modal next actions (STA-10)**: Success dialogs or completion banners MUST offer clear, explicit next actions (e.g. primary: "View created item", secondary: "Create another" or "Return to dashboard"). Dismissing a success modal must never strand the user on a frozen or dirty form.
+
+## 7. Checklist
 
 - [ ] Every data region has a skeleton that matches its final layout (no CLS when data arrives).
 - [ ] Redesigned components have newly redesigned skeletons matching the new layout - no legacy/old skeletons reused (LDG-11).

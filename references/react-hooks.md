@@ -89,6 +89,12 @@ Signals to look for: a URL or network log containing an `undefined`/`null` segme
 
 Fix: guard before the request and treat the literal `'undefined'`/`'null'` as absent at the boundary; early-return or set `enabled` on the id; and pair every async-loaded component with the key it was loaded for (or `key={id}` to reset it). Dynamic by design: it applies to any id, route, key, or href, not one specific endpoint.
 
+
+### Controlled inputs, sync anti-patterns & identity traps
+- **HOOK-15 Uncontrolled-to-controlled input flash**: Binding `value={data?.name}` when `data` loads asynchronously passes `undefined` on initial render, then a string when resolved. React flags a console warning and transitions the input from uncontrolled to controlled, causing caret jumping and dropped keystrokes. Always provide an empty string fallback: `value={data?.name ?? ''}`.
+- **HOOK-16 Effect prop-to-state synchronization**: Mirroring props to state via `useEffect(() => { setState(prop) }, [prop])` causes an extra render cycle, a 1-frame visual flash of stale state, and race conditions during rapid prop updates. Compute derived state directly during render (`const value = derive(prop)`), reset component state cleanly using `key={prop.id}`, or synchronize in event handlers.
+- **HOOK-17 Object or array identity churn in hook dependencies**: Supplying fresh object/array literals directly in dependency arrays (e.g. `useEffect(..., [{ filter: true }])` or `useMemo(..., [options || {}])`) evaluates to a new reference on every render, triggering infinite effect loops or rendering cascades. Stabilize references with `useMemo`, extract constants outside the component, or depend on individual primitive properties.
+- **HOOK-18 Stale closures in asynchronous handlers & listeners**: Event listeners, intervals, or async callbacks referencing outer state variables capture the render snapshot from their creation time. Use functional state updates (`setCount(prev => prev + 1)`), store latest values in a `useRef`, or use stable event callback abstractions.
 ## 3. State
 
 - **HOOK-05 Stale closures**: intervals, timeouts, event listeners and async callbacks that read state captured at creation. Use functional updates (`setCount(c => c + 1)`), a ref holding the latest value, or include the value in deps.

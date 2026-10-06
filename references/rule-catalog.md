@@ -81,6 +81,8 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - STA-06 Disabled controls with no reason given
 - STA-07 Dead ends: no recovery or next step after an error/empty/success
 - STA-08 One component error blanks the whole page (no local error boundary/fallback)
+- STA-09 Post-deletion navigation to deleted resource: deleting or archiving an entity leaves user on dead detail view or 404 route without redirecting to parent list with confirmation
+- STA-10 Success modal without next action: mutation succeeds but modal offers no next steps ("View item", "Create another", "Return to list"), leaving user stranded on dirty form
 
 ## LDG - Loading & pending → loading-states.md
 - LDG-01 Data region with no loading UI (`return null`, blank, bare "Loading...")
@@ -134,6 +136,10 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - MUT-11 Same mutation implemented differently in different places (direct fetch here, hook there)
 - MUT-12 Server-side cache holding derived counts/summaries not invalidated on mutation (client queries refreshed, cached aggregate stays stale)
 - MUT-13 Cache invalidation on mutation misses child/telemetry queries (primary entity query refreshed, but audit logs, approval histories, activity feeds, or related sub-resources stay stale)
+- MUT-14 Event handler parameter leak: passing function accepting optional argument directly to `onClick` passes synthetic `MouseEvent` into domain argument (e.g. `(id?: string)` receives event object), causing circular JSON serialization failure or `"[object Object]"` request payload
+- MUT-15 Un-awaited mutation promise: triggering async mutation without `await` inside handler allows spinner/dialog to dismiss prematurely while request is in flight and drops error handling
+- MUT-16 Optimistic payload shape mismatch: optimistic update enriches cache with full nested relations, but server returns partial DTO, shallowly wiping local joined state upon settlement
+- MUT-17 Non-idempotent mutation retry storm: automated network retries on POST/write requests omit client idempotency key (`Idempotency-Key` header), risking duplicate row creation or double charge on network drop
 
 ## FRM - Forms & validation → mutations-forms.md §2
 - FRM-01 Field without a visible label (placeholder used as label); label not linked (`htmlFor`)
@@ -202,6 +208,10 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - HOOK-12 Context value recreated each render causing app-wide re-renders
 - HOOK-13 `useLayoutEffect` on the server / layout reads in render
 - HOOK-14 Request path, cache key, `href` or required id built from a value that can be missing, so it requests a literal `undefined`/`null`; or an asynchronously loaded component rendered against a changed key while its state still belongs to the previous one (stale async component)
+- HOOK-15 Uncontrolled-to-controlled input flash: form input binds `value={data?.field}`, which starts as `undefined` while loading, causing React uncontrolled-to-controlled warning and input caret jumping
+- HOOK-16 Effect prop-to-state synchronization (`useEffect(() => setState(prop), [prop])`): causes double renders, 1-frame stale flashes, and concurrent rendering tear; must use derived render state or `key` reset
+- HOOK-17 Object or array literal in hook dependency array (`[options || {}]`, `[{ filter: true }]`): creates fresh reference each render, causing infinite effect loops or continuous calculation thrashing
+- HOOK-18 Stale closure in asynchronous callback or detached listener: interval, WebSocket listener, or async callback captures initial state snapshot instead of using functional state updater (`setState(prev => ...)`) or `useRef`
 
 ## A11Y - Accessibility → accessibility.md
 - A11Y-01 Clickable `div`/`span`; `onClick` navigation instead of `a`/`Link`
@@ -234,6 +244,8 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - NAV-06 Search/filter async query race condition: slow earlier request resolves after fast later request, displaying stale search results
 - NAV-07 Search input lacks instant clear (`x`) button, or clearing fails to reset active results and focus
 - NAV-08 Combobox or autocomplete dropdown navigating with Arrow keys fails to scroll active highlighted option into listbox view
+- NAV-09 Post-submission back button trap: creation form redirects with `router.push` instead of `router.replace`, causing browser Back button to return to empty creation form rather than parent list
+- NAV-10 Debounced input vs. submit race: pressing Enter or clicking Submit in a debounced field executes before debounce timer flushes, submitting stale pre-debounce query and dropping recent keystrokes
 
 ## CON - Consistency → consistency.md
 - CON-01 More than one variant of a pattern in the surface (buttons, tables, empty states, dialogs, badges, page headers)

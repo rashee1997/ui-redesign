@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.5.0 (2026-10-06): Dynamic catalog introspection, silent mutation bugs, hook state traps, post-mutation dead ends, and race conditions
+- Added:
+  - Dynamic Catalog Introspection Engine in `scripts/evaluate_audit.py`: parses `rule-catalog.md` on the fly (categories, titles, rules, guides). Zero hardcoded category names or rule counts; automatically supports any future catalog expansions and dynamically validates Gate G1 coverage.
+  - Rules `MUT-14` to `MUT-17`: synthetic event leaks into optional arguments, un-awaited mutation promises, optimistic payload shape mismatches, and non-idempotent retry idempotency.
+  - Rules `HOOK-15` to `HOOK-18`: uncontrolled-to-controlled input flash, effect prop-to-state synchronization anti-patterns, object/array identity churn in dependency arrays, and stale closures in async handlers/listeners.
+  - Rules `STA-09` to `STA-10`: post-deletion navigation to deleted resource, and success modal dead ends lacking affirmative next actions.
+  - Rules `NAV-09` to `NAV-10`: post-creation back button form resubmission traps (`router.push` vs `router.replace`), and debounced input vs instant submit race conditions.
+- Changed:
+  - `references/rule-catalog.md`: added rules `MUT-14..17`, `HOOK-15..18`, `STA-09..10`, and `NAV-09..10`.
+  - `references/mutations-forms.md`: documented silent mutation bugs (`MUT-14..17`).
+  - `references/react-hooks.md`: documented hook state traps and identity churn (`HOOK-15..18`).
+  - `references/loading-states.md`: documented post-mutation transitions and dead ends (`STA-09..10`).
+  - `references/responsive-fluid.md`: documented back button replacement and debounce flush on submit (`NAV-09..10`).
+- Reason: user requested researching silent bugs in mutations, hooks, race conditions, and dead ends, updating the catalog, and making the evaluation script dynamic to support future expansions.
+
 ## 1.4.1 (2026-10-06): Advanced Actor-Critic AI self-reflection prompt architecture with dynamic telemetry injection
 - Added:
   - Dynamic audit telemetry injection in `scripts/evaluate_audit.py`: extracts surface name, inventory counts, finding severities, category distribution, wireframe indicators, and microtask counts directly into the prompt.
