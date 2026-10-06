@@ -63,6 +63,7 @@ Read only what the current step needs.
 | MUT, FRM, ERR - mutations, forms, errors | `mutations-forms.md` |
 | UPL - file uploads, drag-and-drop | `file-uploads.md` |
 | NOT - toasts, notifications, alerts | `notifications-toasts.md` |
+| HOOK - React hooks | `react-hooks.md` |
 | A11Y - accessibility, keyboard, contrast, ARIA | `accessibility.md` |
 | CON - consistency | `consistency.md` |
 | SLOP, CPY - visual slop, copy | `anti-slop.md`, `ux-copy.md` |
