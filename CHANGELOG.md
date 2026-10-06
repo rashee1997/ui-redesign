@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1 (2026-10-06): Fix HOOK router entry in SKILL.md and replace em dashes with hyphens
+- Changed:
+  - `SKILL.md`: restored `| HOOK - React hooks | react-hooks.md |` to the "Which reference, when" router table after it was displaced during router table category expansion.
+  - `references/mutations-forms.md`: replaced em dash in MUT-12 description with a standard hyphen.
+  - `references/pagination.md`: replaced em dashes in PAG-11 and PAG-12/13 descriptions with standard hyphens.
+- Reason: validation with `validate_skill.py` from skill-creator flagged `react-hooks.md` as unrouted from `SKILL.md` and flagged em dashes in reference guides.
+
 ## 1.3.0 (2026-10-06): Production data table integrity, file upload drag-and-drop safety, persistent notification architecture, and expanded form/dialog/search edge cases
 - Added:
   - Category `TAB` (Tables & Data Grids) with rules `TAB-01` to `TAB-07` and reference guide `references/tables-data-grids.md` (header/cell alignment parity, opaque sticky headers, select-all page vs dataset scope clarity, persistent row actions on touch/keyboard, horizontal scroll cues and frozen key columns, cell truncation tooltips, active sort direction chevrons)
