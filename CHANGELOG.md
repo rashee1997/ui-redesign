@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0 (2026-10-07): Point to skill-creator for self-updates
+- Changed: references/updating-skill.md: added a line directing to the skill-creator skill when available
+- Reason: user asked that every skill's update-skill doc reference the skill-creator skill
+- Sources: skill-creator CHANGELOG.md v2.1.0 entry
+
 ## 1.5.0 (2026-10-06): Dynamic catalog introspection, silent mutation bugs, hook state traps, post-mutation dead ends, and race conditions
 - Added:
   - Dynamic Catalog Introspection Engine in `scripts/evaluate_audit.py`: parses `rule-catalog.md` on the fly (categories, titles, rules, guides). Zero hardcoded category names or rule counts; automatically supports any future catalog expansions and dynamically validates Gate G1 coverage.

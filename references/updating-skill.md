@@ -6,6 +6,8 @@ Use this when the user asks to change **the skill itself**: add rules for issues
 - Do **not** rewrite or restyle files that the change doesn't affect.
 - Do update **every file the change cascades to**, so the skill stays consistent with itself.
 
+If the skill-creator skill is available, invoke it to perform this update: it carries the current, researched rules for skill structure, naming, versioning and testing, so prefer it over following this file freehand.
+
 ## Contents
 1. Steps
 2. Cascade map
