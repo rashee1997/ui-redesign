@@ -11,6 +11,7 @@
 6. Responsive dialogs, sheets and popovers
 7. Touch, viewport and safe-area details
 8. Tailwind snippets
+9. Scroll containment (one scrollbar)
 
 ## 1. Widths to design for
 
@@ -168,11 +169,33 @@ Dialog layout rules:
 </div>
 
 <!-- Dialog body that scrolls, footer that stays -->
-<DialogContent class="flex max-h-[min(90dvh,48rem)] w-[min(100%-2rem,36rem)] flex-col p-0">
-  <DialogHeader class="px-6 pt-6">…</DialogHeader>
-  <div class="min-h-0 flex-1 overflow-y-auto px-6">…</div>
-  <DialogFooter class="border-t px-6 py-4 max-sm:flex-col-reverse max-sm:[&>*]:w-full">…</DialogFooter>
+<DialogContent className="flex max-h-[min(90dvh,48rem)] w-[min(100%-2rem,36rem)] flex-col p-0">
+  <DialogHeader className="px-6 pt-6">…</DialogHeader>
+  <div className="min-h-0 flex-1 overflow-y-auto px-6">…</div>
+  <DialogFooter className="border-t px-6 py-4 max-sm:flex-col-reverse max-sm:[&>*]:w-full">…</DialogFooter>
 </DialogContent>
 ```
+
+## 9. Scroll containment (one scrollbar)
+
+Every screen has exactly one vertical scroll owner. Name it in the plan.
+
+| Shape | Owner | Rules |
+|---|---|---|
+| App shell (sidebar + header + content) | One content wrapper (`flex-1 overflow-y-auto`) inside a `h-dvh overflow-hidden` shell | The document must never scroll. Nothing in the content may be taller than the scroller can contain. |
+| Plain page | The document | No inner `overflow-y: auto` around whole page content. |
+
+Anything else that scrolls (dialog body, table body, dropdown list) is a bounded region with a `max-height`. Views never set their own viewport height; flex ancestors between shell and scroller carry `min-h-0`; use `dvh`, never `100vh`.
+
+**Leak causes (LAY-11, LAY-12):** absolute/`sr-only` elements with no positioned ancestor escape the scroller and grow the document (fix: `relative` on the nearest wrapper, or on the scroll container once in the shell); nested full-page scrollers (fix: remove the inner one, keep bounded regions only); in-flow siblings after the shell; negative margins/translates; portalled popovers left mounted. Never "fix" with `overflow: hidden` on `body` — it hides the symptom and breaks keyboard focus scrolling.
+
+**Find the culprit** (short viewport, e.g. 1361×700):
+```js
+[document.scrollingElement.scrollHeight, innerHeight]  // equal on shell screens?
+[...document.querySelectorAll('*')].filter(e => /(auto|scroll)/.test(getComputedStyle(e).overflowY) && e.scrollHeight > e.clientHeight + 1)  // the owner, exactly one
+```
+Elements below the viewport with `position: absolute|fixed` and `offsetParent === BODY` are Cause 1. `scripts/ui_audit.mjs` reports the same as `leakedAbsolute`/`nestedScrollers`; `scripts/scan_patterns.mjs` lists viewport-height containers and `sr-only` lines.
+
+**Checklist:** one named owner; `scrollHeight === innerHeight` at 320/768/1361×700/1920; no nested full scrollers; every `absolute` (incl. `sr-only`) has a positioned ancestor; no view-level `h-screen`/`100vh`; `min-h-0` on flex ancestors; no in-flow siblings after the shell; padding has one owner; checked on every tab/state, not just the first.
 
 Use the project's own class names and tokens; these show structure only.

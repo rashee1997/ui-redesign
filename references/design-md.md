@@ -9,7 +9,7 @@ The project's DESIGN.md is written by the user, for this project. It has **no fi
 3. **The existing code's conventions** - tokens, primitives, and how the good pages do things.
 4. **This skill's reference guides** - fallback defaults only, for questions 2 and 3 don't answer.
 
-Every number and rule in the other reference files (breakpoints, spacing, widths, font sizes, button order, banned styles, copy rules) is a **default**. If DESIGN.md sets its own value or rule for the same thing, use DESIGN.md's and don't mention the default. If DESIGN.md deliberately asks for something the anti-slop list bans (all-caps labels, gradients, a centered layout), follow DESIGN.md.
+Every number and rule in the other reference files (breakpoints, spacing, widths, font sizes, button order, banned styles, copy rules) is a **default**. If DESIGN.md sets its own value or rule for the same thing, use DESIGN.md's and don't mention the default. If DESIGN.md deliberately asks for something craft.md §1 bans (all-caps labels, gradients, a centered layout), follow DESIGN.md.
 
 ## 1. Find it
 

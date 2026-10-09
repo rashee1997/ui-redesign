@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.0 (2026-10-09): Structured rebuild, craft merge, sourced protocol, evaluator removed
+
+- Added: `references/craft.md` — merges `soulful-design.md`, `human-design-theory.md`, and `anti-slop.md` into one taste/craft/human guide (slop tells, 8 human laws with fixes, craft finish with recipes, three audit checklists). Catalog SLOP/SOUL/HUM IDs unchanged.
+- Added: severity second pass in `harness.md` §3 — findings recorded severity-free during the hunt, P-rated after against frequency × impact × persistence (P0–P3 ≙ Nielsen 4–1, rejected ≙ 0); two-pass read named in `phases.md` (trace pass → violation pass); fresh-eyes subagent rates independently before opening ledger ratings.
+- Added: primary-source lines — `loading-states.md` (NN/g skeleton thresholds: full-page loads under ~10s, frame-only ≈ spinner, processes get progress bars, shimmer needs motion-reduce), `harness.md` (audit shape follows W3C WCAG-EM: scope → explore → sample → evaluate → report).
+- Changed: `scroll-containment.md` folded into `responsive-fluid.md` §9 (owner table, leak causes, browser snippet, checklist); `plan-template.md` §5 findings collapsed from ~110 lines of per-category examples to row format plus one compact worked shape; harness red flags 28 → 17 (rule-specific gotchas stay in their guides).
+- Changed: SKILL.md router, `phases.md`, `static-audit.md`, and `rule-catalog.md` guide links point at `craft.md` and responsive §9.
+- Removed: `scripts/evaluate_audit.py` (mechanical gate enforcer + self-reflection prompt generator). Coverage stays ledger-enforced by Gate G1; the two evidence scripts (`ui_audit.mjs`, `scan_patterns.mjs`) are unchanged.
+- Reason: user asked for a structured, debloated, well-organized redesign skill grounded in deep research on audit standards.
+- Sources: NN/g "Severity Ratings for Usability Problems" (Nielsen 1994), https://www.nngroup.com/articles/how-to-rate-the-severity-of-usability-problems/ (frequency × impact × persistence, 0–4 scale, independent post-hoc rating; read 2026-10-09); NN/g "How to Conduct a Heuristic Evaluation" (Moran & Gordon 2023), https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/ (narrow scope, independent evaluators, two passes, violation ≠ problem; read 2026-10-09); NN/g "Skeleton Screens 101" (Tankala 2023), https://www.nngroup.com/articles/skeleton-screens/ (read 2026-10-09); W3C WCAG-EM 2.0 Overview, https://www.w3.org/WAI/test-evaluate/conformance/wcag-em/ (5-step pipeline, sampling, preliminary checks; read 2026-10-09); Pavle Lucic, "UX Audit vs Heuristic Evaluation", https://pavle-design.com/blog/ux-audit-vs-heuristic-evaluation (audit scope, heuristic-first triage; read 2026-10-09).
+
 ## 1.6.0 (2026-10-07): Point to skill-creator for self-updates
 - Changed: references/updating-skill.md: added a line directing to the skill-creator skill when available
 - Reason: user asked that every skill's update-skill doc reference the skill-creator skill

@@ -11,7 +11,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 
 ---
 
-## LAY - Layout & declutter → hierarchy-declutter.md, scroll-containment.md
+## LAY - Layout & declutter → hierarchy-declutter.md, responsive-fluid.md §9
 - LAY-01 Elements that serve no task in the task list (duplicate titles, decorative icons, welcome banners, stats nobody acts on, helper text repeating the label)
 - LAY-02 Things that should be merged (two toolbars, search + filter rows, label/value/unit split across lines)
 - LAY-03 Rarely used actions/info shown at full weight instead of in a menu, disclosure or detail view
@@ -22,7 +22,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - LAY-08 Wrapper elements with no purpose (extra divs carrying padding/borders)
 - LAY-09 Visual order ≠ DOM/focus order
 - LAY-10 Fixed heights on content containers (clips text when content grows)
-- LAY-11 Absolute or `sr-only` descendants lack positioned ancestor inside scroller, leaking phantom scroll height and outer scrollbars (see scroll-containment.md)
+- LAY-11 Absolute or `sr-only` descendants lack positioned ancestor inside scroller, leaking phantom scroll height and outer scrollbars (see responsive-fluid.md §9)
 - LAY-12 Nested scroller inside an existing scrolling container without explicit bounded height or scroll owner delegation
 
 ## HIE - Hierarchy → hierarchy-declutter.md
@@ -268,7 +268,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - CPY-08 Straight quotes (`"`, `'`) used in editorial or marketing copy instead of typographic curly quotes (`“`, `”`, `‘`, `’`)
 - CPY-09 Missing non-breaking space (`&nbsp;` / `\u00A0`) between numbers and units or key shortcuts (e.g. `10 MB`, `⌘ K`), causing orphan wrapping
 
-## SLOP - Visual slop → anti-slop.md
+## SLOP - Visual slop → craft.md §1
 - SLOP-01 Values outside tokens (hex, arbitrary sizes, new fonts)
 - SLOP-02 Decorative gradients, glows, colored left borders, glass effects
 - SLOP-03 Template structures (icon-card rows, stat banners, eyebrow labels, badge above title, the generic SaaS page template: hero → features grid → social-proof stats → testimonials → FAQ)
@@ -289,7 +289,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - MOT-09 Sluggish micro-interactions exceeding 250ms or multi-stage loops delaying user tasks
 - MOT-10 Skeleton-to-content transition flashes or pops without crossfade or smooth settling
 
-## SOUL - Soulful design, craft & tactile finish → soulful-design.md
+## SOUL - Soulful design, craft & tactile finish → craft.md §3
 - SOUL-01 Flat/dead interactive controls with zero active press depression, haptic feedback, or immediate (<100ms) tactile response
 - SOUL-02 Non-concentric nested border radii (inner radius doesn't match outer radius minus padding: R_inner ≠ R_outer - P)
 - SOUL-03 Uncompensated optical misalignment (geometric centering of triangles, play icons, badges, or mixed-height icon-label locks that look off-center)
@@ -300,7 +300,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - SOUL-08 Artificial, patronizing, or robotic voice (condescending "Oopsie!", fake celebratory emoji confetti, or corporate marketing jargon on operational screens)
 - SOUL-09 Lack of fidgetable/satisfying mechanical tactile feedback on toggles, segment controls, sliders, and interactive primitives
 - SOUL-10 Fragile edge handling: UI breaks or looks neglected with 0 items, 1 item, 10,000 items, ultra-long strings, or unexpected network latency
-## HUM - Human cognitive & emotional experience → human-design-theory.md
+## HUM - Human cognitive & emotional experience → craft.md §2
 - HUM-01 Extraneous cognitive overload: >7 unchunked competing options, form fields, or navigation links presented without grouping or progressive disclosure (Sweller / Miller / Hick)
 - HUM-02 Wide Gulf of Execution: Action controls lack visible signifiers or intuitive affordance, requiring mental guesswork or manual documentation (Norman)
 - HUM-03 Wide Gulf of Evaluation: System state change after user action is ambiguous, delayed (>100ms), or hidden away from focal gaze (Norman)

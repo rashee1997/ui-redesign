@@ -89,7 +89,7 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - Viewport occlusion: Are toasts anchored where they do not obscure top action headers or mobile tab bars (`NOT-04`)?
 - Badge counter sync: Do unread notification badges decrement synchronously when opened or read (`NOT-05`)?
 
-**Scroll containment & mobile viewport** - LAY-11, LAY-12, RSP-14, RSP-15, DLG-10 (scroll-containment.md, responsive-fluid.md)
+**Scroll containment & mobile viewport** - LAY-11, LAY-12, RSP-14, RSP-15, DLG-10 (responsive-fluid.md §9 and §§6-7)
 - Does any absolute or `sr-only` element lack a positioned ancestor inside its scroller (`LAY-11`)?
 - Are there nested scrollers competing for scroll events (`LAY-12`)?
 - Do sticky bottom bars/sheets include safe-area insets (`env(safe-area-inset-bottom)`, `RSP-14`)?
@@ -111,7 +111,7 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - Do interactive controls provide immediate press feedback within 100ms (`active:scale-[0.98]`, MOT-06)?
 - Do state transitions (expand/collapse, tabs, switches, popovers) transition smoothly without layout thrash on height/width (MOT-07, MOT-08)?
 - Are durations budgeted ≤ 250ms with `motion-reduce:transition-none` (MOT-01, MOT-09)?
-**Human cognitive & emotional experience** - HUM (human-design-theory.md)
+**Human cognitive & emotional experience** - HUM (craft.md §2)
 - Cognitive capacity: Does the screen overwhelm working memory with >7 unchunked options or fields without progressive disclosure (`HUM-01`)?
 - Gulf of Execution: Does every actionable control have visible signifiers and intuitive physical affordance (`HUM-02`)?
 - Gulf of Evaluation: Does every state change register visible feedback within 100ms in the user's focal gaze (`HUM-03`)?
@@ -121,7 +121,7 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - Calm attention: Do routine background tasks and non-critical status updates remain in the peripheral awareness rather than interrupting with shrill modal alerts (`HUM-07`)?
 - Peak-end resolution: Do error states provide compassionate cause+fix guidance, and do completed workflows offer affirmative closure (`HUM-08`)?
 
-**Soulful design & tactile finish** - SOUL (soulful-design.md)
+**Soulful design & tactile finish** - SOUL (craft.md §3)
 - Physical tactility: Do buttons, switches, and tabs have instant active/press depression (`active:scale-[0.98]`, SOUL-01, SOUL-09)?
 - Concentric geometry: Do nested containers follow the Doppelrand rule R_inner = R_outer - P (SOUL-02)?
 - Optical alignment: Are asymmetric icons (play, chevron), micro-badges, and mixed text-icon locks optically compensated (SOUL-03)?

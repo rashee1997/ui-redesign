@@ -2,6 +2,8 @@
 
 > **Defaults only.** If the project already has a `Skeleton`, `Spinner`, `LoadingButton` or a `loading` prop on Button, use and fix those rather than adding new ones. DESIGN.md's motion and color rules win.
 
+Sources: NN/g "Skeleton Screens 101" (skeletons only for full-page loads under ~10s; frame-only skeletons ≈ spinners, don't use; spinners for single modules; nothing under 1s; processes like uploads get progress bars; shimmer can harm accessibility — pair with `motion-reduce`).
+
 ## Contents
 1. Which loading state to use
 2. Skeletons: rules

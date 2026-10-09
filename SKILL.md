@@ -55,8 +55,8 @@ Read only what the current step needs.
 | Running each phase | `phases.md` |
 | Reading DESIGN.md | `design-md.md` |
 | Auditing | `static-audit.md` + `rule-catalog.md` |
-| LAY, HIE - layout, hierarchy, declutter | `hierarchy-declutter.md`, `scroll-containment.md` |
-| RSP, DLG - responsive, wrapping, dialogs, scroll containment | `responsive-fluid.md`, `scroll-containment.md` |
+| LAY, HIE - layout, hierarchy, declutter | `hierarchy-declutter.md`, `responsive-fluid.md` §9 (scroll) |
+| RSP, DLG - responsive, wrapping, dialogs, scroll containment | `responsive-fluid.md` (incl. §9 scroll) |
 | LDG, STA - loading, skeletons, pending buttons, states | `loading-states.md` |
 | PAG - lists, pagination | `pagination.md` |
 | TAB - tables, data grids | `tables-data-grids.md` |
@@ -66,13 +66,13 @@ Read only what the current step needs.
 | HOOK - React hooks | `react-hooks.md` |
 | A11Y - accessibility, keyboard, contrast, ARIA | `accessibility.md` |
 | CON - consistency | `consistency.md` |
-| SLOP, CPY - visual slop, copy | `anti-slop.md`, `ux-copy.md` |
+| SLOP, CPY - visual slop, copy | `craft.md` §1 + §4 checklists, `ux-copy.md` |
 | MOT - motion, micro-interactions | `motion.md` |
-| SOUL - soulful design, craft, tactile finish | `soulful-design.md` |
-| HUM - human design theory (for humans, not robots) | `human-design-theory.md` |
+| SOUL - soulful design, craft, tactile finish | `craft.md` §3 + §4 checklists |
+| HUM - human design theory (for humans, not robots) | `craft.md` §2 + §4 checklists |
 | Writing the plan | `plan-template.md` |
 | Updating this skill (not a UI) | `updating-skill.md` |
-| Optional runtime evidence & plan evaluation | `scripts/ui_audit.mjs`, `scripts/scan_patterns.mjs`, `scripts/evaluate_audit.py` |
+| Optional runtime evidence (scripts are candidates, never verdicts) | `scripts/ui_audit.mjs`, `scripts/scan_patterns.mjs` |
 
 ## Non-negotiables
 

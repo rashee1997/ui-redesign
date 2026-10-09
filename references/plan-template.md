@@ -53,107 +53,31 @@ Source: <path to the project's DESIGN.md + linked files> | none, derived from co
 Legacy structure: <one line naming the current layout, e.g. "stacked cards with a stat row on top">
 
 ## 5. Findings
-*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 25 catalog categories and every rule ID have been individually audited in 04-coverage.md (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed).*
+*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 25 catalog categories and every rule ID have been individually audited in 04-coverage.md (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
+
+Row format: `- [Pn] <rule> <file:line> - <what> → <fix>` (ledger findings: `- F-0xx [Pn] <rule> …`). Shape of a good section — one or two rows per category, concrete file:line and fix in each:
 ### Breaks DESIGN.md rules
 - [P2] file:line - <what> - breaks <rule, §section> → <fix>
-### Hierarchy & clutter
-- [P2] file:line - <what> → <fix>
-- [P2] HIE-09 dashboard.tsx:45 - flat visual weight across 4 identical stat cards → establish primary metric anchor with tonal contrast
-- [P2] HIE-10 header.tsx:18 - badge, icon, and colored chip all competing with title → demote badge, remove redundant icon
-- [P2] HIE-11 article.tsx:22 - arbitrary 29px heading with loose leading → map to theme font-2xl with tight leading and text-wrap: balance
-- [P2] HIE-12 panel.tsx:60 - heavy dark drop shadow (shadow-xl) → replace with subtle background tier and crisp hairline border
-- [P1] HIE-08 invoice-card.tsx:32 - duplicate Save buttons visible in card header and footer → remove header duplicate, unify on single footer action
-### Responsive & fluid
-- [P1] file:line - page overflows 34px at 375 (from audit) → <fix>
-- [P2] RSP-14 floating-bar.tsx:18 - floating action bar touches home indicator on mobile → add `pb-[max(1rem,env(safe-area-inset-bottom))]`
-- [P2] RSP-15 filter-chip.tsx:22 - fast tap chip triggers 300ms double-tap zoom delay → add `touch-manipulation`
-- [P2] DLG-10 sheet-drawer.tsx:45 - scrollable sheet chains scroll to outer body → add `overscroll-contain`
-### Visual slop & layout containment
-- [P1] LAY-11 table-actions.tsx:88 - `sr-only` description in table row has unpositioned parent, leaking phantom scroll height → add `relative` to parent cell wrapper
-- [P1] LAY-12 panel-view.tsx:34 - inner scroller nested inside shell scroller without max-height bounds → delegate scroll ownership to shell
-- …
-### Copy
-- …
-### Consistency & component sharing
-- [P2] 3 spinner kinds (Loader2, CSS ring, "Loading..." text) → one `Spinner`
-- [P1] CON-06 invoices/new/page.tsx:40 & invoices/[id]/edit/page.tsx:42 - separate copy-pasted create and edit forms → extract shared `<InvoiceForm mode="create" | "edit" />` (FRM-14)
-- [P1] CON-08 document-view.tsx:285 - version selector switches canvas but header and facts panel remain statically bound to currentVersion → dynamically bind activeVersion across all child panels and workflows
-### Motion & micro-interactions
-- [P2] MOT-06 invoice-form.tsx:110 - buttons lack active/press micro-feedback → add `active:scale-[0.98]` and 100ms transition
-- [P2] MOT-07 filter-bar.tsx:65 - collapsible panel snaps open abruptly → smooth CSS grid row transition (motion.md §2D)
-### Human cognitive & emotional experience
-- [P1] HUM-01 settings-form.tsx:30 - 18 unchunked settings fields dumped in single card → split into 4 thematic cards with progressive disclosure
-- [P2] HUM-02 audit-log.tsx:44 - clickable table row looks like static text (no cursor, no hover affordance) → add hover background and subtle row link signifier
-- [P1] HUM-03 filter-dropdown.tsx:20 - selecting tag updates count 800ms later with no immediate visual receipt → add instant local state feedback (<100ms)
-- [P2] HUM-04 profile-view.tsx:55 - label is closer to previous field than its own input → adjust Gestalt proximity spacing (gap-1.5 label-to-input, gap-6 between fields)
-- [P1] HUM-06 document-form.tsx:80 - requires user to manually type department ID from memory → replace with auto-complete department combobox
-- [P2] HUM-07 sync-panel.tsx:12 - routine background sync pops full modal interrupting user input → move to calm peripheral status indicator in footer
-- [P1] HUM-08 upload-wizard.tsx:110 - completion abruptly vanishes leaving user on empty dashboard → add affirmative completion card with view and share next actions
-### Soulful design, craft & tactile finish
-- [P2] SOUL-01 buttons.tsx:40 - dead controls lack active/press physical depression → add `active:scale-[0.98]` and 100ms ease-out
-- [P2] SOUL-02 card-wrapper.tsx:18 - nested card has clashing border radius (p-4 with rounded-2xl outer and rounded-2xl inner) → apply concentric radius R_inner = R_outer - P (rounded-lg)
-- [P2] SOUL-03 play-control.tsx:25 - triangle play icon geometrically centered appears off-balance → add `translate-x-[1px]` optical compensation
-- [P2] SOUL-04 data-view.tsx:50 - content pops in abruptly when data loads → add smooth 200ms fade-in crossfade
-- [P2] SOUL-06 surface.tsx:32 - muddy drop shadow (shadow-xl) → replace with tonal luminance tier and crisp hairline border
-### Pagination
-- [P1] server/invoices.ts:12 - query has no limit; page slices on the client → backend pagination
-- [P1] PAG-14 get-documents.ts:92 - archive query retains is_current: true filter, excluding all soft-deleted records → remove active-only filters from archive queries
-### Tables & data grids (TAB)
-- [P2] TAB-01 documents-table.tsx:42 - Amount column header is left-aligned while currency cells are right-aligned → align header right with `text-right`
-- [P1] TAB-02 equipment-table.tsx:18 - sticky table header lacks background, letting scrolled rows bleed through text → add `bg-background border-b border-border`
-- [P1] TAB-03 user-table.tsx:30 - select-all checkbox ambiguously selects only current page without declaring scope or offering dataset selection → add scope label and dataset banner
-- [P2] TAB-04 invoice-table.tsx:88 - row Edit and Delete buttons hidden behind `group-hover:opacity-100`, unreachable on touch → replace with persistent kebab menu button
-- [P2] TAB-05 asset-table.tsx:15 - wide table scrolls horizontally with no shadow affordance or frozen key column → add scroll shadow cues and freeze Asset ID column (`sticky left-0`)
-- [P2] TAB-06 log-table.tsx:64 - UUIDs truncated with ellipsis without tooltip or inspection affordance → add tooltip and one-click copy button
-- [P2] TAB-07 sort-header.tsx:22 - sortable column lacks ascending/descending chevron when sorted → add explicit chevron indicator and `aria-sort`
-### File uploads & drag-and-drop (UPL)
-- [P0] UPL-01 document-uploader.tsx:35 - missing window `dragover`/`drop` `preventDefault`, so dropping file outside zone navigates tab away and erases form → add window drop containment effect
-- [P1] UPL-02 avatar-picker.tsx:50 - `<input type="file">` does not reset `e.target.value = ''`, so re-selecting same file fails to fire `onChange` → reset value after selection
-- [P1] UPL-03 certificate-preview.tsx:28 - `URL.createObjectURL` generated for preview without `URL.revokeObjectURL` cleanup on unmount → revoke URL in effect destructor
-- [P2] UPL-04 dropzone.tsx:14 - upload area gives no indication of accepted file formats or size limits → add upfront subtitle "PDF, PNG, JPG up to 25 MB"
-- [P1] UPL-05 batch-uploader.tsx:80 - single file error aborts entire 10-file upload batch without retry → isolate failed file with retry action and preserve successful uploads
-- [P2] UPL-06 large-upload.tsx:44 - 100 MB video upload shows indeterminate spinner without progress bar or cancel button → add percentage/byte progress and AbortController button
-### Toasts, notifications & alerts (NOT)
-- [P1] NOT-01 payment-form.tsx:90 - critical transaction error code auto-dismisses after 3 seconds → render as persistent inline `<Alert variant="destructive">`
-- [P2] NOT-02 undo-toast.tsx:25 - "Undo" toast auto-dismisses while user moves pointer toward it → pause timer on `:hover` and `:focus-within` with minimum 8s duration
-- [P2] NOT-03 bulk-delete.tsx:60 - deleting 15 items fires 15 separate toasts filling the screen → combine into single summary toast "15 items deleted"
-- [P2] NOT-04 notification-host.tsx:18 - toasts anchored top-right cover primary Save and Publish buttons → anchor to bottom-right (desktop) / bottom-center (mobile)
-- [P2] NOT-05 bell-icon.tsx:20 - notification count badge does not decrement when notifications are read → synchronize badge count state on read
-### Loading & pending
-- [P2] app/invoices/page.tsx:3 - `if (isLoading) return null` → table skeleton
-- [P1] LDG-11 invoices-table.tsx:24 - legacy 3-column skeleton reused for new 5-column layout → redesign InvoiceTableSkeleton to match new table
-- [P2] invoice-dialog.tsx:88 - Save spinner oval (no shrink-0), button shrinks 40px → Button `loading`
-### Mutations, forms & errors
-- F-012 [P1] MUT-04 invoice-dialog.tsx:120 - after Save the table isn't invalidated → stale list
-- F-013 [P1] FRM-06 invoice-form.tsx:64 - server field errors only shown as a toast
-- F-014 [P1] FRM-14 invoice-form.tsx - create and edit forms maintained separately → unified polymorphic form
-- F-015 [P1] FRM-15 auth-code.tsx:20 - `onPaste` blocks pasting verification code → remove `e.preventDefault()`
-- F-016 [P2] FRM-16 terms-checkbox.tsx:15 - checkbox and label have unclickable dead zone between them → wrap in unified `<label className="cursor-pointer">`
-- F-017 [P2] FRM-17 search-input.tsx:10 - unconditional `autoFocus` triggers abrupt mobile keyboard pop and screen zoom → restrict to desktop or user-intent click
-- F-018 [P1] FRM-18 file-preview.tsx:46 - preview toggle button inside form lacks type="button", causing accidental submit on click/Enter → add explicit type="button" and suppress input Enter submission
-- F-019 [P1] MUT-13 use-mutations.ts:75 - mutation invalidation refreshes parent document but omits audit-log query → add complete child telemetry invalidation
-- F-020 [P2] HOOK-03 customer-search.tsx:31 - fetch in effect without abort → out-of-order results
-- F-021 [P2] FRM-19 quantity-input.tsx:18 - mouse wheel while hovering number input changes quantity accidentally → add `onWheel={(e) => e.currentTarget.blur()}`
-- F-022 [P2] FRM-20 mobile-form.tsx:95 - virtual keyboard covers active form input on mobile viewports → add smooth `scrollIntoView` on focus
-- F-023 [P1] FRM-21 date-picker.tsx:40 - date picker converts local date to UTC midnight ISO string, shifting date back 1 day in Americas → store local `YYYY-MM-DD` string
-- F-024 [P2] FRM-22 bio-textarea.tsx:30 - input with maxLength=200 silently drops typed characters without counter → add visible `{count}/200` counter
-- F-025 [P2] FRM-23 password-input.tsx:25 - password field lacks show/hide toggle → add toggle button with `aria-label`
-- F-026 [P1] FRM-24 onboarding-wizard.tsx:55 - reloading step 3 resets wizard back to step 1 losing all inputs → persist step state in sessionStorage with draft recovery
-- F-027 [P2] DLG-11 modal.tsx:40 - opening dialog removes scrollbar causing 15px layout lurch → apply `scrollbar-gutter: stable`
-- F-028 [P2] DLG-12 popover.tsx:18 - popover menu rendered inside `overflow-hidden` card is clipped at border → render menu via Radix Portal
-- F-029 [P3] DLG-14 save-button.tsx:12 - "Save" button has redundant tooltip "Save" with no added info → remove redundant tooltip
-- F-030 [P1] NAV-06 search-bar.tsx:34 - async search does not abort stale in-flight query, displaying outdated results → attach AbortController to search queries
-- F-031 [P2] NAV-07 search-bar.tsx:28 - search input lacks instant clear (`x`) button → add clear button that resets query and preserves focus
-- F-032 [P2] NAV-08 combobox.tsx:75 - keyboard arrow navigation does not scroll highlighted option into view → add `scrollIntoView({ block: 'nearest' })`
-- F-033 [P1] ERR-08 submit-handler.ts:45 - 401 response hard-redirects to login losing completed form → preserve form inputs in sessionStorage and prompt with in-place modal
-### Accessibility (A11Y)
-- [P1] A11Y-01 actions.tsx:14 - `<div onClick={onDelete}>` used as button → replace with native `<button type="button">`
-- [P1] A11Y-02 toolbar.tsx:28 - icon-only button lacks accessible name → add `aria-label="Filter documents"` and `aria-hidden="true"` on SVG
-- [P1] A11Y-03 inputs.tsx:55 - `outline-none` removes focus ring without replacement → add `focus-visible:ring-2 focus-visible:ring-ring`
-- [P1] A11Y-04 badge.tsx:19 - muted grey text on dark background has 2.4:1 contrast → update to token with ≥ 4.5:1 ratio
-- [P2] A11Y-05 table-actions.tsx:40 - icon button hit target is 18×18px → expand hit target to minimum 24×24px with `p-1.5`
-- [P1] A11Y-12 sticky-bar.tsx:10 - sticky header obscures top of focused form inputs when tabbing → add `scroll-margin-top: 5rem`
-- [P1] A11Y-18 form.tsx:82 - validation error not associated with input → link with `aria-describedby` and `aria-invalid="true"`
+### Hierarchy, responsive & layout
+- [P1] HIE-08 invoice-card.tsx:32 - duplicate Save in header and footer → single footer action
+- [P2] RSP-14 floating-bar.tsx:18 - bar touches home indicator → `pb-[max(1rem,env(safe-area-inset-bottom))]`
+- [P1] LAY-11 table-actions.tsx:88 - `sr-only` has unpositioned parent, phantom scroll → `relative` on cell wrapper
+### Consistency, motion, human & craft
+- [P1] CON-08 document-view.tsx:285 - header frozen on currentVersion while viewing another revision → bind activeVersion to all panels
+- [P2] MOT-06 invoice-form.tsx:110 - buttons lack press feedback → `active:scale-[0.98]`, 100ms
+- [P1] HUM-01 settings-form.tsx:30 - 18 unchunked fields → 4 thematic cards + disclosure
+- [P2] SOUL-02 card-wrapper.tsx:18 - clashing nested radii → concentric R_inner = R_outer - P
+### Data, tables, uploads, toasts, loading, mutations
+- [P1] PAG-14 get-documents.ts:92 - archive query keeps `is_current: true` → drop active-only filter
+- [P2] TAB-02 equipment-table.tsx:18 - sticky header has no background → `bg-background border-b`
+- [P0] UPL-01 document-uploader.tsx:35 - missed drop navigates tab away → window drop containment
+- [P1] NOT-01 payment-form.tsx:90 - error code auto-dismisses in 3s → persistent inline Alert
+- [P1] LDG-11 invoices-table.tsx:24 - legacy 3-col skeleton on new 5-col table → redesign skeleton
+- F-012 [P1] MUT-04 invoice-dialog.tsx:120 - table not invalidated after Save → invalidate on onSuccess
+- F-015 [P1] FRM-15 auth-code.tsx:20 - `onPaste` blocked → remove `preventDefault`
+### Accessibility & navigation
+- [P1] A11Y-01 actions.tsx:14 - div-as-button → native `<button type="button">`
+- F-030 [P1] NAV-06 search-bar.tsx:34 - stale queries not aborted → AbortController
 ### Navigation & other
 - …
 ### Noticed, out of scope (FOCUSED only - not fixed)

@@ -14,7 +14,7 @@ This skill is long because UI work has many ways to go wrong. Agents skip steps 
 
 ## 1. The ledger folder
 
-Create `.ui-audit/<surface-slug>/` at the start (add `.ui-audit/` to `.gitignore` if the user doesn't want it committed - ask once). Files, in the order they're written:
+Create `.ui-audit/<surface-slug>/` at the start (add `.ui-audit/` to `.gitignore` if the user doesn't want it committed - ask once). Files, in the order they're written (audit shape follows W3C WCAG-EM: scope → explore → sample → evaluate → report):
 
 | File | Written in | Must contain (required slots) |
 |---|---|---|
@@ -54,10 +54,12 @@ State the gate result in one line when crossing it: `Gate G1: PASS - 14 files re
 | F-001 | MUT-03 | components/invoice-form.tsx:88 | `onSubmit` has no pending guard; `mutate()` can fire twice (no `disabled`, no `isPending` check) | Button `loading={isPending}` + early return | P1 | open |
 ```
 
+**Severity is rated in a second pass, not during the hunt.** Record findings severity-free first (leave Sev blank), then rate the complete list against frequency × impact × persistence: how often it hits, how hard it is to overcome, whether it repeats (Nielsen). P0 ≙ catastrophe (blocks task / loses data · fix before release), P1 ≙ major (broken or WCAG A/AA failure), P2 ≙ minor (wrong or confusing), P3 ≙ cosmetic (polish if time). `rejected` ≙ not-a-problem. Rating during the hunt biases the audit toward what was found first; the list gets rated whole.
+
 - **ID**: `F-001`… never reused.
 - **Rule**: the ID from `rule-catalog.md` (or `DM-<n>` for a DESIGN.md rule, cited by section).
 - **Where**: file:line. One finding = one root cause (list extra locations in the same row).
-- **Severity**: P0 blocks a task / loses data · P1 broken or WCAG A/AA failure · P2 wrong or confusing · P3 polish.
+- **Severity**: rated in the second pass (above): P0 blocks a task / loses data · P1 broken or WCAG A/AA failure · P2 wrong or confusing · P3 polish.
 - **Status**: `open` → `fixed` | `deferred` | `rejected`.
 
 **The proof rule.** A candidate becomes a finding only when it has:
@@ -114,25 +116,13 @@ If you catch yourself thinking one of these, stop and do the step.
 | "The script passed, so it's done" | Scripts are a secondary runtime check. Static review of every file is the primary audit. |
 | "Approval is implied, they asked me to do it" | G3 needs explicit approval in this conversation, unless the user said up front not to wait (quote it). |
 | "The existing skeleton is fine, no need to touch it" | When UI layout or card structure changes, the old skeleton mismatches the new layout and causes layout shift (CLS). Skeletons must be redesigned to match the new UI. |
-| "The UI library handles all accessibility" | Component libraries only supply primitives; omitting labels, killing focus rings, or failing color contrast breaks accessibility in user code. |
-| "outline-none looks cleaner" | Invisible focus leaves keyboard users stranded; always provide an explicit, high-contrast `:focus-visible` indicator (A11Y-03). |
-| "Removing slop makes it finished" | Stripping gradients and badges prevents bad UI, but without soulful craft (concentric geometry, tactile depression, optical alignment, calm crossfades) the screen remains a sterile, lifeless void (soulful-design.md). |
-| "Accessibility is a polish pass for later" | Accessibility is structural (DOM order, semantic elements, labels); bolting it on later forces painful rewrites. |
-| "The data model is the UI" | Exposing raw DB columns, unchunked forms, and robotic status strings ignores human cognitive limits; interfaces must be designed for human psychology (human-design-theory.md). |
 | "I'll update the ledger at the end" | Update as you go; end-of-task reconstruction is where steps get faked. |
 | "Typecheck probably passes" | Run it in this message and paste the result. |
 | "Should work now" / "Looks good" | Evidence before claims. Say what you ran and what it returned. |
-| "The id is always there by the time the effect runs" | It is not: a URL change or a stale async component renders the effect with `undefined` first (a request to `…/undefined`). Guard the id and gate the component on the key it loaded for (HOOK-14). |
 | "The checklists passed once, so it's done" | The audit is a loop, not a one-shot pass: re-audit each changed surface against the SLOP and MOT rules its slices touched and fix any regression before G5. |
-| "The child component can just read the root/default item" | It cannot: when the user selects a revision/item in a picker, hardcoded props leave headers, badges, facts, and approval panels frozen on the old item (CON-08). |
-| "Buttons without type default to standard buttons" | In HTML forms, `<button>` without type defaults to `type="submit"`, causing utility buttons (file pickers, preview toggles) to fire premature form submissions on click or input Enter (FRM-18). |
-| "Sticky table headers don't need an explicit background" | Without `bg-background` and hairline border, scrolling data rows bleed through the text, rendering headers unreadable (TAB-02). |
-| "A local dropzone container is sufficient for file uploads" | Missing `dragover`/`drop` `preventDefault` on window/document causes accidental drops outside the container to navigate the browser directly to the raw file, crashing the app and destroying form state (UPL-01). |
-| "Toasts are fine for all error feedback" | Auto-dismissing error toasts on short timers (<10s) destroys critical diagnostic codes before users can read or copy them; critical failures require persistent alerts (NOT-01). |
-| "Date pickers can just convert dates with toISOString()" | `toISOString()` converts local calendar dates to UTC midnight, shifting dates backwards by one full day in negative GMT timezones (FRM-21). |
 
 ## 6. Context resets and long runs
 
 - After a context reset or `/compact`, re-read `00-scope.md`, `03-findings.md` and `05-progress.md` before doing anything else, and continue from the first unfinished slice.
 - For big surfaces (> ~15 files), use read-only subagents to read groups of files against specific catalog categories; each must return findings in the §3 format with file:line evidence. You still own the ledger, the falsify pass and the gates. Don't trust a subagent's "no issues" without its evidence column.
-- For high-stakes runs, finish with a fresh subagent that reads only `PLAN.md`, `03-findings.md` and the diff, and reports any finding marked `fixed` that the diff doesn't actually fix.
+- For high-stakes runs, finish with a fresh subagent that reads only `PLAN.md`, `03-findings.md` and the diff, rates severity independently before opening the ledger's ratings, and reports any finding marked `fixed` that the diff doesn't actually fix.
