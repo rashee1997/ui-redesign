@@ -54,7 +54,7 @@ Rules:
 - **Only fix ledger findings.** Something new turns up → add it to the ledger first (with evidence), then fix it if in scope; otherwise defer. In FOCUSED mode, out-of-scope items are never touched.
 - **One version of each pattern** - use the shared canonical component, don't restyle a one-off.
 - **Deviations**: small and sensible → do it and log it in `05-progress.md`; large (new structure, new dependency, another feature) → stop and ask.
-- **After each slice**: typecheck/lint the touched files, look at a phone and a desktop width if the app runs, set finding statuses to `fixed`, log the slice with command output. Then next slice. After all slices, Gate G4.
+- **After each slice**: typecheck/lint the touched files, look at a phone and a desktop width if the app runs, set finding statuses to `fixed`, log the slice with command output — then stage that slice's files by path (`git add <paths>`, never `-A`) and commit. One verified slice, one commit; never batch slices, never commit unverified. Then next slice. After all slices, Gate G4.
 
 ## 5. Verify
 

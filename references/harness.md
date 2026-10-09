@@ -24,7 +24,7 @@ Create `.ui-audit/<surface-slug>/` at the start (add `.ui-audit/` to `.gitignore
 | `03-findings.md` | Phase 1 | the findings ledger (§3). Every finding has an ID |
 | `04-coverage.md` | Phase 1 (FULL only) | the rule-by-rule coverage ledger (§4) - every individual rule ID in `rule-catalog.md` accounted for with finding IDs or concrete verified pass evidence |
 | `PLAN.md` | Phase 2 | the plan (plan-template.md); every finding ID appears in exactly one slice or in "Deferred" with a reason |
-| `05-progress.md` | Phase 4 | per slice: files changed, finding IDs closed, deviations, checks run with their output |
+| `05-progress.md` | Phase 4 | per slice: files changed, finding IDs closed, deviations, checks run with their output, commit SHA |
 | `06-verify.md` | Phase 5 | per finding ID: how it was verified (command output, file:line re-read, screenshot); final checklist results |
 
 Write the files as you go, not at the end. Update the finding status in `03-findings.md` the moment a fix lands.
@@ -39,7 +39,7 @@ Before starting each phase, open the previous files and check the gate. If a gat
 | G1 → Plan | every file in `02-inventory.md` is marked Read ✔; `01-design.md` has a digest or "none, derived from code"; FULL: every single rule ID from `rule-catalog.md` in `04-coverage.md` is accounted for **in exact sequential catalog order** (with finding IDs or concrete code file:line pass evidence - no blank cells, no unevidenced "clean", no lump category skips, no jumping or omitting IDs); FOCUSED: every named issue has ≥1 finding or a "could not reproduce - evidence" line, and every rule in its mapped categories is fully checked in catalog order |
 | G2 → Approval | `PLAN.md` exists; every finding ID is assigned to a slice or Deferred with a reason; wireframes present if layout changes |
 | G3 → Implement | the user approved in this conversation (quote their words in `PLAN.md` under "Approval") |
-| G4 → Verify | every slice in `05-progress.md` has its checks run with output pasted |
+| G4 → Verify | every slice in `05-progress.md` has its checks run with output pasted and a commit SHA |
 | G5 → Done | `03-findings.md` has **zero rows with status `open`**; every row is `fixed` (with verification in `06-verify.md`), `deferred` (with reason, approved or out of scope) or `rejected` (failed the proof rule); typecheck/lint/tests ran in this message and passed or pre-existing failures are named |
 
 State the gate result in one line when crossing it: `Gate G1: PASS - 14 files read, 22 categories audited, 133/133 rules individually accounted for in 04-coverage.md in strict catalog order, 23 findings.`

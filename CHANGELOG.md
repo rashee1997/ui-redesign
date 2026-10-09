@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0 (2026-10-09): Commit-per-verified-slice in Implement
+- Changed: `phases.md` implement rules — after each slice's checks pass, stage by path and commit; one verified slice, one commit; never batch, never commit unverified. `harness.md` 05-progress row and G4 gate now require the commit SHA per slice.
+- Reason: user instruction — the implement step had no commit instructions; same gap as edgecase-review v4.1.0.
+- Sources: user, this session.
+
 ## 2.0.0 (2026-10-09): Structured rebuild, craft merge, sourced protocol, evaluator removed
 
 - Added: `references/craft.md` — merges `soulful-design.md`, `human-design-theory.md`, and `anti-slop.md` into one taste/craft/human guide (slop tells, 8 human laws with fixes, craft finish with recipes, three audit checklists). Catalog SLOP/SOUL/HUM IDs unchanged.
