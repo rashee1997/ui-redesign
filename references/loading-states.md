@@ -121,6 +121,7 @@ Then give the project's Button a `loading` prop (or a `LoadingButton` wrapper) t
 
 - **Post-deletion navigation (STA-09)**: Deleting, archiving, or disposing an entity from its detail view MUST automatically redirect the user to the parent collection/list route with an affirmative confirmation toast. Leaving the user on a deleted resource URL produces a confusing 404 or blank dead end.
 - **Success modal next actions (STA-10)**: Success dialogs or completion banners MUST offer clear, explicit next actions (e.g. primary: "View created item", secondary: "Create another" or "Return to dashboard"). Dismissing a success modal must never strand the user on a frozen or dirty form.
+- **First-run without blocking (STA-11)**: First use gets a progressive checklist or contextual hints, not a blocking coachmark tour. Any tour has Skip, and dismissal persists (never re-nags on next visit).
 
 ## 7. Checklist
 
@@ -133,3 +134,4 @@ Then give the project's Button a `loading` prop (or a `LoadingButton` wrapper) t
 - [ ] List page changes keep previous data (no blank flash).
 - [ ] `prefers-reduced-motion` respected.
 - [ ] Error after loading is handled (not an infinite skeleton).
+- [ ] First use is a progressive checklist, not a blocking tour; dismissal persists (STA-11).

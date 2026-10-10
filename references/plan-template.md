@@ -53,7 +53,7 @@ Source: <path to the project's DESIGN.md + linked files> | none, derived from co
 Legacy structure: <one line naming the current layout, e.g. "stacked cards with a stat row on top">
 
 ## 5. Findings
-*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 25 catalog categories and every rule ID have been individually audited in 04-coverage.md (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
+*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 26 catalog categories and every rule ID have been individually audited in 04-coverage.md (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
 
 Row format: `- [Pn] <rule> <file:line> - <what> → <fix>` (ledger findings: `- F-0xx [Pn] <rule> …`). Shape of a good section — one or two rows per category, concrete file:line and fix in each:
 ### Breaks DESIGN.md rules
@@ -78,6 +78,9 @@ Row format: `- [Pn] <rule> <file:line> - <what> → <fix>` (ledger findings: `- 
 ### Accessibility & navigation
 - [P1] A11Y-01 actions.tsx:14 - div-as-button → native `<button type="button">`
 - F-030 [P1] NAV-06 search-bar.tsx:34 - stale queries not aborted → AbortController
+- [P2] NAV-11 palette.tsx:41 - empty query blank, no recents → 4-6 recents + suggestions
+### AI answers (if in scope)
+- [P1] AI-02 qa-panel.tsx:88 - claims with no source links → cite document chunks with count
 ### Navigation & other
 - …
 ### Noticed, out of scope (FOCUSED only - not fixed)

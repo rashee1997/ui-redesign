@@ -4,10 +4,10 @@ Every finding cites one rule ID from here (or a DESIGN.md rule). In FULL mode ev
 
 These are defaults: when DESIGN.md or the codebase's own primitives decide something differently, they win (design-md.md). Details and fixes live in the linked guides.
 
-Sources: this skill's own guides, Vercel Web Interface Guidelines, Christopher Alexander (A Pattern Language), Don Norman (The Design of Everyday Things, Emotional Design), Rauno Freiberg (Invisible Details), Emil Kowalski (Animations on the Web), impeccable (harden/distill/layout/audit), WCAG 2.2, TanStack Query and React docs, Front-End Checklist (thedaviddias), Jef Raskin (The Humane Interface), John Sweller (Cognitive Load Theory), Mark Weiser (Calm Technology), Daniel Kahneman (Peak-End Rule), Roman Kamushken (Data Table UI Design), BuiltUX (Toast Notification Doctrine), Editorial Web Typography & Visual Hierarchy Research.
+Sources: this skill's own guides, Vercel Web Interface Guidelines, Christopher Alexander (A Pattern Language), Don Norman (The Design of Everyday Things, Emotional Design), Rauno Freiberg (Invisible Details), Emil Kowalski (Animations on the Web), impeccable (harden/distill/layout/audit), WCAG 2.2, TanStack Query and React docs, Front-End Checklist (thedaviddias), Jef Raskin (The Humane Interface), John Sweller (Cognitive Load Theory), Mark Weiser (Calm Technology), Daniel Kahneman (Peak-End Rule), Roman Kamushken (Data Table UI Design), BuiltUX (Toast Notification Doctrine), NN/g "AI Hallucinations" (Laubheimer 2025), Setproduct "Command Palette UI Design" (Kamushken 2026), Editorial Web Typography & Visual Hierarchy Research.
 
 ## Contents
-LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR · NOT · HOOK · A11Y · NAV · CON · CPY · SLOP · MOT · SOUL · HUM · PERF · I18N · THM
+LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR · NOT · HOOK · A11Y · NAV · CON · CPY · SLOP · MOT · SOUL · HUM · PERF · I18N · THM · AI
 
 ---
 
@@ -83,6 +83,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - STA-08 One component error blanks the whole page (no local error boundary/fallback)
 - STA-09 Post-deletion navigation to deleted resource: deleting or archiving an entity leaves user on dead detail view or 404 route without redirecting to parent list with confirmation
 - STA-10 Success modal without next action: mutation succeeds but modal offers no next steps ("View item", "Create another", "Return to list"), leaving user stranded on dirty form
+- STA-11 First-run blocks or nags: blocking coachmark tour with no skip, or tips that reappear after dismissal, instead of a progressive checklist / contextual hint that persists dismissal
 
 ## LDG - Loading & pending → loading-states.md
 - LDG-01 Data region with no loading UI (`return null`, blank, bare "Loading...")
@@ -185,6 +186,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - ERR-07 Network offline/timeout not handled (spinner forever)
 - ERR-08 Session expiry (401) on form submit redirects to login and permanently discards entered user form data without draft recovery
 - ERR-09 Multi-tab authentication desync: session expiration or logout in another tab crashes current tab actions without in-place re-auth modal
+- ERR-10 Offline with no banner or queued retry: network drop fails mutations silently with no offline indicator, and no queued resubmit when back online
 
 ## NOT - Toasts, notifications & alerts → notifications-toasts.md
 - NOT-01 Auto-dismissing critical or actionable error messages on a short timer (<10s) before user can read, copy, or act
@@ -246,6 +248,8 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - NAV-08 Combobox or autocomplete dropdown navigating with Arrow keys fails to scroll active highlighted option into listbox view
 - NAV-09 Post-submission back button trap: creation form redirects with `router.push` instead of `router.replace`, causing browser Back button to return to empty creation form rather than parent list
 - NAV-10 Debounced input vs. submit race: pressing Enter or clicking Submit in a debounced field executes before debounce timer flushes, submitting stale pre-debounce query and dropping recent keystrokes
+- NAV-11 Command palette missing production states: empty query shows blank instead of 4-6 recents; no-results is a dead end; async results jump without skeleton rows; offline kills local commands; nested page has no visible back (Backspace-only); disabled commands hidden instead of greyed with reason
+- NAV-12 Shortcuts and palette undiscoverable: no visible trigger teaching the binding, binding dead inside text inputs, fuzzy matches without highlighted characters, result count not announced to screen readers
 
 ## CON - Consistency → consistency.md
 - CON-01 More than one variant of a pattern in the surface (buttons, tables, empty states, dialogs, badges, page headers)
@@ -317,6 +321,7 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - PERF-04 Whole lists re-render on one row change (unstable props/keys)
 - PERF-05 Big blur/backdrop-filter surfaces; `will-change` left on
 - PERF-06 Large selectable lists, dropdown menus, or combobox options (>100 items) rendered into DOM without virtualization or pagination
+- PERF-07 Interaction latency over budget: keystroke-to-paint or palette rank over ~250ms on lists >200 items, with no virtualization and no debounced (150-250ms) + aborted async source
 
 ## I18N - Locale & formatting
 - I18N-01 Hard-coded date/number/currency formats instead of `Intl` or the project's helper
@@ -330,3 +335,12 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - THM-01 Colors that don't switch in dark mode (hard-coded)
 - THM-02 Contrast fails in one theme only
 - THM-03 `color-scheme` not set; native controls unreadable in dark mode
+- THM-04 Dark elevation parity broken: overlay container not raised above the page surface in dark mode, or shortcut hints / secondary text illegible in one theme only
+
+## AI - AI chat, streaming & generated answers → ai-ux.md
+- AI-01 Streaming answer with no stream state or stop control: long AI generation shows blank/spinner, has no progressive tokens or step text, no Stop button, or the dialog can close mid-stream and lose the output
+- AI-02 Factual AI answer without source drill-down: generated claims show no links, cards, or reference list into the cited documents, and no trust signal (count / recency)
+- AI-03 Generic disclaimer only: the only inaccuracy warning is small-print "can make mistakes", with no contextual first-person uncertainty ("I'm not sure…") or High/Med/Low confidence on low-confidence or high-stakes outputs
+- AI-04 Generated answer outranks or blends with deterministic results: AI content shares the list with real commands / records without a labelled group and visible seam
+- AI-05 AI action executes without confirm or undo: a prompted write (assign, change status, delete) runs blindly with no preview of what will happen and no undo window
+- AI-06 AI output with no feedback or verify path: no thumbs / copy / cite-check affordance and no human-verify next step on answers that matter

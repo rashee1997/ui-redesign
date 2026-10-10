@@ -18,7 +18,7 @@ The audit is done by **reading code**, file by file, against the rule catalog. G
 4. Run grep recipes (§5) to catch anything the reading missed; open every hit.
 5. Optional: run the scripts for runtime evidence (§6).
 6. Falsify pass (harness.md §3).
-7. Build `04-coverage.md` (FULL mode): walk **every rule ID in `rule-catalog.md` in strict sequential order from LAY-01 to THM-03**. Record each rule as `VIOLATION` (with `F-xxx`), `PASS` (with concrete code proof `file:line`), or justified `N/A`. Verify Gate G1 before moving to plan.
+7. Build `04-coverage.md` (FULL mode): walk **every rule ID in `rule-catalog.md` in strict sequential order from LAY-01 through AI-06**. Record each rule as `VIOLATION` (with `F-xxx`), `PASS` (with concrete code proof `file:line`), or justified `N/A`. Verify Gate G1 before moving to plan.
 ## 2. Tracing the surface
 
 Start at the route entry (`page.tsx`, `route.tsx`, `index.vue`, `+page.svelte`…), plus its `layout`, `loading`, `error`, `not-found` siblings. Then follow, recursively:
@@ -107,6 +107,10 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - Does keyboard arrow navigation in comboboxes scroll active highlighted options into view (`NAV-08`)?
 - Does form submission on expired sessions preserve user input instead of hard-redirecting to login (`ERR-08`)?
 - Is session logout synchronized across tabs (`ERR-09`)?
+- Does offline show a persistent banner with queued retry instead of silent failure (`ERR-10`)?
+- Command palette: does empty query show recents, no-results offer exits, async render skeleton rows, local commands survive offline, nested pages show back, disabled rows show reasons (`NAV-11`)? Is the binding taught on a visible trigger, alive inside inputs, with highlighted matches and announced counts (`NAV-12`)?
+**AI chat & generated answers** - AI (ai-ux.md)
+- Does streaming show tokens + Stop (`AI-01`)? Do factual claims link sources (`AI-02`)? Is uncertainty contextual, not generic small print (`AI-03`)? Are AI rows labelled and never outranking real commands (`AI-04`)? Do AI writes confirm/undo (`AI-05`)? Is there feedback + verify (`AI-06`)?
 **Motion & micro-interactions** - MOT (motion.md)
 - Do interactive controls provide immediate press feedback within 100ms (`active:scale-[0.98]`, MOT-06)?
 - Do state transitions (expand/collapse, tabs, switches, popovers) transition smoothly without layout thrash on height/width (MOT-07, MOT-08)?
@@ -202,11 +206,17 @@ rg -n "toast\.(success|error|info|warning|custom)" $P
 rg -n "toast\.error.*duration:\s*[1-9]\d{2,3}\b" $P                           # vanishing error toasts <10s (NOT-01)
 rg -n "forEach.*toast\." $P                                                   # toast storm on batch operations (NOT-03)
 
-# Dialogs, overlays & search (DLG-11..14, NAV-06..08)
+# Dialogs, overlays & search (DLG-11..14, NAV-06..08, NAV-11..12)
 rg -n "scrollbar-gutter" $P                                                   # modal scroll-lock layout shift (DLG-11)
 rg -n "z-\[\d+\]|z-50|z-40|z-30" $P                                          # z-index layering conflicts (DLG-12)
 rg -n "<Tooltip|<TooltipContent" $P                                           # tooltip tautology & hover traps (DLG-13, DLG-14)
 rg -n "useDebounce|useQuery.*search|abortController" $P                       # search race conditions & cancellation (NAV-06)
+rg -n "cmdk|CommandDialog|CommandInput|use-shortcut|aria-activedescendant" $P # palette states & discoverability (NAV-11, NAV-12)
+
+# AI chat & streaming (AI-01..06)
+rg -n "useChat|streamText|stop\(\)|isStreaming|isLoading.*ai" $P               # stream state + stop control (AI-01)
+rg -n "sources|citations|references" $P | rg -v "^\s*//"                      # source drill-down present? (AI-02)
+rg -n "can make mistakes|may (hallucinate|be (wrong|inaccurate))" $P          # generic disclaimer only? needs contextual uncertainty (AI-03)
 
 # Loading / states
 rg -n "isLoading|isPending|isFetching|status ===|loading\b" $P

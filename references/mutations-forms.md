@@ -125,6 +125,7 @@ Rules:
 - `try { … } catch { }` with nothing in the catch, `.catch(() => {})`, and `catch (e) { console.error(e) }` with no UI are always findings unless a comment proves the failure is intentionally ignored.
 - **Session expiration data preservation (ERR-08)**: If a form submission fails due to an expired session (HTTP 401 Unauthorized), the client MUST NOT perform a hard redirect to `/login` that destroys entered form state. It MUST cache entered form inputs in session storage or open an in-place re-authentication modal, resuming submission upon successful login.
 - **Multi-tab authentication desync (ERR-09)**: The client must synchronize authentication state across tabs using `window.addEventListener('storage', ...)` or a `BroadcastChannel`. Logging out or switching roles in Tab A must promptly notify Tab B to lock sensitive inputs or prompt for refresh, avoiding unexpected crashes or permission errors.
+- **Offline banner and queued retry (ERR-10)**: When the network drops, show a persistent offline indicator and keep queued mutations visible with a resubmit path. Never fail silently or spin forever; on reconnect, retry or offer one-tap resubmit with the user's input intact.
 
 ## 4. Audit procedure for one mutation
 

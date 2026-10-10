@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.1.0 (2026-10-10): AI answers, palette states, first-run, offline, dark/latency parity
+- Added:
+  - Category `AI` with rules `AI-01` to `AI-06` and reference guide `references/ai-ux.md` (stream state + Stop, source drill-down, contextual uncertainty, visible seam, confirm/undo on AI writes, feedback + verify)
+  - Rules `NAV-11` to `NAV-12`: palette production states and shortcut discoverability
+  - Rules `STA-11` (first-run checklist over blocking tours), `ERR-10` (offline banner + queued retry), `THM-04` (dark elevation parity), `PERF-07` (interaction latency budget + virtualization)
+- Changed:
+  - `references/rule-catalog.md`: Contents + AI section, Sources (NN/g AI Hallucinations, Setproduct palette guide)
+  - `SKILL.md`: router rows for NAV and AI; G1 range now `LAY-01` through `AI-06`
+  - `references/responsive-fluid.md` §6, `references/loading-states.md` §6-7, `references/mutations-forms.md` §3, `references/static-audit.md` (§1, §3, §5), `references/plan-template.md` (§5), `references/phases.md` (§1d, §1f, §6)
+- Deferred: full charts/dataviz category and print/PDF rules (bloat control; PAG-11..13 already cover aggregate parity; each rule adds mandatory G1 cost)
+- Reason: user-approved gap audit — skill had zero AI-UX rules despite AI Q&A product, 1 of 12 palette checks, no first-run/offline rules
+- Sources: NN/g "AI Hallucinations" (Laubheimer 2025), https://www.nngroup.com/articles/ai-hallucinations/ (read 2026-10-10); Setproduct "Command Palette UI Design" (Kamushken 2026), https://www.setproduct.com/blog/command-palette-ui-design-guide (read 2026-10-10)
+
 ## 3.0.0 (2026-10-09): Commit-per-verified-slice in Implement
 - Changed: `phases.md` implement rules — after each slice's checks pass, stage by path and commit; one verified slice, one commit; never batch, never commit unverified. `harness.md` 05-progress row and G4 gate now require the commit SHA per slice.
 - Reason: user instruction — the implement step had no commit instructions; same gap as edgecase-review v4.1.0.
