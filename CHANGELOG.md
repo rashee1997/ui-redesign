@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.3.1 (2026-10-13): Debloat concept instructions & unify interaction recipes
+- Changed:
+  - `references/interactive-prototypes.md`: Replaced verbose individual JavaScript recipes (180+ lines of repetitive code) with a unified, lightweight interaction pattern (`setupPrototypeInteractions`), compact alert/toast dispatches, and a streamlined switcher shell template (~125 lines eliminated).
+  - `references/phases.md`: Streamlined Phase 2 and Phase 3 prototype descriptions, removing verbose laundry-list text while preserving all validation, alert, and switcher requirements.
+  - `references/harness.md`: Tightened Gate G2 condition description to reference interactive simulations cleanly.
+  - `SKILL.md`: Maintained strict <=100 line limit (96 lines) while tightening Phase 2 concept description.
+- Reason: Eliminate unnecessary instruction bloat and verbose boilerplate scripts in the skill references while retaining full interactive prototype, validation, alert, and switcher capabilities.
+
 ## 4.3.0 (2026-10-13): Decomposed Phase 1 coverage reports (04-coverage/), mandatory domain research & antislop integration
 - Added:
   - Decomposed coverage directory architecture (`04-coverage/`) in `.ui-audit/<surface-slug>/` comprising:

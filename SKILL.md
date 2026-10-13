@@ -37,7 +37,7 @@ If it's truly unclear, ask one question; otherwise pick and state the mode in on
 | # | Phase | Do | Writes | Gate |
 |---|---|---|---|---|
 | 1 | Research | DESIGN.md, app archetype & mandatory external research → digest. Trace surface and **read every file in full**. Static audit against **all 312 catalog rules**. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage/` (FULL) | G1 |
-| 2 | Plan | Plan from template. 3 interactive HTML layout concepts in `concepts/` with live validations & error alerts. Wireframes grounded in domain research. | `PLAN.md`, `concepts/` | G2 |
+| 2 | Plan | Plan from template. 3 interactive HTML layout concepts in `concepts/` with working switcher shell. Wireframes grounded in domain research. | `PLAN.md`, `concepts/` | G2 |
 | 3 | Approval | Short summary, ask Approve / Change / Reject. **No source edits before approval.** Silence is not approval. | `PLAN.md` § Approval | G3 |
 | 4 | Implement | Slice by slice. Tokens and shared primitives only. Only ledger findings get fixed; new ones go into the ledger first. | `05-progress.md`, statuses in `03-findings.md` | G4 |
 | 5 | Verify | Typecheck/lint/tests run now; re-read every changed location; re-run checks; evidence per finding. | `06-verify.md` | G5: zero `open` findings |

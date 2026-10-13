@@ -77,185 +77,79 @@ Every concept must look like the real application, not a generic template:
 
 ---
 
-## 4. Interactive JavaScript Recipes
+## 4. Required Interactive Behaviors
 
-All prototypes must be interactive so the user can physically verify behaviors before approving:
+Prototypes must be physically testable in the browser without backend dependencies. Every concept must simulate:
 
-### A. Accessible Dialogs & Modals
-```javascript
-// Native dialog or custom modal with backdrop and Esc listener
-function setupDialog(triggerId, dialogId) {
-  const trigger = document.getElementById(triggerId);
-  const dialog = document.getElementById(dialogId);
-  if (!trigger || !dialog) return;
+1. **Dialogs & Sheets**: Working `<dialog>` elements or drawer panels with backdrop click, close triggers (`[data-close]`), and Escape dismissal.
+2. **Form & Input Validations (`FRM-01`..`FRM-24`, `A11Y-18`)**: Real inputs with `required` and format checks. Blur and submit triggers set `aria-invalid="true"`, show inline error messages linked via `aria-describedby`, and clear errors on input (`input` listener).
+3. **Mutations & Loading (`MUT-01`..`MUT-13`)**: Mutation buttons show an inline spinner, disable during simulated async work (~600ms), and restore upon completion.
+4. **Alerts & Toasts (`NOT-01`..`NOT-05`, `ERR-01`..`ERR-10`)**: Persistent inline error alert banners (`role="alert"`) with title and recovery action; toast notifications that pause timeout on mouse hover/focus.
+5. **Simulation Test Bar**: A compact fixed top or bottom strip (`.prototype-test-bar`) with trigger buttons to let the user simulate states instantly (e.g. "Trigger Form Errors", "Show Error Banner", "Fire Error Toast").
 
-  trigger.addEventListener('click', () => {
-    if (typeof dialog.showModal === 'function') {
-      dialog.showModal();
-    } else {
-      dialog.classList.remove('hidden');
-    }
-  });
+### Unified Interaction Pattern
 
-  dialog.querySelectorAll('[data-close]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      if (typeof dialog.close === 'function') dialog.close();
-      else dialog.classList.add('hidden');
-    });
-  });
-
-  dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) {
-      if (typeof dialog.close === 'function') dialog.close();
-      else dialog.classList.add('hidden');
-    }
-  });
-}
-```
-
-### B. Toast Alerts with Hover-Pause (`NOT-01`..`NOT-05`)
-```javascript
-function showToast(message, variant = 'default') {
-  const container = document.getElementById('toast-container') || createToastContainer();
-  const toast = document.createElement('div');
-  toast.className = `toast toast-${variant}`;
-  toast.setAttribute('role', 'alert');
-  toast.innerHTML = `<span>${message}</span><button type="button" data-close>&times;</button>`;
-
-  let timer = null;
-  const startTimer = () => { timer = setTimeout(() => toast.remove(), 8000); };
-  const clearTimer = () => { if (timer) clearTimeout(timer); };
-
-  toast.addEventListener('mouseenter', clearTimer);
-  toast.addEventListener('mouseleave', startTimer);
-  toast.querySelector('[data-close]').addEventListener('click', () => toast.remove());
-
-  container.appendChild(toast);
-  startTimer();
-}
-```
-
-### C. Simulated Mutation Loading States
-```javascript
-function setupMutationButton(buttonId, successMessage) {
-  const btn = document.getElementById(buttonId);
-  if (!btn) return;
-
-  btn.addEventListener('click', () => {
-    const originalText = btn.innerHTML;
-    btn.setAttribute('aria-busy', 'true');
-    btn.disabled = true;
-    btn.innerHTML = `<span class="spinner"></span> Saving...`;
-
-    setTimeout(() => {
-      btn.removeAttribute('aria-busy');
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-      showToast(successMessage, 'success');
-    }, 700);
-  });
-}
-```
-
-### D. Interactive Form & Input Validations (`FRM-01`..`FRM-24`, `A11Y-18`)
-Prototypes must not feature dead or fake forms. Users must be able to test live form validations directly in the browser:
-- **Required fields & format validation**: Empty inputs trigger red borders (`border-destructive`), `aria-invalid="true"`, and inline error messages linked via `aria-describedby`.
-- **Live clearing on input**: Errors clear automatically when the user types to correct the field (`input` event).
-- **Character counters**: Textareas or inputs with `maxlength` display live character counters (`x/y chars`), warning users when approaching the limit.
+A single minimal script wires up dialogs, toasts, mutation buttons, and validation:
 
 ```javascript
-function setupFormValidation(formId) {
-  const form = document.getElementById(formId);
-  if (!form) return;
+// Minimal interaction helper for HTML prototypes
+function setupPrototypeInteractions() {
+  // Dialogs & drawers
+  document.querySelectorAll('[data-dialog-target]').forEach(btn => {
+    const dialog = document.getElementById(btn.dataset.dialogTarget);
+    btn.onclick = () => dialog?.showModal?.() || dialog?.classList.remove('hidden');
+  });
+  document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.onclick = () => btn.closest('dialog')?.close?.() || btn.closest('.modal')?.classList.add('hidden');
+  });
 
-  const validateField = (input) => {
-    const errorEl = document.getElementById(`${input.id}-error`);
-    let errorMessage = '';
+  // Simulated mutation buttons
+  document.querySelectorAll('[data-mutation]').forEach(btn => {
+    btn.onclick = () => {
+      const orig = btn.innerHTML;
+      btn.disabled = true;
+      btn.setAttribute('aria-busy', 'true');
+      btn.innerHTML = '<span class="spinner"></span> Saving...';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.removeAttribute('aria-busy');
+        btn.innerHTML = orig;
+        showPrototypeToast('Action completed successfully.', 'success');
+      }, 600);
+    };
+  });
 
-    if (input.hasAttribute('required') && !input.value.trim()) {
-      errorMessage = `${input.dataset.label || 'This field'} is required.`;
-    } else if (input.type === 'email' && input.value && !/^\S+@\S+\.\S+$/.test(input.value)) {
-      errorMessage = 'Enter a valid email address.';
-    } else if (input.minLength && input.value.length < input.minLength) {
-      errorMessage = `Must be at least ${input.minLength} characters.`;
-    }
-
-    if (errorMessage) {
-      input.setAttribute('aria-invalid', 'true');
-      if (errorEl) {
-        errorEl.textContent = errorMessage;
-        errorEl.classList.remove('hidden');
-        input.setAttribute('aria-describedby', errorEl.id);
+  // Form validation simulation
+  document.querySelectorAll('form[data-validate]').forEach(form => {
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const invalid = form.querySelectorAll(':invalid, [aria-invalid="true"]');
+      if (invalid.length) {
+        showPrototypeAlert('Please resolve highlighted errors before submitting.');
+      } else {
+        showPrototypeToast('Form submitted successfully.', 'success');
       }
-      return false;
-    } else {
-      input.removeAttribute('aria-invalid');
-      if (errorEl) {
-        errorEl.textContent = '';
-        errorEl.classList.add('hidden');
-      }
-      return true;
-    }
-  };
-
-  form.querySelectorAll('input, select, textarea').forEach((input) => {
-    input.addEventListener('blur', () => validateField(input));
-    input.addEventListener('input', () => {
-      if (input.getAttribute('aria-invalid') === 'true') validateField(input);
-    });
-  });
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    let hasError = false;
-    form.querySelectorAll('input, select, textarea').forEach((input) => {
-      if (!validateField(input)) hasError = true;
-    });
-
-    if (hasError) {
-      showErrorAlert('Please fix the errors highlighted below before submitting.', 'Validation Failed');
-    } else {
-      showToast('Form submitted successfully!', 'success');
-      form.reset();
-    }
+    };
   });
 }
-```
 
-### E. Error Alerts & Simulation Test Bar (`ERR-01`..`ERR-10`, `NOT-01`..`NOT-05`)
-Every concept must include a lightweight **Test Panel / Simulation Bar** so the user can test how the redesign handles errors and failures without needing backend APIs:
-- **Validation Failure Toggle**: Instantly highlights all invalid form inputs with inline error messages.
-- **Server Error Alert Banner**: Displays a persistent inline alert banner (`role="alert"`) with title, description, and recovery action ("Retry").
-- **Destructive Toast Alert**: Fires an 8-second hover-paused error toast.
-
-```javascript
-function showErrorAlert(message, title = 'Error') {
-  let alertContainer = document.getElementById('alert-banner-container');
-  if (!alertContainer) return;
-
-  alertContainer.innerHTML = `
-    <div class="alert alert-destructive" role="alert">
-      <div class="alert-icon">⚠️</div>
-      <div class="alert-content">
-        <h4 class="alert-title">${title}</h4>
-        <p class="alert-description">${message}</p>
-      </div>
-      <button type="button" class="alert-close" onclick="this.closest('.alert').remove()">&times;</button>
-    </div>
-  `;
+function showPrototypeToast(msg, variant = 'default') {
+  const container = document.getElementById('toast-container') || document.body;
+  const t = document.createElement('div');
+  t.className = `toast toast-${variant}`;
+  t.setAttribute('role', 'alert');
+  t.innerHTML = `<span>${msg}</span><button type="button" data-close>&times;</button>`;
+  let timer = setTimeout(() => t.remove(), 8000);
+  t.onmouseenter = () => clearTimeout(timer);
+  t.onmouseleave = () => { timer = setTimeout(() => t.remove(), 4000); };
+  t.querySelector('[data-close]').onclick = () => t.remove();
+  container.appendChild(t);
 }
 
-// Concept Test Bar: lets users toggle states in the prototype
-function setupPrototypeTestBar() {
-  const bar = document.createElement('div');
-  bar.className = 'prototype-test-bar';
-  bar.innerHTML = `
-    <span><strong>Prototype Testing:</strong></span>
-    <button type="button" onclick="testValidationErrors()">Trigger Form Errors</button>
-    <button type="button" onclick="showErrorAlert('Network connection lost (Status 503). Retrying...', 'Connection Error')">Trigger Alert Banner</button>
-    <button type="button" onclick="showToast('422 Unprocessable: Request payload rejected by validation rules.', 'destructive')">Trigger Error Toast</button>
-  `;
-  document.body.prepend(bar);
+function showPrototypeAlert(msg, title = 'Validation Error') {
+  const container = document.getElementById('alert-banner-container');
+  if (!container) return;
+  container.innerHTML = `<div class="alert alert-destructive" role="alert"><strong>${title}:</strong> ${msg}</div>`;
 }
 ```
 
@@ -274,13 +168,13 @@ The switcher shell hosts all three concepts in an iframe, allowing instant keybo
   <title>UI Redesign Concepts Viewer</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; background: #09090b; color: #f4f4f5; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-    header { background: #121215; border-bottom: 1px solid #27272a; padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    body { font-family: system-ui, sans-serif; background: var(--background, #09090b); color: var(--foreground, #f4f4f5); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    header { background: var(--card, #121215); border-bottom: 1px solid var(--border, #27272a); padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
     .segmented { display: inline-flex; background: #18181b; border: 1px solid #27272a; border-radius: 0.5rem; padding: 2px; gap: 2px; }
-    .segmented button { background: transparent; border: none; color: #a1a1aa; padding: 0.4rem 0.85rem; border-radius: 0.35rem; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-    .segmented button.active { background: #27272a; color: #ffffff; font-weight: 600; }
-    .viewport-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 1rem; background: #050507; }
-    iframe { border: 1px solid #27272a; border-radius: 0.5rem; background: #ffffff; height: 100%; transition: width 0.25s ease; }
+    .segmented button { background: transparent; border: none; color: #a1a1aa; padding: 0.4rem 0.85rem; border-radius: 0.35rem; font-size: 0.85rem; cursor: pointer; }
+    .segmented button.active { background: #27272a; color: #fff; font-weight: 600; }
+    .viewport { flex: 1; display: flex; justify-content: center; align-items: center; padding: 1rem; background: #050507; }
+    iframe { border: 1px solid #27272a; border-radius: 0.5rem; background: #fff; height: 100%; transition: width 0.2s ease; }
     iframe.desktop { width: 100%; max-width: 1440px; }
     iframe.tablet { width: 768px; }
     iframe.mobile { width: 375px; }
@@ -288,51 +182,33 @@ The switcher shell hosts all three concepts in an iframe, allowing instant keybo
 </head>
 <body>
   <header>
-    <div>
-      <strong>UI Redesign: Layout Concepts</strong>
-      <span style="color:#71717a; font-size:0.8rem; margin-left:0.5rem;">Keys 1, 2, 3 to toggle</span>
-    </div>
+    <div><strong>UI Redesign: Concepts</strong> <span style="color:#71717a;font-size:0.8rem;margin-left:0.5rem;">Keys 1, 2, 3</span></div>
     <div class="segmented" id="concept-tabs">
-      <button class="active" data-concept="concept-a">Concept A: Structured</button>
-      <button data-concept="concept-b">Concept B: Balanced</button>
-      <button data-concept="concept-c">Concept C: Contextual</button>
+      <button class="active" data-c="concept-a">Concept A: Structured</button>
+      <button data-c="concept-b">Concept B: Balanced</button>
+      <button data-c="concept-c">Concept C: Contextual</button>
     </div>
-    <div class="segmented" id="viewport-tabs">
-      <button data-viewport="mobile">Mobile (375px)</button>
-      <button data-viewport="tablet">Tablet (768px)</button>
-      <button class="active" data-viewport="desktop">Desktop</button>
+    <div class="segmented" id="vp-tabs">
+      <button data-vp="mobile">Mobile (375px)</button>
+      <button data-vp="tablet">Tablet (768px)</button>
+      <button class="active" data-vp="desktop">Desktop</button>
     </div>
   </header>
-  <div class="viewport-container">
-    <iframe id="preview" class="desktop" src="concept-a/index.html"></iframe>
-  </div>
+  <div class="viewport"><iframe id="preview" class="desktop" src="concept-a/index.html"></iframe></div>
   <script>
     const iframe = document.getElementById('preview');
-    const conceptBtns = document.querySelectorAll('#concept-tabs button');
-    const viewportBtns = document.querySelectorAll('#viewport-tabs button');
-
-    // Set SINGLE_FILE = true when concepts are single files (concept-a.html …); false for modular folders
-    const SINGLE_FILE = false;
-
+    const SINGLE_FILE = false; // set true if using concept-a.html single-file mode
     function setConcept(name) {
-      conceptBtns.forEach(b => b.classList.toggle('active', b.dataset.concept === name));
-      // Modular folders use <name>/index.html; single-file mode uses <name>.html
+      document.querySelectorAll('#concept-tabs button').forEach(b => b.classList.toggle('active', b.dataset.c === name));
       iframe.src = SINGLE_FILE ? `${name}.html` : `${name}/index.html`;
     }
-
-    function setViewport(vp) {
-      viewportBtns.forEach(b => b.classList.toggle('active', b.dataset.viewport === vp));
+    function setVp(vp) {
+      document.querySelectorAll('#vp-tabs button').forEach(b => b.classList.toggle('active', b.dataset.vp === vp));
       iframe.className = vp;
     }
-
-    conceptBtns.forEach(b => b.addEventListener('click', () => setConcept(b.dataset.concept)));
-    viewportBtns.forEach(b => b.addEventListener('click', () => setViewport(b.dataset.viewport)));
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === '1') setConcept('concept-a');
-      if (e.key === '2') setConcept('concept-b');
-      if (e.key === '3') setConcept('concept-c');
-    });
+    document.querySelectorAll('#concept-tabs button').forEach(b => b.onclick = () => setConcept(b.dataset.c));
+    document.querySelectorAll('#vp-tabs button').forEach(b => b.onclick = () => setVp(b.dataset.vp));
+    window.onkeydown = (e) => { if (['1','2','3'].includes(e.key)) setConcept(`concept-${['a','b','c'][e.key - 1]}`); };
   </script>
 </body>
 </html>
