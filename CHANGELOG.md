@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.1.0 (2026-10-13): Slop vs fixed showcase, two realistic sets
+- Added:
+  - `assets/showcase/set-dark-app.png`: realistic dark invoices app screen, slop (pill badge, gradient icon stat cards, glowing dot statuses, cards in cards, duplicate glow CTAs) vs fixed (one primary, toolbar, tabular amounts, visible kebabs, shared pager)
+  - `assets/showcase/set-light-hero.png`: light landing hero, slop (gradient headline, hype copy, icon card row, plain-text logo wall, gradient big-number stat) vs fixed (one focal, honest copy, real proof cards, component preview)
+  - Both sets carry the G0-G5 gate ledger strip
+  - `README.md`: Slop vs Fixed section with both sets; file map covers `assets/showcase/`
+- Changed:
+  - `README.md`: version badge to 4.1.0
+- Reason: show what the skill fixes on the public repo page
+- Sources: prg.sh (purple-gradient default), dev.to (purple gradient problem), Anthropic cookbook frontend aesthetics, `references/craft.md` slop tells
+
 ## 4.0.4 (2026-10-13): Replace unindexed skills.sh badge
 - Changed:
   - `README.md`: version badge to 4.0.4; replaced skills.sh install-count badge (rendered `resource not found` — skill not yet indexed, indexing follows install telemetry) with a static install badge linking to `Usage`

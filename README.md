@@ -4,7 +4,7 @@
   # UI Redesign
 
   <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.0.4-indigo.svg" alt="Version 4.0.4" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.1.0-indigo.svg" alt="Version 4.1.0" /></a>
     <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
     <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
@@ -24,6 +24,14 @@ A skill for auditing, decluttering, and redesigning frontend user interfaces. En
 4. **Declutters Before Restructure**: Runs a Keep/Remove/Merge/Demote/Defer/Move pass on all visible elements.
 5. **Shows 3 Interactive Concepts Before Approval**: Builds three clickable HTML prototypes (high-density, balanced SaaS, contextual fluid) with working dialogs, toasts, and mobile/tablet/desktop emulation in `.ui-audit/<slug>/concepts/` — the user opens `concepts/index.html` and picks a direction before any production code is touched.
 6. **Verifies Every Step**: Enforces a 6-gate ledger in `.ui-audit/<slug>/` where code edits require user approval and verified test output.
+
+## Slop vs Fixed
+
+Research-grounded comparison in two sets: a dark invoices app screen, and a light landing hero. Same surface each side. Left: the documented AI slop fingerprint (purple gradients, pill badge, icon-card rows, hype copy, glow-soup CTAs, fake stats, logo wall). Right: the skill's discipline (one primary, hairlines, tabular numerals, honest copy, real proof). Bottom strip: the gate ledger that gets it there.
+
+![Dark invoices app screen: slop on the left, fixed on the right](assets/showcase/set-dark-app.png)
+
+![Light landing hero: slop on the left, fixed on the right](assets/showcase/set-light-hero.png)
 
 ## The Three Dials
 
@@ -75,7 +83,8 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 ├── LICENSE                           # MIT License
 ├── assets/
 │   ├── cover/                        # Top cover banner
-│   └── logo/                         # Brand identity and marks
+│   ├── logo/                         # Brand identity and marks
+│   └── showcase/                     # Before/after comparison plates
 ├── references/
 │   ├── taste-engineering.md          # Three Dials, brief inference, GSAP motion patterns
 │   ├── rule-catalog.md               # 312 auditable rule IDs with exact failure conditions
