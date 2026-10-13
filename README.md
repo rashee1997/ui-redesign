@@ -1,4 +1,17 @@
-# UI Redesign
+<div align="center">
+  <img src="assets/cover/ui-redesign-cover.png" alt="UI Redesign Cover" width="100%" />
+
+  # UI Redesign
+
+  <p>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-3.2.0-indigo.svg" alt="Version 3.2.0" /></a>
+    <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+    <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
+    <a href="./phases.md"><img src="https://img.shields.io/badge/gates-G0..G5-purple.svg" alt="Gates G0..G5" /></a>
+    <a href="./references/accessibility.md"><img src="https://img.shields.io/badge/WCAG-2.2%20AA-sky.svg" alt="WCAG 2.2 AA" /></a>
+    <a href="./references/taste-engineering.md"><img src="https://img.shields.io/badge/taste-Three%20Dials-amber.svg" alt="Three Dials" /></a>
+  </p>
+</div>
 
 A skill for auditing, decluttering, and redesigning frontend user interfaces. Enforces project `DESIGN.md` tokens, human cognitive laws, WCAG 2.2 AA accessibility, responsive layout stability, and state integrity through a gate-enforced ledger.
 
@@ -57,6 +70,10 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 ├── SKILL.md                          # Primary agent entrypoint and router (<= 100 lines)
 ├── README.md                         # Technical overview and quick reference
 ├── CHANGELOG.md                      # Release ledger and provenance
+├── LICENSE                           # MIT License
+├── assets/
+│   ├── cover/                        # Top cover banner
+│   └── logo/                         # Brand identity and marks
 ├── references/
 │   ├── taste-engineering.md          # Three Dials, brief inference, GSAP motion patterns
 │   ├── rule-catalog.md               # 312 auditable rule IDs with exact failure conditions

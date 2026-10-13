@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
-  <title id="title">UI Redesign Logo - The Optical Caliper</title>
-  <g id="symbol" fill="#09090B">
-    <!-- Concentric U cradle with optical horizon at Y=64 -->
-    <path d="M40 64 H76 V128 C76 156.719 99.281 180 128 180 C156.719 180 180 156.719 180 128 V64 H216 V128 C216 176.601 176.601 216 128 216 C79.399 216 40 176.601 40 128 Z"/>
-    <!-- Central I pillar / vernier needle -->
-    <rect x="114" y="92" width="28" height="56" rx="14"/>
-    <!-- Precision focal lens dot aligned to U horizon -->
-    <circle cx="128" cy="64" r="14"/>
+  <title id="title">UI Redesign Logo Symbol</title>
+  <g id="symbol" fill="#09090B" transform="rotate(-90 128 128)">
+    <!-- Concentric cradle aligned to horizon -->
+    <path d="M40 45 H76 V123 C76 151.719 99.281 175 128 175 C156.719 175 180 151.719 180 123 V45 H216 V123 C216 171.601 176.601 211 128 211 C79.399 211 40 171.601 40 123 Z"/>
+    <!-- Central pillar / vernier caliper needle -->
+    <rect x="114" y="87" width="28" height="56" rx="14"/>
+    <!-- Precision focal lens dot -->
+    <circle cx="128" cy="59" r="14"/>
   </g>
 </svg>
