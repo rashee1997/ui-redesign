@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.1.0 (2026-10-13): Slop vs fixed showcase plate
+- Added:
+  - `assets/showcase/slop-vs-fixed.png`: same invoices surface as slop (eyebrow spam, cards in cards, glow-soup CTAs, fake stats) and fixed (one primary action, hairlines, real data)
+  - `README.md`: Slop vs Fixed section with the comparison image; file map covers `assets/showcase/`
+- Changed:
+  - `README.md`: version badge to 4.1.0
+- Reason: show what the skill fixes on the public repo page
+
 ## 4.0.4 (2026-10-13): Replace unindexed skills.sh badge
 - Changed:
   - `README.md`: version badge to 4.0.4; replaced skills.sh install-count badge (rendered `resource not found` — skill not yet indexed, indexing follows install telemetry) with a static install badge linking to `Usage`

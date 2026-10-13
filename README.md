@@ -4,7 +4,7 @@
   # UI Redesign
 
   <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.0.4-indigo.svg" alt="Version 4.0.4" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.1.0-indigo.svg" alt="Version 4.1.0" /></a>
     <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
     <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
@@ -24,6 +24,12 @@ A skill for auditing, decluttering, and redesigning frontend user interfaces. En
 4. **Declutters Before Restructure**: Runs a Keep/Remove/Merge/Demote/Defer/Move pass on all visible elements.
 5. **Shows 3 Interactive Concepts Before Approval**: Builds three clickable HTML prototypes (high-density, balanced SaaS, contextual fluid) with working dialogs, toasts, and mobile/tablet/desktop emulation in `.ui-audit/<slug>/concepts/` — the user opens `concepts/index.html` and picks a direction before any production code is touched.
 6. **Verifies Every Step**: Enforces a 6-gate ledger in `.ui-audit/<slug>/` where code edits require user approval and verified test output.
+
+## Slop vs Fixed
+
+![Same invoices surface: slop on the left, fixed on the right](assets/showcase/slop-vs-fixed.png)
+
+Same invoices surface. Left: eyebrow spam, cards in cards, glow-soup CTAs, fake stats. Right: one primary action, hairlines, real data.
 
 ## The Three Dials
 
@@ -75,7 +81,8 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 ├── LICENSE                           # MIT License
 ├── assets/
 │   ├── cover/                        # Top cover banner
-│   └── logo/                         # Brand identity and marks
+│   ├── logo/                         # Brand identity and marks
+│   └── showcase/                     # Before/after comparison plates
 ├── references/
 │   ├── taste-engineering.md          # Three Dials, brief inference, GSAP motion patterns
 │   ├── rule-catalog.md               # 312 auditable rule IDs with exact failure conditions
