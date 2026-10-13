@@ -38,7 +38,7 @@ Write `PLAN.md` from plan-template.md. Ground all decisions in the researched ap
 - findings summarized by category with IDs (evidence stays in the ledger)
 - declutter table for every visible element (if redesigning) or cognitive chunking architecture (if designing a new UI feature)
 - wireframes at phone, tablet and desktop (the project's breakpoints if defined) and each dialog on phone and desktop
-- three interactive HTML layout concepts in `.ui-audit/<surface>/concepts/` (Concept A Structured, Concept B Balanced, Concept C Contextual) with working interactions, validations, dark mode and themes, and `concepts/index.html` switcher shell (`references/interactive-prototypes.md`)
+- three interactive HTML layout concepts in `.ui-audit/<surface>/concepts/` (Concept A Structured, Concept B Balanced, Concept C Contextual) with working interactions, validations, dark mode and themes, and `concepts/index.html` switcher shell (`references/interactive-prototypes.md`); before styling, build the token ledger (§2) and collect verbatim toast/alert/error/empty strings from the codebase; every concept block traces to `02-inventory.md`, every feedback string is verbatim, and the §7 fidelity protocol passes with its table filled in §6
 - layout mechanics per region (grid/flex, container vs media query, what collapses when)
 - copy table, consistency table, pagination contract (if any), loading/pending table (with matching skeletons mirroring final UI - never reusing legacy skeletons), mutations table
 - proposed new tokens/shared components/DESIGN.md changes (not done yet)

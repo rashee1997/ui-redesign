@@ -50,12 +50,12 @@ Never generate superficial re-skins (e.g. three identical card grids with differ
 
 ---
 
-## 3. Production Token Fidelity & Anti-Slop Rules
+## 3. Production Token Fidelity & Anti-Hallucination Rules
 
 Every concept must look like the real application, not a generic template:
 
-1. **Extract Project Tokens (`DESIGN.md`)**:
-   Map both light and dark CSS custom properties in `styles.css` (or `<style>`):
+1. **Token ledger first (no invented colors):**
+   Build the ledger in `PLAN.md` §2 before writing any concept CSS: every token name from `DESIGN.md` mapped to its exact code name and literal value (`var(--background)` → `#ffffff`, `bg-accent`, `rounded-lg`, font stack). Copy values character-for-character from `tokens.css` / `globals.css` / `@theme` / `tailwind.config.*`, never from memory. Map both light (`:root`) and dark (`.dark`, `[data-theme="dark"]`) sets, and use only ledger entries (CSS vars, Tailwind classes, primitives) in concepts and in the switcher shell. Banned in `concepts/`: any hex / `rgb()` / `oklch()` / `from-purple` / `bg-gradient` / glow / arbitrary `-[...]` value absent from the ledger. The shell chrome placeholder values in §5 must be replaced with ledger tokens before showing the user:
    ```css
    :root {
      --background: #ffffff;
@@ -70,10 +70,12 @@ Every concept must look like the real application, not a generic template:
      --border: #27272a;
    }
    ```
-2. **Zero Arbitrary Palette Drift**: Never inject unvetted purples, neon glows, or random hex values unless defined in the project's `DESIGN.md`.
-3. **Realistic Domain Data**: Zero "Lorem Ipsum", "User 1", or "Test Item". Use real entity names, realistic timestamps, real monetary amounts, and actual status states matching the audited codebase.
-4. **Accessible Native Controls**: Use native `<button type="button">`, `<dialog>`, `<input>`, `<label>`, and semantic headings (`<h1>`..`<h3>`). Div-based fake buttons are banned.
-5. **Real Inline SVGs**: Use crisp inline SVGs (e.g. Lucide icons matching the app) with proper `size-4` / `size-5` dimensions.
+2. **Zero Arbitrary Palette Drift**: Never inject unvetted purples, neon glows, or random hex values unless that exact value sits in the ledger with its DESIGN.md section citation.
+3. **Inventory-traced structure (no invented UI)**: Every concept block, dialog, action, field, and status must trace to one `02-inventory.md` row (`file:line`). No invented routes, tabs, fields, filters, roles, or workflows. Same primary action label and placement logic as `PLAN.md` §4; same dialog container type and widths as the wireframes. Record the trace in the fidelity table (§7): concept block → inventory `file:line` → finding ID (or "existing, kept").
+4. **Realistic Domain Data from the codebase**: Zero "Lorem Ipsum", "User 1", "Test Item", or "Acme Ltd" filler unless that literal exists in the codebase. Entity names, field names, status enums, timestamps, amounts, and counts must come from the traced files, API samples, or fixtures. Status badges use only statuses the code emits, with the code's casing and colors.
+5. **Verbatim feedback copy (no hallucinated toasts/errors)**: Every toast, alert banner, inline error, empty state, and validation message in concepts must be copied verbatim from the codebase (grep `toast.`, `<Alert`, `error.tsx`, Zod messages) or from the approved `PLAN.md` §7 copy table. Banned prototype-only copy: invented error codes (`ERR_xxx`, `Reference: ...`), generic "Action completed successfully.", generic "Please resolve highlighted errors before submitting.", generic "Something went wrong". The simulation test bar (§4.5) fires only these verbatim strings.
+6. **Accessible Native Controls**: Use native `<button type="button">`, `<dialog>`, `<input>`, `<label>`, and semantic headings (`<h1>`..`<h3>`). Div-based fake buttons are banned.
+7. **Real Inline SVGs**: Use crisp inline SVGs (e.g. Lucide icons matching the app) with proper `size-4` / `size-5` dimensions. No emoji icons, no second icon set.
 
 ---
 
@@ -236,6 +238,28 @@ The switcher shell hosts all three concepts in an iframe, allowing instant keybo
 ## 6. Gate Criteria & Workflow Integration
 
 1. **Phase 2 (Plan)**: In addition to drafting `PLAN.md`, the agent builds the three concepts in `.ui-audit/<surface-slug>/concepts/`.
-2. **Gate G2 Requirement**: `PLAN.md` exists, findings mapped, and all 3 interactive concepts exist, verified free of console syntax errors, and linkable from `PLAN.md`.
+2. **Gate G2 Requirement**: `PLAN.md` exists, findings mapped, token ledger (§2) and fidelity table (§7) filled, and all 3 interactive concepts exist, verified free of console syntax errors, and linkable from `PLAN.md`. G2 **fails** on any hallucination: a hex / `rgb()` / `oklch()` / gradient / arbitrary value in `concepts/` absent from the ledger; a toast / alert / error / empty-state string not verbatim from the codebase or `PLAN.md` §7; a concept block, dialog, field, or status with no `02-inventory.md` `file:line` trace; "Lorem Ipsum" / "User 1" / "Test Item" filler; or shell chrome still on placeholder tokens.
 3. **Phase 3 (Approval)**: The agent outputs the local link to `.ui-audit/<surface-slug>/concepts/index.html`. The user opens the file, tests interactions, and selects their choice.
 4. **Gate G3 Requirement**: User's approved choice (e.g. "Approved Concept B" or "Concept A with Concept B dialog") is quoted in `PLAN.md` before Phase 4 begins.
+
+---
+
+## 7. Concept Fidelity Verification Protocol (run before asking for approval)
+
+Do these checks in order; fix and re-run until all pass. Paste the result into `PLAN.md` §6:
+
+1. **Ledger completeness**: every color, font, radius, and spacing value used in `concepts/` appears in the `PLAN.md` §2 token ledger with its DESIGN.md section and code name. No value from memory.
+2. **Hex hunt**: list every hex / `rgb()` / `oklch()` literal in `concepts/` and show its ledger row. An unlisted literal is a violation, not a style choice.
+3. **Structure trace**: every concept block, dialog, action, and field cites its `02-inventory.md` `file:line`. An untraced block is removed, not kept as "exploration".
+4. **Copy trace**: every toast / alert / inline error / empty-state string cites its source `file:line` or `PLAN.md` §7 row. The error-toast demo fires the codebase's real error (e.g. the real 422/500 text), never an invented code.
+5. **Shell check**: `concepts/index.html` chrome uses ledger tokens only; no placeholder `#09090b` / `#27272a` / `#a1a1aa` unless those exact values are in the ledger.
+6. **Data sanity**: entity names, statuses, amounts, and counts are plausible against the inventory and pagination totals. No "Acme Ltd $1,200" style filler.
+
+Fidelity table (one row per concept block, in `PLAN.md` §6):
+
+```markdown
+| Concept block | Inventory source (file:line) | Tokens used (ledger names) | Feedback copy source (file:line or §7 row) |
+|---|---|---|---|
+| Invoices table row | components/invoices/table.tsx:42 | bg-card, border, text-sm, tabular-nums | - |
+| Save-failure toast | components/invoices/form.tsx:118 | bg-destructive, text-destructive-foreground | form.tsx:118 verbatim |
+```

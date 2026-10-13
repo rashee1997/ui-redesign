@@ -37,7 +37,7 @@ If it's truly unclear, ask one question; otherwise pick and state the mode in on
 | # | Phase | Do | Writes | Gate |
 |---|---|---|---|---|
 | 1 | Research | DESIGN.md, app archetype & mandatory external research → digest. Trace surface and **read every file in full**. Static audit against **all 312 catalog rules**. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage/` (FULL) | G1 |
-| 2 | Plan | Plan from template. 3 interactive HTML layout concepts in `concepts/` with working switcher shell (dark mode & themes). Wireframes grounded in domain research. | `PLAN.md`, `concepts/` | G2 |
+| 2 | Plan | Plan from template. 3 traced HTML concepts in `concepts/` (ledger tokens, verbatim copy) with switcher shell (dark mode & themes). Wireframes grounded in domain research. | `PLAN.md`, `concepts/` | G2 |
 | 3 | Approval | Short summary, ask Approve / Change / Reject. **No source edits before approval.** Silence is not approval. | `PLAN.md` § Approval | G3 |
 | 4 | Implement | Slice by slice. Tokens and shared primitives only. Only ledger findings get fixed; new ones go into the ledger first. | `05-progress.md`, statuses in `03-findings.md` | G4 |
 | 5 | Verify | Typecheck/lint/tests run now; re-read every changed location; re-run checks; evidence per finding. | `06-verify.md` | G5: zero `open` findings |
@@ -73,7 +73,7 @@ Read only what the current step needs.
 | MOT - motion, micro-interactions | `motion.md` |
 | SOUL, HUM - soulful craft, human laws | `craft.md` §§2–3 + §4 checklists |
 | Taste engineering & dials | `taste-engineering.md` - Three Dials, brief inference, archetypes |
-| Layout concepts & HTML prototypes | `interactive-prototypes.md` - 3 concepts, switcher shell, interactive dialogs/toasts |
+| Layout concepts & HTML prototypes | `interactive-prototypes.md` - 3 traced concepts, switcher shell, interactive dialogs/toasts, fidelity protocol |
 | Writing the plan | `plan-template.md` |
 | Updating this skill (not a UI) | `updating-skill.md` |
 | Optional runtime evidence (scripts are candidates, never verdicts) | `scripts/ui_audit.mjs`, `scripts/scan_patterns.mjs` |
@@ -87,6 +87,7 @@ Read only what the current step needs.
 - **Every finding has a rule, quoted evidence, one fix, a severity and a status.** No finding without proof; no fix without a finding.
 - **Declutter before restructure.** A layout redesign decides Keep / Remove / Merge / Demote / Defer / Move for every visible element.
 - **Skeletons match redesigned UI.** When layout or components change, skeletons are redesigned in tandem to match the new UI - never reuse legacy skeletons.
+- **Concepts are traced, not invented.** Every value in `concepts/` cites the token ledger, every block cites inventory `file:line`, every toast/error/empty string is verbatim from the codebase; hallucinations fail G2.
 - **Behaviour is preserved.** Handlers, data hooks, routes, test ids and accessible names keep working. Backend changes (e.g. pagination) only as planned and approved, with every caller updated.
 - **Out-of-surface or risky problems** (auth, data integrity, other features) are logged and deferred, not fixed silently.
 - **Evidence before claims.** Never write "done", "fixed" or "works" without the command output, re-read line or screenshot that proves it, produced in this message.

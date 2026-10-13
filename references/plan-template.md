@@ -112,6 +112,14 @@ Baseline audit: overflow at <widths>; wrapped labels <n>; small targets <n>; bad
 - **[Concept B: Modern SaaS / Balanced](./concepts/concept-b/index.html)** (or `concept-b.html`)
 - **[Concept C: Contextual / Fluid](./concepts/concept-c/index.html)** (or `concept-c.html`)
 
+### Concept fidelity (fails G2 if incomplete)
+*Token ledger lives in §2 above; every value below cites a ledger name, every block cites inventory, every feedback string cites its source (interactive-prototypes.md §7).*
+| Concept block | Inventory source (file:line) | Tokens used (ledger names) | Feedback copy source (file:line or §7 row) |
+|---|---|---|---|
+| … | … | … | … |
+- Hex hunt: <every hex/rgb/oklch literal in `concepts/` with its ledger row, or "none beyond ledger">
+- Shell chrome: <ledger tokens only, placeholders replaced>
+
 *Use the project's breakpoints if DESIGN.md defines them; otherwise phone ≈375, tablet ≈768, desktop ≥1280.*
 ### Phone (≈375px)
 ```

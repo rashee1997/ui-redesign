@@ -47,7 +47,7 @@ The **Gaps** row matters: it tells you exactly where the skill's defaults are al
 
 ## 3. Map rules to code
 
-For each token or component rule, find how it's implemented: CSS variables, `@theme` (Tailwind v4), `tailwind.config.*`, theme objects (MUI/Chakra/Mantine), shadcn `components.json` + `globals.css`, a `components/ui` folder. Record the code name you'll actually write (`bg-accent`, `var(--space-4)`, `<Button variant="ghost">`). Use code names in the implementation, never raw values copied from the doc.
+For each token or component rule, find how it's implemented: CSS variables, `@theme` (Tailwind v4), `tailwind.config.*`, theme objects (MUI/Chakra/Mantine), shadcn `components.json` + `globals.css`, a `components/ui` folder. Record the code name you'll actually write (`bg-accent`, `var(--space-4)`, `<Button variant="ghost">`) **plus its exact literal value copied character-for-character** (`#ffffff`, `16px`, `rounded-lg`). This name-plus-value ledger is what concepts and implementation may use; anything absent from it is banned. Use code names in the implementation, never raw values copied from the doc.
 
 If DESIGN.md describes something the code doesn't have yet (a token, a variant), note it; implementing it goes in the plan as a proposed change.
 

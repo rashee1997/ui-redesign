@@ -1,5 +1,23 @@
 # Changelog
 
+## 5.0.0 (2026-10-13): Concept fidelity hardening - traced concepts, verbatim copy, G2 reject gate
+- Added:
+  - Concept Fidelity Verification Protocol (`references/interactive-prototypes.md` §7): ledger completeness, hex hunt, structure trace, copy trace, shell check, data sanity, plus the fidelity table pasted into `PLAN.md` §6
+  - Token-ledger-first rule (§3.1): name-plus-literal-value ledger built before any concept CSS; concepts and switcher shell may use only ledger entries
+  - Inventory-trace rule (§3.3): every concept block, dialog, action, field, and status traces to one `02-inventory.md` row; untraced blocks removed
+  - Verbatim feedback-copy rule (§3.5): toasts, alerts, inline errors, empty states, and validation strings copied verbatim from the codebase or `PLAN.md` §7; invented error codes and generic success text banned; simulation test bar fires only verbatim strings
+  - G2 reject gate: unlisted color values, invented copy, untraced blocks, filler data, or placeholder shell chrome fail G2
+  - `PLAN.md` §6 fidelity table, hex-hunt line, and shell-chrome line (`references/plan-template.md`)
+  - Harness red flags against styling concepts from memory and inventing prototype copy
+- Changed:
+  - `references/interactive-prototypes.md`: §3 rewritten as anti-hallucination rules (§3.1-§3.7), §6 G2 condition hardened
+  - `references/harness.md`: G2 row requires filled token ledger and fidelity table
+  - `references/phases.md`: Phase 2 requires ledger, verbatim-string collection, and §7 pass before approval
+  - `references/design-md.md`: §3 records exact literal values alongside code names for the ledger
+  - `SKILL.md`: Phase 2 row and router mention traced concepts; new non-negotiable "Concepts are traced, not invented" (98 lines)
+- Reason: concepts were styled from memory with invented colors, filler data, and hallucinated toast/error text that did not match DESIGN.md or the existing surface
+- Sources: user report, this session
+
 ## 4.3.2 (2026-10-13): Theme & dark mode support in layout concepts
 - Added:
   - Dual Theme Token Mapping in `references/interactive-prototypes.md`: concepts must define both light (`:root`) and dark (`.dark`, `[data-theme="dark"]`) token variables from `DESIGN.md`.
