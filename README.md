@@ -95,3 +95,7 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 # Focused fix
 /ui-redesign Fix mobile sheet overflow and missing pending states on checkout
 ```
+
+## License
+
+MIT. See [LICENSE](./LICENSE).

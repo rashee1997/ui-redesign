@@ -1,6 +1,7 @@
 ---
 name: ui-redesign
 description: Use whenever performing ANY UI/UX work - designing new UI/UX features, building views, modals, forms, or screens, or redesigning, decluttering, auditing, and fixing existing UI. Enforces human design theory (for humans not robots), cognitive load, Gestalt, calm technology, soulful craft, accessibility (WCAG AA), motion, loading/skeletons, forms, scroll containment, and UX copy. Applies whenever authoring, updating, or fixing any frontend user-facing code. Also use when updating this skill.
+license: MIT
 ---
 
 # UI Redesign
