@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.3 (2026-10-13): skills.sh install badge and instructions
+- Changed:
+  - `README.md`: version badge to 4.0.3; added skills.sh install-count badge; `Usage` documents `npx skills add rashee1997/ui-redesign`
+- Reason: make the published skill installable and indexable via skills.sh telemetry
+
 ## 4.0.2 (2026-10-13): README covers interactive concepts
 - Changed:
   - `README.md`: version badge to 4.0.2; `What It Does` documents the 3 interactive HTML concepts step; pipeline table G2/G3 rows mention `concepts/` and the chosen concept

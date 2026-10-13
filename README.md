@@ -4,7 +4,8 @@
   # UI Redesign
 
   <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.0.2-indigo.svg" alt="Version 4.0.2" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.0.3-indigo.svg" alt="Version 4.0.3" /></a>
+    <a href="https://skills.sh/rashee1997/ui-redesign"><img src="https://skills.sh/b/rashee1997/ui-redesign" alt="skills.sh" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
     <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
     <a href="./phases.md"><img src="https://img.shields.io/badge/gates-G0..G5-purple.svg" alt="Gates G0..G5" /></a>
@@ -108,6 +109,9 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 ## Usage
 
 ```bash
+# Install as an agent skill (Claude Code, Codex, Cursor, OpenCode, …)
+npx skills add rashee1997/ui-redesign
+
 # Full view redesign
 /ui-redesign Redesign the invoices page to match our updated DESIGN.md
 
