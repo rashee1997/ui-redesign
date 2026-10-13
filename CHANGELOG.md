@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.3.2 (2026-10-13): Theme & dark mode support in layout concepts
+- Added:
+  - Dual Theme Token Mapping in `references/interactive-prototypes.md`: concepts must define both light (`:root`) and dark (`.dark`, `[data-theme="dark"]`) token variables from `DESIGN.md`.
+  - Dark Mode & Theme switching requirement (`THM-01`..`THM-04`): concepts must support toggling between light, dark, and project themes without broken contrast or unstyled flashes.
+  - Theme switcher in `concepts/index.html`: added Dark / Light segmented toggle and keyboard shortcut (`T`) syncing theme class to both the shell and the active concept preview iframe.
+- Changed:
+  - `references/phases.md`: Phase 2 and Phase 3 updated to require dark mode and theme toggling in interactive concepts.
+  - `references/harness.md`: Gate G2 condition updated to verify dark mode/theme toggling.
+  - `SKILL.md`: Phase 2 row updated with dark mode & themes while staying strictly under 100 lines (96 lines).
+- Reason: Ensure user can preview and verify redesign concepts across both light and dark themes before approving.
+
 ## 4.3.1 (2026-10-13): Debloat concept instructions & unify interaction recipes
 - Changed:
   - `references/interactive-prototypes.md`: Replaced verbose individual JavaScript recipes (180+ lines of repetitive code) with a unified, lightweight interaction pattern (`setupPrototypeInteractions`), compact alert/toast dispatches, and a streamlined switcher shell template (~125 lines eliminated).

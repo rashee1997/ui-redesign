@@ -55,19 +55,19 @@ Never generate superficial re-skins (e.g. three identical card grids with differ
 Every concept must look like the real application, not a generic template:
 
 1. **Extract Project Tokens (`DESIGN.md`)**:
-   Map the project's exact CSS custom properties in `styles.css` (or `<style>`):
+   Map both light and dark CSS custom properties in `styles.css` (or `<style>`):
    ```css
    :root {
+     --background: #ffffff;
+     --foreground: #09090b;
+     --card: #f4f4f5;
+     --border: #e4e4e7;
+   }
+   .dark, [data-theme="dark"] {
      --background: #09090b;
      --foreground: #f4f4f5;
      --card: #121215;
-     --card-foreground: #f4f4f5;
-     --primary: #2563eb;
-     --primary-foreground: #ffffff;
-     --muted: #27272a;
-     --muted-foreground: #a1a1aa;
      --border: #27272a;
-     --radius: 0.5rem;
    }
    ```
 2. **Zero Arbitrary Palette Drift**: Never inject unvetted purples, neon glows, or random hex values unless defined in the project's `DESIGN.md`.
@@ -86,6 +86,7 @@ Prototypes must be physically testable in the browser without backend dependenci
 3. **Mutations & Loading (`MUT-01`..`MUT-13`)**: Mutation buttons show an inline spinner, disable during simulated async work (~600ms), and restore upon completion.
 4. **Alerts & Toasts (`NOT-01`..`NOT-05`, `ERR-01`..`ERR-10`)**: Persistent inline error alert banners (`role="alert"`) with title and recovery action; toast notifications that pause timeout on mouse hover/focus.
 5. **Simulation Test Bar**: A compact fixed top or bottom strip (`.prototype-test-bar`) with trigger buttons to let the user simulate states instantly (e.g. "Trigger Form Errors", "Show Error Banner", "Fire Error Toast").
+6. **Dark Mode & Themes (`THM-01`..`THM-04`)**: All concepts must support light and dark modes (and project theme variants). Toggling themes must flip CSS variables cleanly without broken contrast, unstyled flashes, or illegible text.
 
 ### Unified Interaction Pattern
 
@@ -182,7 +183,7 @@ The switcher shell hosts all three concepts in an iframe, allowing instant keybo
 </head>
 <body>
   <header>
-    <div><strong>UI Redesign: Concepts</strong> <span style="color:#71717a;font-size:0.8rem;margin-left:0.5rem;">Keys 1, 2, 3</span></div>
+    <div><strong>UI Redesign: Concepts</strong> <span style="color:#71717a;font-size:0.8rem;margin-left:0.5rem;">Keys 1, 2, 3 · T (Theme)</span></div>
     <div class="segmented" id="concept-tabs">
       <button class="active" data-c="concept-a">Concept A: Structured</button>
       <button data-c="concept-b">Concept B: Balanced</button>
@@ -192,6 +193,10 @@ The switcher shell hosts all three concepts in an iframe, allowing instant keybo
       <button data-vp="mobile">Mobile (375px)</button>
       <button data-vp="tablet">Tablet (768px)</button>
       <button class="active" data-vp="desktop">Desktop</button>
+    </div>
+    <div class="segmented" id="theme-tabs">
+      <button class="active" data-th="dark">Dark</button>
+      <button data-th="light">Light</button>
     </div>
   </header>
   <div class="viewport"><iframe id="preview" class="desktop" src="concept-a/index.html"></iframe></div>
@@ -206,9 +211,21 @@ The switcher shell hosts all three concepts in an iframe, allowing instant keybo
       document.querySelectorAll('#vp-tabs button').forEach(b => b.classList.toggle('active', b.dataset.vp === vp));
       iframe.className = vp;
     }
+    function setTheme(th) {
+      document.querySelectorAll('#theme-tabs button').forEach(b => b.classList.toggle('active', b.dataset.th === th));
+      document.documentElement.className = th;
+      try { iframe.contentDocument.documentElement.className = th; } catch (e) {}
+    }
     document.querySelectorAll('#concept-tabs button').forEach(b => b.onclick = () => setConcept(b.dataset.c));
     document.querySelectorAll('#vp-tabs button').forEach(b => b.onclick = () => setVp(b.dataset.vp));
-    window.onkeydown = (e) => { if (['1','2','3'].includes(e.key)) setConcept(`concept-${['a','b','c'][e.key - 1]}`); };
+    document.querySelectorAll('#theme-tabs button').forEach(b => b.onclick = () => setTheme(b.dataset.th));
+    window.onkeydown = (e) => {
+      if (['1','2','3'].includes(e.key)) setConcept(`concept-${['a','b','c'][e.key - 1]}`);
+      if (e.key === 't' || e.key === 'T') {
+        const cur = document.querySelector('#theme-tabs button.active')?.dataset.th;
+        setTheme(cur === 'dark' ? 'light' : 'dark');
+      }
+    };
   </script>
 </body>
 </html>

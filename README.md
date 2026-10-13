@@ -4,7 +4,7 @@
 # UI Redesign
 
 <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.3.1-indigo.svg" alt="Version 4.3.1" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.3.2-indigo.svg" alt="Version 4.3.2" /></a>
     <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
     <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
