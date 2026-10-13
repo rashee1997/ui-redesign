@@ -18,7 +18,7 @@ Sources: Leonxlnx/taste-skill (taste-skill v2 experimental, redesign-skill, soft
 
 ## 1. Brief inference & the Design Read
 
-Statistical LLM defaults collapse into generic mediocrity: Inter font, slate-900 dark background, AI-purple glowing gradient buttons, three equal cards, and a centered hero over a dark mesh. To break these clichés, the agent must read the brief before writing code or choosing styling.
+Read the brief, audience context, and existing repository tokens before selecting layout, typography, or styling.
 
 ### A. Read these signals first
 1. **Page kind**: landing (SaaS, consumer, agency, event), portfolio (developer, designer), admin/internal tool, product dashboard, editorial/documentation.
@@ -256,6 +256,6 @@ A partial implementation is a broken implementation. LLMs exhibit statistical "l
 ### Execution rules
 1. **Count deliverables upfront**: Count functions, sections, and files before authoring. Deliver all of them in full.
 2. **Never compress or skip**: Do not output the first and last item while skipping the middle.
-3. **Token budget splits**: If hitting token output limits, stop cleanly at a natural boundary (e.g. end of component) and output:
-   `[PAUSED — X of Y complete. Send "continue" to resume from: <section>]`.
+3. **Token budget splits**: If hitting token output limits, stop cleanly at a natural boundary (such as the end of a component) and output:
+   `[PAUSED: X of Y complete. Send "continue" to resume from: <section>]`.
    Resume immediately without preamble or recapping.

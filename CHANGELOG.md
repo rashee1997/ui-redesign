@@ -3,17 +3,17 @@
 ## 3.2.0 (2026-10-13): Taste engineering, Three Dials, brief inference, and anti-slop rules
 - Added:
   - Reference guide `references/taste-engineering.md` synthesizing 13 skills from `Leonxlnx/taste-skill`:
-    - Three Dials calibration (`DESIGN_VARIANCE` 0–10, `MOTION_INTENSITY` 0–10, `VISUAL_DENSITY` 0–10)
-    - Brief Inference & 1-line "Design Read" protocol for converting brief intents into concrete UI parameters
+    - Three Dials calibration (`DESIGN_VARIANCE` 0-10, `MOTION_INTENSITY` 0-10, `VISUAL_DENSITY` 0-10)
+    - Brief Inference and 1-line "Design Read" protocol for converting brief intents into concrete UI parameters
     - Archetype mapping (Official Enterprise/B2B vs Craft/Editorial vs Brutalist vs Minimalist vs Soft)
     - Modernisation Levers Priority Stack (Layout > Surface > Typography > Motion > Polish)
-    - Canonical GSAP Sticky-Stack & Horizontal-Pan animation patterns with cleanup
+    - Canonical GSAP Sticky-Stack and Horizontal-Pan animation patterns with cleanup
     - Full-output emission enforcement (ban on placeholders, omissions, and truncations)
   - 28 new falsifiable rules across 7 categories in `references/rule-catalog.md`:
-    - `LAY-13` to `LAY-18`: display headline wrap cap (2–3 lines, max-w-5xl+), hero viewport overflow (`min-h-[100dvh]`, top padding cap `pt-24`), hero stack overload (max 4 text items), zigzag alternation cap (max 2), bento grid voids & visual variation (`grid-flow-dense`), split-header default ban
+    - `LAY-13` to `LAY-18`: display headline wrap cap (2-3 lines, max-w-5xl+), hero viewport overflow (`min-h-[100dvh]`, top padding cap `pt-24`), hero stack overload (max 4 text items), zigzag alternation cap (max 2), bento grid voids and visual variation (`grid-flow-dense`), split-header default ban
     - `HIE-13` to `HIE-15`: duplicate CTA intent, multi-column card baseline misalignment, double-bezel / nested enclosure violation
     - `CON-09` to `CON-11`: Page Theme Lock (no mid-page light/dark flipping), Color Consistency Lock (no off-token brand colors), Corner Radius Scale Lock
-    - `CPY-10` to `CPY-13`: Absolute Zero Em-Dash Ban (`—`/`–`), artificial meta-numbering filler (`01 / ARCHITECTURE`), middle-dot rationing, performative copy register
+    - `CPY-10` to `CPY-13`: Absolute Zero Em-Dash Ban, artificial meta-numbering filler (`01 / ARCHITECTURE`), middle-dot rationing, performative copy register
     - `SLOP-08` to `SLOP-12`: eyebrow spam cap (max 1 per 3 sections), div-based fake screenshots, lazy warm craft palette drift, plain text wordmarks on trust walls, decorative unclickable status dots
     - `MOT-11` to `MOT-14`: motivated motion mandate, raw scroll listener state ban, marquee count/overflow, ScrollTrigger pinning integrity
     - `SOUL-11` to `SOUL-14`: desktop CTA button text wrap ban, italic serif descender clearance, button-in-button nested trailing icon, full-output omission ban
