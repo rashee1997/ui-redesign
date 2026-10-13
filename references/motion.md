@@ -2,17 +2,18 @@
 
 > **Defaults only.** Everything here is a fallback for what the project's own DESIGN.md and existing code don't decide. If DESIGN.md sets motion tokens, easing curves, duration scales or component micro-interactions, follow DESIGN.md and use its names. See `design-md.md`.
 
-Sources: Nielsen Norman Group (micro-interactions, 0.1s response limit), W3C WCAG 2.2 (SC 2.3.3 Animation from Interactions), Vercel Web Interface Guidelines.
+Sources: Nielsen Norman Group (micro-interactions, 0.1s response limit), W3C WCAG 2.2 (SC 2.3.3 Animation from Interactions), Vercel Web Interface Guidelines, Leonxlnx/taste-skill (taste-skill v2 experimental, gpt-tasteskill).
 
-Rules map to `MOT-*` in `rule-catalog.md`.
+Rules map to `MOT-*` in `rule-catalog.md`. See also canonical GSAP skeletons in `taste-engineering.md` §5.
 
 ## Contents
 1. Principles of micro-interactions
 2. Micro-interaction catalog & patterns
 3. Performance: composited properties only
 4. Duration and easing budget
-5. Accessibility & `prefers-reduced-motion`
-6. Anti-slop motion rules & checklist
+5. Motivated motion & scroll architecture
+6. Accessibility & `prefers-reduced-motion`
+7. Anti-slop motion rules & checklist
 
 ---
 
@@ -141,7 +142,35 @@ Micro-interactions must never make the user wait. Every millisecond above the th
 
 ---
 
-## 5. Accessibility & `prefers-reduced-motion` (MOT-01)
+## 5. Motivated motion & scroll architecture
+
+### A. The Motivated Motion mandate (MOT-11)
+Before adding any animation or transition, articulate its exact functional role in one sentence:
+- **Hierarchy**: drawing focal attention to the primary element in sequence.
+- **Storytelling**: revealing narrative content progressively as the user advances.
+- **Feedback**: confirming user input within the 100ms threshold.
+- **State transition**: maintaining spatial orientation when modes or views change.
+*Invalid reason*: "It looks cool" or "adding GSAP because it's available." Animations without a clear communicative role are visual clutter.
+
+### B. Ban on raw scroll listeners & state updates (MOT-12)
+`window.addEventListener('scroll', ...)` runs on every scroll frame without batching, triggering main-thread layout thrashing and stutter.
+- **Banned**: Binding `window.addEventListener('scroll')` in React effects.
+- **Banned**: Storing `window.scrollY` in React state (`useState`) to drive layout styles (causes root-to-leaf re-renders on every scroll tick).
+- **Required**: Use Motion's `useScroll()` with `useTransform()`, GSAP `ScrollTrigger` with `scrub`, or native CSS scroll-driven animations (`animation-timeline: view()`).
+
+### C. Marquee restraint (MOT-13)
+Horizontal continuous scrolling marquees (partner logos, keyword bands) are permitted **at most once per page**. Multiple marquees on a single page create visual fatigue and mask layout deficiencies.
+
+### D. ScrollTrigger pinning integrity (MOT-14)
+When implementing pinned card stacks or horizontal scrubs, follow the canonical skeletons in `taste-engineering.md` §5:
+- Trigger starts exactly at `top top`, not arbitrary percentages.
+- Pin the outer wrapper; transform the inner child (never scale or transform the pinned element itself).
+- End trigger dynamically recomputes via functions (`end: () => "+=" + distance`) paired with `invalidateOnRefresh: true`.
+- Under `prefers-reduced-motion`, collapse pinning into accessible static or native-scroll layouts (`overflow-x-auto snap-x`).
+
+---
+
+## 6. Accessibility & `prefers-reduced-motion` (MOT-01)
 
 Vestibular disorders and motion sensitivities affect millions of users. Movement, parallax, and sudden scaling can trigger nausea or dizziness.
 
@@ -166,7 +195,7 @@ Under **WCAG 2.2 Success Criterion 2.3.3 (Animation from Interactions)**:
 
 ---
 
-## 6. Anti-slop motion rules & checklist
+## 7. Anti-slop motion rules & checklist
 
 ### Banned motion tells
 - ✘ Section fade-in-and-slide-up triggered on scroll (portfolio slop).
@@ -174,7 +203,11 @@ Under **WCAG 2.2 Success Criterion 2.3.3 (Animation from Interactions)**:
 - ✘ Wobbly spinners or spinning wrappers that aren't centered.
 - ✘ Elastic bouncy buttons that jiggle after clicking.
 - ✘ Continuous looping animations (pulsing badges, glowing borders) that distract from content.
-- ✘ Bounce/fade animations applied to every hover and scroll entry with no functional intent (motion not tied to a user action).
+- ✘ Bounce/fade animations applied to every hover and scroll entry with no functional intent (MOT-03).
+- ✘ Unmotivated motion added for spectacle without functional intent (MOT-11).
+- ✘ Raw `window.addEventListener('scroll')` or `scrollY` driving React state (MOT-12).
+- ✘ More than one continuous horizontal marquee on the same page (MOT-13).
+- ✘ ScrollTrigger pinning the element being transformed or omitting `invalidateOnRefresh` (MOT-14).
 
 ### Motion audit checklist
 - [ ] Every interactive control (button, tab, menu item) provides instant active/press feedback within 100ms.
@@ -184,3 +217,7 @@ Under **WCAG 2.2 Success Criterion 2.3.3 (Animation from Interactions)**:
 - [ ] Popovers and dropdowns animate from their trigger attachment point (`transform-origin`).
 - [ ] All animated transitions include `motion-reduce:transition-none` or equivalent reduced-motion fallback.
 - [ ] No uniform bounce/fade on every hover and scroll with no functional intent (MOT-03).
+- [ ] Every animation can be articulated with a clear communicative purpose (MOT-11).
+- [ ] Zero raw scroll event listeners or React state scroll bindings (MOT-12).
+- [ ] Max one horizontal marquee per page (MOT-13).
+- [ ] Pinned scroll-stack or horizontal pan follows canonical skeletons with `invalidateOnRefresh` (MOT-14).

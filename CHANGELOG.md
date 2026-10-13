@@ -1,5 +1,36 @@
 # Changelog
 
+## 3.2.0 (2026-10-13): Taste engineering, Three Dials, brief inference, and anti-slop rules
+- Added:
+  - Reference guide `references/taste-engineering.md` synthesizing 13 skills from `Leonxlnx/taste-skill`:
+    - Three Dials calibration (`DESIGN_VARIANCE` 0–10, `MOTION_INTENSITY` 0–10, `VISUAL_DENSITY` 0–10)
+    - Brief Inference & 1-line "Design Read" protocol for converting brief intents into concrete UI parameters
+    - Archetype mapping (Official Enterprise/B2B vs Craft/Editorial vs Brutalist vs Minimalist vs Soft)
+    - Modernisation Levers Priority Stack (Layout > Surface > Typography > Motion > Polish)
+    - Canonical GSAP Sticky-Stack & Horizontal-Pan animation patterns with cleanup
+    - Full-output emission enforcement (ban on placeholders, omissions, and truncations)
+  - 28 new falsifiable rules across 7 categories in `references/rule-catalog.md`:
+    - `LAY-13` to `LAY-18`: display headline wrap cap (2–3 lines, max-w-5xl+), hero viewport overflow (`min-h-[100dvh]`, top padding cap `pt-24`), hero stack overload (max 4 text items), zigzag alternation cap (max 2), bento grid voids & visual variation (`grid-flow-dense`), split-header default ban
+    - `HIE-13` to `HIE-15`: duplicate CTA intent, multi-column card baseline misalignment, double-bezel / nested enclosure violation
+    - `CON-09` to `CON-11`: Page Theme Lock (no mid-page light/dark flipping), Color Consistency Lock (no off-token brand colors), Corner Radius Scale Lock
+    - `CPY-10` to `CPY-13`: Absolute Zero Em-Dash Ban (`—`/`–`), artificial meta-numbering filler (`01 / ARCHITECTURE`), middle-dot rationing, performative copy register
+    - `SLOP-08` to `SLOP-12`: eyebrow spam cap (max 1 per 3 sections), div-based fake screenshots, lazy warm craft palette drift, plain text wordmarks on trust walls, decorative unclickable status dots
+    - `MOT-11` to `MOT-14`: motivated motion mandate, raw scroll listener state ban, marquee count/overflow, ScrollTrigger pinning integrity
+    - `SOUL-11` to `SOUL-14`: desktop CTA button text wrap ban, italic serif descender clearance, button-in-button nested trailing icon, full-output omission ban
+- Changed:
+  - `references/rule-catalog.md`: Added sources and cataloged rules (expanded to 312 rules across 26 categories)
+  - `references/craft.md`: Added Doppelrand nested container recipe, button-in-button trailing icon, italic descender clearance, palette rotation, fake screenshot ban, and updated audit checklists
+  - `references/motion.md`: Added Motivated Motion mandate (`MOT-11`), raw scroll listener ban (`MOT-12`), marquee limit (`MOT-13`), ScrollTrigger pinning integrity (`MOT-14`), and updated checklist
+  - `references/ux-copy.md`: Added Absolute Zero Em-Dash Ban (`CPY-10`), meta-numbering ban (`CPY-11`), middle-dot rationing (`CPY-12`), performative copy register ban (`CPY-13`), and single CTA intent (`HIE-13`)
+  - `references/hierarchy-declutter.md`: Added Section 10 on display headline wrap, hero viewport stability, zigzag cap, bento density, split-header ban, and multi-column baseline alignment (`LAY-13..18`, `HIE-14`)
+  - `references/consistency.md`: Added Page Theme Lock (`CON-09`), Color Consistency Lock (`CON-10`), Corner Radius Scale Lock (`CON-11`), and updated checklist
+  - `references/static-audit.md`: Added per-file pass questions in §3, cross-file checks in §4, and candidate grep recipes in §5
+  - `references/plan-template.md`: Added Anti-slop & copy hygiene category and examples in §5
+  - `references/harness.md`: Updated Gate G1 count (312 rules) and hook rule range (`HOOK-01` through `HOOK-14`)
+  - `SKILL.md`: Added `taste-engineering.md` to reference router and updated Non-negotiables (kept under 100 lines: 94 lines)
+- Reason: User requested cloning and reading `Leonxlnx/taste-skill`, extracting every skill, and updating, enhancing, and hardening `ui-redesign`.
+- Sources: `Leonxlnx/taste-skill` (taste-skill v2 experimental, redesign-skill, soft-skill, minimalist-skill, brutalist-skill, gpt-tasteskill, stitch-skill, output-skill, image-to-code-skill, imagegen-frontend-web, imagegen-frontend-mobile, brandkit).
+
 ## 3.1.0 (2026-10-10): AI answers, palette states, first-run, offline, dark/latency parity
 - Added:
   - Category `AI` with rules `AI-01` to `AI-06` and reference guide `references/ai-ux.md` (stream state + Stop, source drill-down, contextual uncertainty, visible seam, confirm/undo on AI writes, feedback + verify)

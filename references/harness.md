@@ -42,7 +42,7 @@ Before starting each phase, open the previous files and check the gate. If a gat
 | G4 → Verify | every slice in `05-progress.md` has its checks run with output pasted and a commit SHA |
 | G5 → Done | `03-findings.md` has **zero rows with status `open`**; every row is `fixed` (with verification in `06-verify.md`), `deferred` (with reason, approved or out of scope) or `rejected` (failed the proof rule); typecheck/lint/tests ran in this message and passed or pre-existing failures are named |
 
-State the gate result in one line when crossing it: `Gate G1: PASS - 14 files read, 22 categories audited, 133/133 rules individually accounted for in 04-coverage.md in strict catalog order, 23 findings.`
+State the gate result in one line when crossing it: `Gate G1: PASS - 14 files read, 26 categories audited, 312/312 rules individually accounted for in 04-coverage.md in strict catalog order, 23 findings.`
 
 ## 3. Finding format and the proof rule
 
@@ -94,7 +94,7 @@ Status values:
 **Gate G1 failure conditions for coverage:**
 1. Any rule ID from `rule-catalog.md` omitted or checked out of sequence.
 2. Any `PASS` row lacking concrete `file:line` proof or specific implementation evidence.
-3. Lump reviews (e.g. `HOOK: all 14 files clean`) without walking each hook rule individually (`HOOK-01` through `HOOK-13`).
+3. Lump reviews (e.g. `HOOK: all 14 files clean`) without walking each hook rule individually (`HOOK-01` through `HOOK-14`).
 4. Claiming `N/A` when the relevant element exists in the surface.
 
 In FOCUSED mode, `00-scope.md` maps each named issue to its categories, and every single rule ID within those mapped categories must be audited with this exact rule-by-rule sequence and rigor.

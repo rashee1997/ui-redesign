@@ -38,9 +38,13 @@ Read the file once fully, then walk it with these questions. Record every hit as
 
 **Markup & layout** - LAY, RSP, HIE, SLOP rules
 - What's the structure? Wrappers that do nothing? Cards in cards? One uniform gap? `justify-between` holes? Fixed widths/heights? `h-screen`/`100vh`? Missing `min-w-0`/truncation on text in flex/grid?
+- Display headlines & hero stability: Does the display headline wrap past 2–3 lines on desktop (`LAY-13`)? Does the hero section overflow the initial viewport via `min-h-[100dvh]` with `pt-24+` pushing CTAs below fold (`LAY-14`)? Does the hero stack exceed 4 text/action items before primary content (`LAY-15`)?
+- Layout rhythm & bento density: Does feature alternating zigzag exceed 2 pairs (`LAY-16`)? Does any bento grid card leave empty visual voids or lack dynamic visual variation (`LAY-17`)? Does section header split title left and text right as default filler without asymmetric tension (`LAY-18`)?
 - Hierarchy & visual weight: Is there a single dominant focal anchor, or is visual weight flat and monotonous across all cards (HIE-01, HIE-09)? Are eyebrow badges, icons, or chips competing with the headline (HIE-10)? Does typography follow a harmonic scale with tight leading on display headings (HIE-11)? Is depth built with surface luminance tiers instead of blurry drop shadows (HIE-12)?
-- Actions & buttons: Are there duplicate buttons triggering the same action on the same screen (e.g. Save at top and bottom of card, duplicate Create CTAs competing in header and body) (HIE-08)?
-- Copy strings: run them past `ux-copy.md`.
+- Multi-column card baseline: Across horizontal grid/flex card rows, are CTAs, metadata, and badge baselines misaligned across cards due to uneven content heights without `flex flex-col justify-between` (`HIE-14`)?
+- Nested container double-bezel: Are nested cards/containers wrapped in identical hairline borders without background luminance shift (`HIE-15`)?
+- Actions & buttons: Are there duplicate buttons triggering the same action on the same screen (HIE-08)? Do hero or section CTAs compete with duplicate intents or conflicting weights (`HIE-13`)?
+- Copy strings: run them past `ux-copy.md`. Check for em-dashes (`CPY-10`), meta-numbering filler (`CPY-11`), middle-dot overuse (`CPY-12`), and performative marketing jargon (`CPY-13`).
 
 **Accessibility & assistive tech** - A11Y (accessibility.md)
 - Controls & names: Does every button, link, and input have an unambiguous accessible name (A11Y-01, A11Y-02)? Are icon-only buttons equipped with `aria-label` or `<span className="sr-only">`? Are interior SVGs marked `aria-hidden="true"`?
@@ -115,6 +119,7 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - Do interactive controls provide immediate press feedback within 100ms (`active:scale-[0.98]`, MOT-06)?
 - Do state transitions (expand/collapse, tabs, switches, popovers) transition smoothly without layout thrash on height/width (MOT-07, MOT-08)?
 - Are durations budgeted ≤ 250ms with `motion-reduce:transition-none` (MOT-01, MOT-09)?
+- Motivated motion & scroll integrity: Does every entrance animation serve a cognitive purpose rather than distracting boilerplate fade-ups (`MOT-11`)? Does any component attach a raw `window.addEventListener('scroll')` to track scroll progress in React state (`MOT-12`)? Does the page feature >1 infinite marquee or miss pause-on-hover/reduced-motion (`MOT-13`)? Does any pinned section fail to calculate explicit scroll distance or cleanup triggers (`MOT-14`)?
 **Human cognitive & emotional experience** - HUM (craft.md §2)
 - Cognitive capacity: Does the screen overwhelm working memory with >7 unchunked options or fields without progressive disclosure (`HUM-01`)?
 - Gulf of Execution: Does every actionable control have visible signifiers and intuitive physical affordance (`HUM-02`)?
@@ -132,6 +137,8 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - State choreography: Does the skeleton match the content layout 1:1, and does the data transition calmly with a crossfade rather than jarring CLS or abrupt snaps (SOUL-04)?
 - Surface elevation: Does depth come from calibrated surface luminance tiers and crisp hairline borders rather than heavy muddy drop shadows (SOUL-06)?
 - Human voice: Is copy unpretentious, dignified, and clear without robotic "Oops!" or juvenile cheerfulness (SOUL-08)?
+- Desktop button wrap & descenders: Does any CTA button or badge allow text to wrap onto multiple lines at desktop breakpoints (`SOUL-11`)? Do italic serif display headings clip descenders (`g`, `y`, `p`) without explicit line-height and bottom padding (`SOUL-12`)?
+- Nested trailing icon & full output: Do pill buttons nest trailing icon circles with proper concentric radius and subtle hover translation (`SOUL-13`)? Are all files emitted in full without placeholder comments or truncations (`SOUL-14`)?
 
 **Data & lists** - PAG, PERF
 - Unbounded fetch? Client-side slicing? Big list without pagination/virtualization? Keys stable (not index on reorderable lists)?
@@ -141,7 +148,8 @@ Read the file once fully, then walk it with these questions. Record every hit as
 
 ## 4. Cross-file passes
 
-- **Consistency** (consistency.md): list every variant of each pattern found across the inventory.
+- **Consistency** (consistency.md): list every variant of each pattern found across the inventory. Verify Page Theme Lock (no mid-page light/dark flips, `CON-09`), Color Consistency Lock (no extra brand/accent colors outside tokens, `CON-10`), and Corner Radius Scale Lock (no disparate radii, `CON-11`).
+- **Anti-slop audit** (rule-catalog.md §4, craft.md §4): Check for eyebrow spam across sections (max 1 per 3 sections, `SLOP-08`), fake div screenshots (`SLOP-09`), lazy warm craft palette drift (`SLOP-10`), plain text wordmarks in trust walls (`SLOP-11`), and decorative unclickable status dots (`SLOP-12`).
 - **Component & form reuse** (consistency.md §3): compare forms and complex views across routes. Are separate Create and Edit pages duplicating schemas and JSX instead of sharing a polymorphic `<EntityForm mode="..." />` (CON-06, FRM-14)?
 - **Data flow**: for each mutation, which queries show the changed data? Are they all refreshed? (A stale list after "Save" is the most common mutation bug.) For every summary/KPI on the surface, diff its aggregate filters against the list query's filters (PAG-11); list the entity's status enum values and check each lands in one breakdown bucket and one filter option (PAG-12); add the parts and compare with the stated total (PAG-13); for every server cache key holding a derived count, check the mutation paths delete/bump it (MUT-12).
 - **State coverage matrix**: region × state (loading / empty / error / pending / no-permission / long content). Empty cells are findings.
@@ -231,18 +239,26 @@ rg -n "byStatus|byDepartment|breakdown|split|statusCounts" $P     # breakdowns: 
 rg -n "\.set\(|cache.*set|CACHE_KEY|ex:\s*[0-9]" $P               # server cache writes holding derived counts
 rg -n "\.del\(|invalidate|bump|version.*cache" $P                 # cache invalidation: every set above needs a del on each mutation path (MUT-12)
 
-# Layout / slop
+# Layout & hero stability (LAY-13..15, LAY-17)
 rg -n "h-screen|100vh|w-\[\d|min-w-\[\d|h-\[\d" $P
+rg -n "min-h-screen|min-h-\[100dvh\]" $P                                       # hero viewport overflow (LAY-14)
+rg -n "col-span-2.*row-span-2|grid-flow-dense" $P                              # bento voids & dense flow (LAY-17)
+
+# Anti-slop & copy hygiene (CPY-10..12, SLOP-01..12)
 rg -n "#[0-9a-fA-F]{3,8}\b|-\[[^\]]+\]" $P                              # raw values (SLOP-01)
 rg -n "font-family|Inter\b|sans-serif\b" $P                              # single/default font, no pairing (SLOP-06)
 rg -n "dicebear|multiavatar|avataaars|unsplash|\bstock\b|placeholder" $P # AI/placeholder people as content (SLOP-07)
-rg -n "bg-gradient|from-(purple|violet|indigo)|shadow-\w+/\d+|uppercase tracking" $P
+rg -n "bg-gradient|from-(purple|violet|indigo)|shadow-\w+/\d+" $P
+rg -n "tracking-widest|uppercase.*tracking" $P                                # eyebrow pill spam (SLOP-08)
+rg -n "rounded-full\s+size-[23]\s+bg-(green|emerald|amber)-" $P               # decorative status dots (SLOP-12)
 rg -n "key=\{(i|index|idx)\}" $P
 rg -n "toLocaleDateString|toFixed\(|new Date\(.*\)\.to" $P
 rg -n "[\"'][^\"']*\"[^\"']*[\"']" $P                                      # straight quotes in strings (CPY-08)
 rg -n "\d+\s+(MB|GB|KB|px|rem|%|items|records|documents)\b" $P              # missing non-breaking spaces before units (CPY-09)
+rg -n "—|–|--\s" $P                                                           # em-dash / en-dash / double-hyphen ban (CPY-10)
+rg -ni "(SECTION\s*0[1-9]|STEP\s*0[1-9]|0[1-9]\s*//|0[1-9]\s*/)" $P           # artificial meta-numbering (CPY-11)
+rg -n "·|&middot;|&#183;" $P                                                  # middle-dot rationing (CPY-12)
 rg -n "translate=[\"']no[\"']|notranslate" $P                              # untranslated system tokens/IDs (I18N-06)
-
 
 # Accessibility & assistive tech (accessibility.md)
 rg -n "onClick" $P | rg -v "<(button|Button|a |Link|DropdownMenuItem|MenuItem)"  # div/span as button (A11Y-01)
@@ -251,7 +267,6 @@ rg -n "outline-none|outline:\s*none|outline-0" $P | rg -v "focus-visible:"      
 rg -n "tabIndex=\{?[1-9]" $P                                                     # positive tabIndex (A11Y-15)
 rg -n "aria-hidden=[\"']true[\"'][^>]*<(button|a|input|select)" $P               # aria-hidden on interactive (A11Y-16)
 rg -n "<(button|Button)[^>]*<button|<a[^>]*<a" $P                                 # nested interactives (A11Y-17)
-rg -n "onPaste.*preventDefault" $P                                                # blocked paste / cognitive auth (A11Y-20, FRM-10)
 rg -n "role=[\"'](button|link)[\"']" $P                                          # manual roles instead of native elements
 rg -n "<img|<Image" $P | rg -v "alt="                                            # missing image alt (A11Y-08)
 rg -n "user-scalable\s*=\s*no|maximum-scale\s*=\s*1" $P                         # zoom disabled (A11Y-10)
@@ -263,6 +278,9 @@ rg -n "animate-bounce|animate-pulse" $P                                  # distr
 rg -n "duration-\[?[3-9]\d{2,}\]?" $P                                   # sluggish >250ms transitions (MOT-09)
 rg -n "<(button|Button)" $P | rg -v "active:"                           # missing press micro-feedback (MOT-06)
 rg -n "(animate-|transition)" $P | rg -v "motion-reduce:"               # missing reduced motion fallback (MOT-01)
+rg -n "addEventListener\(['\"]scroll['\"]" $P                                  # raw scroll listener in state (MOT-12)
+rg -n "<Marquee|animate-marquee" $P                                            # marquee count & overflow (MOT-13)
+rg -n "ScrollTrigger\.create" $P                                               # pinned scroll distance & cleanup (MOT-14)
 
 # Duplicate actions & shared form sprawl (HIE-08, CON-06, CON-07)
 rg -n "type=[\"']submit[\"']" $P                                        # multiple submit buttons on same view? (HIE-08)
@@ -270,14 +288,15 @@ rg -n "useForm\b|z\.object\(" $P                                         # dupli
 # Shared-primitive reuse vs one-off variants (CON-01, CON-02, CON-07)
 rg -n "components/ui/" $P                                                # shared primitives; one-off variants are candidates
 
-# Hierarchy & depth (HIE-09..HIE-12)
+# Hierarchy & depth (HIE-09..HIE-15)
 rg -n "shadow-(lg|xl|2xl)" $P                                                # shadow soup instead of surface luminance (HIE-12)
 rg -n "text-\[\d+px\]" $P                                                    # arbitrary unscaled font sizes (HIE-11)
 
-# Soulful craft & tactile finish (SOUL-01..SOUL-06)
-rg -n "shadow-(lg|xl|2xl)" $P                                                # heavy drop shadows instead of hairline border + luminance (SOUL-06)
+# Soulful craft & tactile finish (SOUL-01..SOUL-14)
 rg -n "rounded-[a-z0-9]+" $P                                                 # check nested radii for concentricity: R_inner = R_outer - P (SOUL-02)
 rg -n "<(Play|Chevron|Arrow)" $P                                             # check optical alignment compensation on directional icons (SOUL-03)
+rg -n "italic.*font-serif|<em\b" $P                                            # italic descender clipping check (SOUL-12)
+rg -n "<(Button|button)[^>]*class.*(w-full|flex-1)" $P                         # desktop CTA wrap candidates (SOUL-11)
 
 # Dynamic item binding & form button safety (CON-08, FRM-18, PAG-14, MUT-13)
 rg -n "<(button|Button)[^>]*" $P | rg -v "type="                            # button inside form without explicit type="button"? (FRM-18)

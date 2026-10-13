@@ -4,14 +4,14 @@ Every finding cites one rule ID from here (or a DESIGN.md rule). In FULL mode ev
 
 These are defaults: when DESIGN.md or the codebase's own primitives decide something differently, they win (design-md.md). Details and fixes live in the linked guides.
 
-Sources: this skill's own guides, Vercel Web Interface Guidelines, Christopher Alexander (A Pattern Language), Don Norman (The Design of Everyday Things, Emotional Design), Rauno Freiberg (Invisible Details), Emil Kowalski (Animations on the Web), impeccable (harden/distill/layout/audit), WCAG 2.2, TanStack Query and React docs, Front-End Checklist (thedaviddias), Jef Raskin (The Humane Interface), John Sweller (Cognitive Load Theory), Mark Weiser (Calm Technology), Daniel Kahneman (Peak-End Rule), Roman Kamushken (Data Table UI Design), BuiltUX (Toast Notification Doctrine), NN/g "AI Hallucinations" (Laubheimer 2025), Setproduct "Command Palette UI Design" (Kamushken 2026), Editorial Web Typography & Visual Hierarchy Research.
+Sources: this skill's own guides, Vercel Web Interface Guidelines, Christopher Alexander (A Pattern Language), Don Norman (The Design of Everyday Things, Emotional Design), Rauno Freiberg (Invisible Details), Emil Kowalski (Animations on the Web), Leonxlnx/taste-skill (taste-skill v2 experimental, redesign-skill, soft-skill, minimalist-skill, brutalist-skill, gpt-tasteskill, output-skill), impeccable (harden/distill/layout/audit), WCAG 2.2, TanStack Query and React docs, Front-End Checklist (thedaviddias), Jef Raskin (The Humane Interface), John Sweller (Cognitive Load Theory), Mark Weiser (Calm Technology), Daniel Kahneman (Peak-End Rule), Roman Kamushken (Data Table UI Design), BuiltUX (Toast Notification Doctrine), NN/g "AI Hallucinations" (Laubheimer 2025), Setproduct "Command Palette UI Design" (Kamushken 2026), Editorial Web Typography & Visual Hierarchy Research.
 
 ## Contents
 LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR · NOT · HOOK · A11Y · NAV · CON · CPY · SLOP · MOT · SOUL · HUM · PERF · I18N · THM · AI
 
 ---
 
-## LAY - Layout & declutter → hierarchy-declutter.md, responsive-fluid.md §9
+## LAY - Layout & declutter → hierarchy-declutter.md, responsive-fluid.md §9, taste-engineering.md
 - LAY-01 Elements that serve no task in the task list (duplicate titles, decorative icons, welcome banners, stats nobody acts on, helper text repeating the label)
 - LAY-02 Things that should be merged (two toolbars, search + filter rows, label/value/unit split across lines)
 - LAY-03 Rarely used actions/info shown at full weight instead of in a menu, disclosure or detail view
@@ -24,8 +24,14 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - LAY-10 Fixed heights on content containers (clips text when content grows)
 - LAY-11 Absolute or `sr-only` descendants lack positioned ancestor inside scroller, leaking phantom scroll height and outer scrollbars (see responsive-fluid.md §9)
 - LAY-12 Nested scroller inside an existing scrolling container without explicit bounded height or scroll owner delegation
+- LAY-13 Narrow display headline wrap (H1 forced into 4+ lines due to narrow container or oversized font; must use wide container max-w-5xl+ and cap at 2–3 lines)
+- LAY-14 Hero viewport overflow & top padding leak (hero exceeds initial viewport or top padding > pt-24, floating hero halfway down screen; must use min-h-[100dvh] and fit headline, subtext <=20 words, and CTAs above fold)
+- LAY-15 Hero stack overload (>4 text elements in hero; micro-taglines below CTAs, trust micro-strips, or pricing teasers stuffed into hero instead of dedicated sections below)
+- LAY-16 Zigzag alternation fatigue (>2 consecutive sections using alternating left-image/right-text split; must break rhythm with bento, full-width, stack, or marquee)
+- LAY-17 Bento grid voids & lack of visual variation (empty dead cells in CSS grid without grid-auto-flow: dense, or all cells identical flat text cards with zero image/gradient/tone variation)
+- LAY-18 Split-header default pattern ("left big headline + right small body paragraph" as section header without visual justification; must stack vertically or carry real visual in column 2)
 
-## HIE - Hierarchy → hierarchy-declutter.md
+## HIE - Hierarchy → hierarchy-declutter.md, craft.md
 - HIE-01 No single clear primary element/action on the view
 - HIE-02 More than one primary-styled button per view/dialog
 - HIE-03 More than ~4 text sizes or ~3 weights on screen; weights under 400
@@ -38,6 +44,9 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - HIE-10 Competing secondary anchors (eyebrow badges, decorative icons, chips, and colored accents scattered indiscriminately, diluting the primary focal point)
 - HIE-11 Unscaled typographic jumps (arbitrary font sizes without modular ratio scale; headings without tight line-heights or balanced wrapping)
 - HIE-12 Depth through shadow soup instead of surface luminance (heavy blurry drop shadows instead of calibrated tonal background tiers and crisp hairline borders)
+- HIE-13 Duplicate CTA intent (multiple buttons on the same page with identical intent using conflicting labels like "Get in touch" vs "Let's talk" vs "Contact us"; pick one canonical label per intent)
+- HIE-14 Multi-column card baseline misalignment (buttons or feature lists in adjacent cards/columns floating at random heights instead of pinned to bottom or aligned on identical baselines)
+- HIE-15 Double-bezel / nested enclosure violation (outer shell and inner card container with mismatched radii or flat unrefined border-shadow soup instead of concentric machining R_inner = max(0, R_outer - P))
 
 ## RSP - Responsive, fluid, wrapping → responsive-fluid.md
 - RSP-01 Horizontal page overflow at any width 320–1920
@@ -260,6 +269,9 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - CON-06 Duplicate component or form implementations across routes/pages instead of a shared component (e.g. copy-pasted create vs edit forms, duplicate modal vs page form implementations causing schema/behavior drift)
 - CON-07 Patterns reinvented instead of reusing or extending canonical shared primitives or best existing usage
 - CON-08 Static/hardcoded item props across workbench views (orchestrating view provides a selector/picker, but child components remain bound to root/default/current items like items[0] or currentVersion instead of dynamically reacting to the active selected variant)
+- CON-09 Page theme flipping (random light-mode section in a dark-mode page or vice versa without intentional narrative color-block transition)
+- CON-10 Color consistency drift (multiple competing accent colors or switching accent colors between sections on the same page; exactly one accent color locked per page)
+- CON-11 Corner radius scale incoherence (mixing sharp, soft, and pill radii arbitrarily without a unified, documented radius hierarchy)
 
 ## CPY - Copy → ux-copy.md
 - CPY-01 Buttons without verb + object ("Submit", "OK", "Yes")
@@ -271,6 +283,10 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - CPY-07 `...` instead of `…` in loading/menu labels (if project style uses it); "Loading…" without what
 - CPY-08 Straight quotes (`"`, `'`) used in editorial or marketing copy instead of typographic curly quotes (`“`, `”`, `‘`, `’`)
 - CPY-09 Missing non-breaking space (`&nbsp;` / `\u00A0`) between numbers and units or key shortcuts (e.g. `10 MB`, `⌘ K`), causing orphan wrapping
+- CPY-10 Absolute Zero Em-Dash Ban (any em-dash "—" or en-dash "–" used as a design flourish or separator in UI copy, headlines, buttons, or quotes; must use hyphen "-" or restructure with colons/periods)
+- CPY-11 Artificial metadata & meta-numbering filler (decorative pseudo-system labels like "SECTION 01", "001 · Capabilities", "QUESTION 05", "v0.6.2", or fake live-stock counters)
+- CPY-12 Middle-dot (·) pollution (>1 middle dot per metadata line, or using middle-dots as lazy dividers everywhere)
+- CPY-13 Performative craftsman copy register ("Quietly trusted by", "From the field", "On our benches", "We respect the French ones", or ungrounded fake-precise metrics like "99.99%")
 
 ## SLOP - Visual slop → craft.md §1
 - SLOP-01 Values outside tokens (hex, arbitrary sizes, new fonts)
@@ -280,8 +296,13 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - SLOP-05 Emoji as icons; mixed icon sets; icons on every label
 - SLOP-06 Typography slop: defaulting to one font (e.g. Inter) with no deliberate type pairing/hierarchy, or one type scale with no modular rhythm
 - SLOP-07 AI/placeholder people as content: generated avatars (e.g. dicebear/multiavatar), anime/3D mascots, stock faces; content images lacking a real or meaningful `alt`
+- SLOP-08 Eyebrow spam (>1 eyebrow per 3 sections, count > ceil(sectionCount / 3); small-caps mono labels above every single section header)
+- SLOP-09 Div-based fake screenshot / UI mockup (hand-built <div> rectangles simulating software, terminals, or task lists; must use real screenshots, component previews, or imagery)
+- SLOP-10 Lazy default "warm craft" palette (cliché bone/cream #f5f1ea + brass/oxblood #b08947 + espresso #1a1714 applied indiscriminately to all premium/consumer briefs; rotate palettes)
+- SLOP-11 Plain-text wordmarks on trust walls (using unstyled <span>Acme</span> instead of real SVG marks from Simple Icons / devicon, or printing redundant industry labels under logos)
+- SLOP-12 Decorative fake status dots (colored glowing dots placed before every nav link, badge, or list item without real semantic state)
 
-## MOT - Motion & micro-interactions → motion.md
+## MOT - Motion & micro-interactions → motion.md, taste-engineering.md §5
 - MOT-01 No `prefers-reduced-motion` handling
 - MOT-02 `transition: all`; animating layout properties (width/height/top/left)
 - MOT-03 Same entrance animation on every section; hover lift on non-interactive cards; bounce/fade animations on every hover and scroll entry with no functional intent
@@ -292,8 +313,12 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - MOT-08 Animating layout properties (margin, padding, top/left, height) causing layout thrash instead of composited transform/opacity or CSS grid transitions
 - MOT-09 Sluggish micro-interactions exceeding 250ms or multi-stage loops delaying user tasks
 - MOT-10 Skeleton-to-content transition flashes or pops without crossfade or smooth settling
+- MOT-11 Unmotivated animation (adding animations solely for spectacle without communicating hierarchy, storytelling, state transition, or feedback)
+- MOT-12 Raw scroll listeners / scrollY in state (window.addEventListener('scroll') or continuous scroll position in React state causing frame drops and layout thrash; must use useScroll, ScrollTrigger, or CSS scroll-driven animations)
+- MOT-13 Marquee overflow (>1 continuous horizontal marquee on the same page)
+- MOT-14 Fragile scroll-pinning / sticky stack (start trigger misaligned, pinning element while transforming it, or omitting invalidateOnRefresh and resize recalculation)
 
-## SOUL - Soulful design, craft & tactile finish → craft.md §3
+## SOUL - Soulful design, craft & tactile finish → craft.md §3, taste-engineering.md
 - SOUL-01 Flat/dead interactive controls with zero active press depression, haptic feedback, or immediate (<100ms) tactile response
 - SOUL-02 Non-concentric nested border radii (inner radius doesn't match outer radius minus padding: R_inner ≠ R_outer - P)
 - SOUL-03 Uncompensated optical misalignment (geometric centering of triangles, play icons, badges, or mixed-height icon-label locks that look off-center)
@@ -304,6 +329,10 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - SOUL-08 Artificial, patronizing, or robotic voice (condescending "Oopsie!", fake celebratory emoji confetti, or corporate marketing jargon on operational screens)
 - SOUL-09 Lack of fidgetable/satisfying mechanical tactile feedback on toggles, segment controls, sliders, and interactive primitives
 - SOUL-10 Fragile edge handling: UI breaks or looks neglected with 0 items, 1 item, 10,000 items, ultra-long strings, or unexpected network latency
+- SOUL-11 CTA button text wrapping at desktop (CTA text wrapping to 2+ lines due to narrow button or verbose label)
+- SOUL-12 Italic descender clipping (display italic words with descenders y, g, j, p, q clipped by tight leading-none without descender clearance leading-[1.1] + pb-1 reserve)
+- SOUL-13 Button-in-button nested trailing icon missing (naked arrow icon placed beside CTA label instead of nested within its own distinct tactile pill/circle)
+- SOUL-14 Full-output omission (lazy truncation, // ..., placeholder comments, or skeleton code in production deliverables)
 ## HUM - Human cognitive & emotional experience → craft.md §2
 - HUM-01 Extraneous cognitive overload: >7 unchunked competing options, form fields, or navigation links presented without grouping or progressive disclosure (Sweller / Miller / Hick)
 - HUM-02 Wide Gulf of Execution: Action controls lack visible signifiers or intuitive affordance, requiring mental guesswork or manual documentation (Norman)

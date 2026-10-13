@@ -11,8 +11,9 @@ First check for a voice guide: DESIGN.md, PRODUCT.md, a `content-guidelines` doc
 **Buttons and links**
 - Verb + object, sentence case: "Save changes", "Create invoice", "Delete 3 files". Not "Submit", "OK", "Yes", "Click here".
 - The button label matches the dialog title's action: title "Delete project?" → button "Delete project".
-- Keep to 1–3 words where possible so it never wraps.
+- Keep to 1–3 words where possible so it never wraps (SOUL-11).
 - Links say where they go: "View invoice", not "Learn more" repeated five times.
+- **No duplicate CTA intent (HIE-13)**: Never use conflicting labels for the same action on one page (e.g. mixing "Get in touch", "Contact us", and "Let's talk"). Pick one canonical label per intent and stick to it across nav, hero, and footer.
 
 **Page and section titles**
 - Name the thing, not a slogan: "Invoices", "Team members". Not "Manage your invoices seamlessly".
@@ -42,6 +43,8 @@ First check for a voice guide: DESIGN.md, PRODUCT.md, a `content-guidelines` doc
 
 **Loading & punctuation**
 - Skeletons over "Loading..." text. If text is needed, say what: "Loading invoices…". Use the real ellipsis character `…` (`\u2026`), never three ASCII periods `...` (`CPY-07`).
+- **Absolute Zero Em-Dash Ban (CPY-10)**: The em-dash character (`—`) and en-dash (`–`) used as a separator are strictly banned across all visible UI strings, headlines, buttons, eyebrows, body copy, and quote attributions. Restructure sentences with periods, commas, or colons; use regular hyphen (`-`) for compound words or ranges (`2024-2026`).
+- **Middle-dot (·) rationing (CPY-12)**: Maximum 1 middle dot per metadata line. Never use middle dots as lazy separators everywhere ("foo · bar · baz · qux"). Prefer line breaks, hairlines, or separate columns.
 - **Typographic quotes (`CPY-08`)**: In user-facing prose, helper copy, and dialog descriptions, use directional curly quotes (“ ” and ‘ ’) rather than typewriter straight quotes (" '). Straight quotes are reserved for code identifiers.
 - **Non-breaking spaces (`CPY-09`)**: Place a non-breaking space (`&nbsp;` or `\u00A0`) between numeric values and units or compound keyboard shortcuts (e.g. `10&nbsp;MB`, `24&nbsp;px`, `⌘&nbsp;K`, `Ctrl&nbsp;+&nbsp;S`) to prevent orphan characters from wrapping to a new line.
 - **Untranslated system tokens (`I18N-06`)**: Brand names, Asset IDs, SKU codes, system tokens, and acronyms must have `translate="no"` (or `className="notranslate"`) to prevent automatic browser translators from mangling technical identifiers into broken vocabulary.
@@ -54,13 +57,15 @@ First check for a voice guide: DESIGN.md, PRODUCT.md, a `content-guidelines` doc
 5. Title Case On Buttons And Labels (use sentence case unless DESIGN.md says otherwise).
 6. "Oops!", "Uh-oh!", "Whoops!" errors.
 7. Generic "Are you sure?".
-8. Em dashes in UI strings - use a period, comma or colon.
+8. **Em-dashes (`—`) or en-dashes (`–`)** in UI strings (CPY-10) — rewrite with periods, commas, colons, or standard hyphen.
 9. Forced groups of three ("Fast, simple, and secure").
 10. Upbeat closers: "Happy invoicing!", "You're all set! 🚀".
 11. Apologies with no fact ("Sorry for the inconvenience").
 12. Emoji in functional copy.
 13. Welcome banners and marketing copy inside app screens.
 14. Exclamation marks (except a genuinely celebratory moment, max one).
+15. **Artificial metadata & meta-numbering (CPY-11)**: "SECTION 01", "001 · Capabilities", "QUESTION 05", "v0.6.2", fake live-stock counters ("Reservation 412 of 800").
+16. **Performative craftsman register (CPY-13)**: "Quietly in use at", "From the field", "On our benches", "We respect the French ones", or invented precision metrics like "99.99%".
 
 ## Final copy checklist (Phase 5)
 
@@ -69,8 +74,10 @@ Any **yes** → rewrite.
 2. Does any error not say how to fix it?
 3. Does any empty state lack an action (where the user is allowed to act)?
 4. Does any confirm dialog not name what will be lost?
-5. Does any string contain a word from the banned list, an em dash or an emoji?
+5. Does any string contain a word from the banned list, an em dash (`—` / `–`) (CPY-10), or an emoji?
 6. Is any placeholder standing in for a label?
 7. Is there helper text that just repeats the label?
-8. Would any label wrap to two lines at 320px?
+8. Would any button label wrap to two lines at desktop (SOUL-11)?
 9. Are straight quotes used in prose or units wrapped without non-breaking spaces?
+10. Are meta-labels ("SECTION 01", "QUESTION 05") or middle-dot spam present (CPY-11, CPY-12)?
+11. Are two buttons competing with conflicting phrasing for the same intent (HIE-13)?

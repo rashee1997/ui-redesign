@@ -70,8 +70,8 @@ Read only what the current step needs.
 | CON - consistency | `consistency.md` |
 | SLOP, CPY - visual slop, copy | `craft.md` §1 + §4 checklists, `ux-copy.md` |
 | MOT - motion, micro-interactions | `motion.md` |
-| SOUL - soulful design, craft, tactile finish | `craft.md` §3 + §4 checklists |
-| HUM - human design theory (for humans, not robots) | `craft.md` §2 + §4 checklists |
+| SOUL, HUM - soulful craft, human laws | `craft.md` §§2–3 + §4 checklists |
+| Taste engineering & dials | `taste-engineering.md` - Three Dials, brief inference, archetypes |
 | Writing the plan | `plan-template.md` |
 | Updating this skill (not a UI) | `updating-skill.md` |
 | Optional runtime evidence (scripts are candidates, never verdicts) | `scripts/ui_audit.mjs`, `scripts/scan_patterns.mjs` |
@@ -79,7 +79,7 @@ Read only what the current step needs.
 ## Non-negotiables
 
 - **Scope is respected.** FOCUSED touches only the named problems; FULL leaves no catalog category or individual rule ID unchecked.
-- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage.md` must account for every rule ID individually in exact numerical sequence (`LAY-01` through `AI-06`, including `TAB-01` to `TAB-07`, `UPL-01` to `UPL-06`, `NOT-01` to `NOT-05`, `NAV-11` to `NAV-12`, and `HUM-01` to `HUM-08`) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
+- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage.md` must account for every rule ID individually in exact numerical sequence (`LAY-01` through `AI-06`, including `TAB-01` to `TAB-07`, `UPL-01` to `UPL-06`, `NOT-01` to `NOT-05`, `NAV-11` to `NAV-12`, `HUM-01` to `HUM-08`, and `taste-engineering.md` standards) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
 - **Every file in the surface is read in full** - child components, dialogs, hooks, and the API/server code behind lists and mutations.
 - **Every finding has a rule, quoted evidence, one fix, a severity and a status.** No finding without proof; no fix without a finding.
 - **Declutter before restructure.** A layout redesign decides Keep / Remove / Merge / Demote / Defer / Move for every visible element.

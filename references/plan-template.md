@@ -62,11 +62,17 @@ Row format: `- [Pn] <rule> <file:line> - <what> → <fix>` (ledger findings: `- 
 - [P1] HIE-08 invoice-card.tsx:32 - duplicate Save in header and footer → single footer action
 - [P2] RSP-14 floating-bar.tsx:18 - bar touches home indicator → `pb-[max(1rem,env(safe-area-inset-bottom))]`
 - [P1] LAY-11 table-actions.tsx:88 - `sr-only` has unpositioned parent, phantom scroll → `relative` on cell wrapper
+- [P2] LAY-14 hero.tsx:12 - hero overflows initial viewport with pt-32 → `min-h-[100dvh] pt-24 pb-12`
 ### Consistency, motion, human & craft
 - [P1] CON-08 document-view.tsx:285 - header frozen on currentVersion while viewing another revision → bind activeVersion to all panels
 - [P2] MOT-06 invoice-form.tsx:110 - buttons lack press feedback → `active:scale-[0.98]`, 100ms
 - [P1] HUM-01 settings-form.tsx:30 - 18 unchunked fields → 4 thematic cards + disclosure
 - [P2] SOUL-02 card-wrapper.tsx:18 - clashing nested radii → concentric R_inner = R_outer - P
+- [P2] SOUL-11 hero-cta.tsx:45 - primary button wraps on desktop → `whitespace-nowrap px-6`
+### Anti-slop & copy hygiene
+- [P2] CPY-10 feature-card.tsx:14 - em-dash used in subhead → clean period / comma
+- [P3] SLOP-08 section-header.tsx:22 - uppercase tracked eyebrow on 4 consecutive sections → ration to max 1 per 3 sections
+- [P2] CPY-11 process-step.tsx:10 - artificial "STEP 01" meta-numbering filler → semantic heading
 ### Data, tables, uploads, toasts, loading, mutations
 - [P1] PAG-14 get-documents.ts:92 - archive query keeps `is_current: true` → drop active-only filter
 - [P2] TAB-02 equipment-table.tsx:18 - sticky header has no background → `bg-background border-b`

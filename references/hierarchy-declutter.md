@@ -12,6 +12,7 @@
 7. Actions & button architecture
 8. Tables, lists and dense data
 9. Page shell patterns
+10. Hero, bento & section composition architecture
 
 ## 1. Diagnose first
 
@@ -211,3 +212,41 @@ A typical app screen, top to bottom:
 - Toolbar: search grows (`flex-1 min-w-0`), filters collapse into a "Filters" button/sheet at small widths.
 - Detail screens: master–detail (list + side panel) on wide screens, separate views or a sheet on small ones.
 - Forms: single column, labels above fields, related fields side by side only when wide enough (container query), actions at the end.
+
+## 10. Hero, bento & section composition architecture
+
+### A. Hero line & container width discipline (LAY-13)
+Display headlines must never wrap into 4, 5, or 6 cramped lines because of artificially constrained containers:
+- Use wide containers (`max-w-5xl`, `max-w-6xl`, or `w-full`) for H1 text so words flow horizontally.
+- The H1 must cap at **2 to 3 lines** maximum on desktop. If it exceeds 3 lines, reduce font scale (`clamp(2.5rem, 5vw, 4.5rem)`) or shorten the copy.
+
+### B. Hero viewport stability & padding cap (LAY-14)
+- Full-height hero sections must use `min-h-[100dvh]`, never `h-screen` (which causes jumpy layout on mobile Safari when browser toolbars collapse).
+- Hero desktop top padding is capped at `pt-24` (≈6rem). Excessive padding floats hero content halfway down the viewport, reading as broken space.
+- Primary CTA must be clearly visible above the fold without requiring scroll. Subtext is capped at **20 words** and 3–4 lines max.
+
+### C. Hero stack discipline (LAY-15)
+The hero is a single focused moment. Allowed text elements: **maximum 4 in total**:
+1. Eyebrow OR brand strip (optional, max 1)
+2. Headline (max 2–3 lines)
+3. Subtext (max 20 words)
+4. Primary & secondary CTA buttons
+*Banned inside hero*: tiny taglines below CTAs, trust logo strips, pricing teasers, or social proof avatar clusters. Move these to dedicated sections directly below the hero.
+
+### D. Zigzag alternation cap (LAY-16)
+Alternating "left-image + right-text" then "left-text + right-image" split sections become monotonous when repeated.
+- **Maximum 2 consecutive sections** with this split pattern.
+- The 3rd section must break the rhythm: use a full-width container, bento grid, marquee, or vertical stack.
+
+### E. Bento grid density & visual variation (LAY-17)
+- **Zero dead cells**: Never leave blank, dead cells in CSS grids. Use `grid-auto-flow: dense` (`grid-flow-dense` in Tailwind) and mathematically ensure `col-span` and `row-span` values interlock perfectly.
+- **Exact cell count**: A bento grid has exactly as many cells as there are content items (3 items = 3 cells in a 1+2 or asymmetric split). Never leave empty placeholder slots.
+- **Visual variation**: At least 2–3 cells in any multi-card grid must feature real visual variation (imagery, subtle gradient, brand tint, or textural depth) rather than a sea of identical white-on-white text cards.
+
+### F. Split-header pattern ban (LAY-18)
+The pattern "left large headline + right small body paragraph" as a section header is banned as a lazy default. Sections should have one focused message. Stack headline and body vertically (`max-w-[65ch]`), or use the right column for real visual or interactive controls.
+
+### G. Multi-column card baseline alignment (HIE-14)
+In feature grids, pricing tables, or multi-column card layouts:
+- Primary CTA buttons must be pinned to the bottom of cards (`mt-auto flex flex-col justify-end`), creating an aligned horizontal baseline across columns.
+- Feature item lists in adjacent comparison columns must start at identical vertical Y positions.

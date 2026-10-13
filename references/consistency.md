@@ -67,6 +67,16 @@ When redesigning master-detail views, split workbenches, or entity pages with ve
   1. Derive `activeItem` from the user's selection (`selectedId || defaultItem.id`), and pass `activeItem` to ALL child components (headers, facts, drawers, lifecycle calculators, action bars).
   2. Resolve sub-resources dynamically for the active item (e.g. `getApprovalForItem(approvals, activeItem.id)`). If the active item has no sub-resource yet (e.g. a new draft revision without an approval chain), render the uninitiated state with an initiation CTA, never the previous item's sub-resource.
   3. Update headings and status badges dynamically: if viewing an obsolete or superseded item, display "Obsolete revision" with strikethrough, not "Current revision" with an "Approved" badge.
+### Page theme, color & shape locks (CON-09, CON-10, CON-11)
+
+- **Page Theme Lock (CON-09)**: The page has exactly ONE theme. Sections must not randomly invert mid-scroll (e.g. an isolated bright cream section sandwiched inside a dark-mode page). If contrast is needed, use a calibrated shade of the same palette (`bg-muted/40` or `bg-card`), never a theme jump.
+- **Color Consistency Lock (CON-10)**: Exactly one accent color is chosen for the page/surface. A warm-neutral page does not suddenly introduce a bright blue CTA in the footer, or a teal badge in a violet-accented flow. Lock one primary accent, use semantic tokens for status only (success green, destructive red), and audit every component before delivering.
+- **Corner Radius Scale Lock (CON-11)**: Pick one radius scale for the page and follow it consistently:
+  - All-sharp (`rounded-none`, 90° mechanical corners).
+  - All-soft (cards `rounded-xl`, buttons `rounded-lg`, inputs `rounded-md`).
+  - All-pill (interactive controls `rounded-full`, containers softly rounded).
+  Mixing round pill buttons with sharp box cards and squircle inputs without a documented rule is broken design.
+
 ## 4. Behaviour consistency (not just looks)
 
 - Same action, same result: delete always confirms (or always offers undo); Esc always closes; Enter always submits forms.
@@ -81,8 +91,11 @@ When redesigning master-detail views, split workbenches, or entity pages with ve
 - [ ] Each pattern in the surface has exactly one variant, matching the canonical version.
 - [ ] Shared components used instead of one-off styling.
 - [ ] Changed patterns reuse the shared primitive or the best existing usage (CON-07), not a one-off restyle.
- - [ ] Repeated forms and components across routes/dialogs extracted into a unified single source of truth (CON-06, FRM-14).
+- [ ] Repeated forms and components across routes/dialogs extracted into a unified single source of truth (CON-06, FRM-14).
 - [ ] Entity/version selectors propagate active item state to all child panels, fact grids, headers, and workflows without hardcoded defaults (CON-08).
- - [ ] Dates/numbers/currency formatted through one helper.
- - [ ] Terminology consistent with DESIGN.md / the app.
- - [ ] Out-of-scope inconsistencies listed as follow-ups.
+- [ ] Page Theme Lock respected: no random inverted theme sections mid-page (CON-09).
+- [ ] Color Consistency Lock respected: exactly one accent color across the page (CON-10).
+- [ ] Corner Radius Scale Lock respected: coherent radius scale without random mixing (CON-11).
+- [ ] Dates/numbers/currency formatted through one helper.
+- [ ] Terminology consistent with DESIGN.md / the app.
+- [ ] Out-of-scope inconsistencies listed as follow-ups.
