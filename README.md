@@ -4,8 +4,8 @@
   # UI Redesign
 
   <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.0.3-indigo.svg" alt="Version 4.0.3" /></a>
-    <a href="https://skills.sh/rashee1997/ui-redesign"><img src="https://skills.sh/b/rashee1997/ui-redesign" alt="skills.sh" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.0.4-indigo.svg" alt="Version 4.0.4" /></a>
+    <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
     <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
     <a href="./phases.md"><img src="https://img.shields.io/badge/gates-G0..G5-purple.svg" alt="Gates G0..G5" /></a>

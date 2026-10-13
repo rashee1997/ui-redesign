@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.4 (2026-10-13): Replace unindexed skills.sh badge
+- Changed:
+  - `README.md`: version badge to 4.0.4; replaced skills.sh install-count badge (rendered `resource not found` — skill not yet indexed, indexing follows install telemetry) with a static install badge linking to `Usage`
+- Reason: broken badge image on the public repo page
+- Revert note: restore `[![skills.sh](https://skills.sh/b/rashee1997/ui-redesign)](https://skills.sh/rashee1997/ui-redesign)` once skills.sh indexes the skill
+
 ## 4.0.3 (2026-10-13): skills.sh install badge and instructions
 - Changed:
   - `README.md`: version badge to 4.0.3; added skills.sh install-count badge; `Usage` documents `npx skills add rashee1997/ui-redesign`
