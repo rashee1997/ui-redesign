@@ -1,10 +1,10 @@
 <div align="center">
   <img src="assets/cover/ui-redesign-cover.png" alt="UI Redesign Cover" width="100%" />
 
-  # UI Redesign
+# UI Redesign
 
-  <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.1.0-indigo.svg" alt="Version 4.1.0" /></a>
+<p>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.2.0-indigo.svg" alt="Version 4.2.0" /></a>
     <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
     <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
@@ -25,25 +25,37 @@ A skill for auditing, decluttering, and redesigning frontend user interfaces. En
 5. **Shows 3 Interactive Concepts Before Approval**: Builds three clickable HTML prototypes (high-density, balanced SaaS, contextual fluid) with working dialogs, toasts, and mobile/tablet/desktop emulation in `.ui-audit/<slug>/concepts/` — the user opens `concepts/index.html` and picks a direction before any production code is touched.
 6. **Verifies Every Step**: Enforces a 6-gate ledger in `.ui-audit/<slug>/` where code edits require user approval and verified test output.
 
-## Slop vs Fixed
+## See It Work
 
-Research-grounded comparison in two sets: a dark invoices app screen, and a light landing hero. Same surface each side. Left: the documented AI slop fingerprint (purple gradients, pill badge, icon-card rows, hype copy, glow-soup CTAs, fake stats, logo wall). Right: the skill's discipline (one primary, hairlines, tabular numerals, honest copy, real proof). Bottom strip: the gate ledger that gets it there.
+One checkout screen, fixed live. `/ui-redesign` audits the default AI output, pins every violation to its rule ID, then morphs each element into the fixed version while the gate ledger ticks from G0 to G5.
 
-![Dark invoices app screen: slop on the left, fixed on the right](assets/showcase/set-dark-app.png)
+<div align="center">
+  <img src="assets/showcase/ui-redesign-demo.gif" alt="Animated demo: an AI-slop checkout screen is audited, 10 findings are pinned to rule IDs, then every element morphs into the fixed UI until zero findings remain" width="100%" />
+</div>
 
-![Light landing hero: slop on the left, fixed on the right](assets/showcase/set-light-hero.png)
+| Slop (before)                         | Fixed (after)                          | Rule                |
+| ------------------------------------- | -------------------------------------- | ------------------- |
+| Emoji hype badge                      | Removed                                | `CPY-05`, `LAY-01`  |
+| Gradient headline                     | Plain "Payment details"                | `SLOP-02`           |
+| 1.9:1 grey subtitle                   | AA contrast, plain words               | `A11Y-04`           |
+| Icon feature-card row                 | One line of text                       | `SLOP-03`, `LAY-02` |
+| Placeholder-only fields               | Visible, linked labels                 | `FRM-01`            |
+| "Error: Invalid input!" banner        | Inline error with cause and fix        | `CPY-02`, `FRM-03`  |
+| Two glowing primary buttons, "Submit" | One primary "Pay $72.36", quiet "Back" | `HIE-02`, `CPY-01`  |
+| Mixed money formats, glow total       | Right-aligned tabular amounts          | `CON-03`, `HIE-06`  |
 
 ## The Three Dials
 
 Interface density, motion, and layout variance are calibrated using three numerical parameters (1 to 10) documented in [`references/taste-engineering.md`](./references/taste-engineering.md):
 
-| Dial | Range | Calibration |
-|---|---|---|
-| `DESIGN_VARIANCE` | 1 to 10 | 1-3: Strict 12-column grid.<br>4-7: Asymmetric white-space and offset columns.<br>8-10: Expressive grid with masonry and fractional tracks. |
-| `MOTION_INTENSITY` | 1 to 10 | 1-3: Static layouts with 100ms press micro-feedback only.<br>4-7: Fluid state transitions (150-200ms cubic-bezier).<br>8-10: Pinned sticky stacks and scroll choreography. |
-| `VISUAL_DENSITY` | 1 to 10 | 1-3: Airy gallery layout with wide padding.<br>4-7: Standard SaaS spacing (`py-12` to `py-20`).<br>8-10: High-density data cockpit with tight hairlines and tabular numerals. |
+| Dial               | Range   | Calibration                                                                                                                                                                   |
+| ------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DESIGN_VARIANCE`  | 1 to 10 | 1-3: Strict 12-column grid.<br>4-7: Asymmetric white-space and offset columns.<br>8-10: Expressive grid with masonry and fractional tracks.                                   |
+| `MOTION_INTENSITY` | 1 to 10 | 1-3: Static layouts with 100ms press micro-feedback only.<br>4-7: Fluid state transitions (150-200ms cubic-bezier).<br>8-10: Pinned sticky stacks and scroll choreography.    |
+| `VISUAL_DENSITY`   | 1 to 10 | 1-3: Airy gallery layout with wide padding.<br>4-7: Standard SaaS spacing (`py-12` to `py-20`).<br>8-10: High-density data cockpit with tight hairlines and tabular numerals. |
 
 ### Presets
+
 - **Internal Tools / Dashboards**: `VARIANCE` 3-4, `MOTION` 2-3, `DENSITY` 8-9
 - **B2B SaaS Views**: `VARIANCE` 6-7, `MOTION` 5-6, `DENSITY` 4-5
 - **Editorial / Documentation**: `VARIANCE` 4-5, `MOTION` 2-3, `DENSITY` 5-6
@@ -52,26 +64,26 @@ Interface density, motion, and layout variance are calibrated using three numeri
 
 All audit work is recorded in `.ui-audit/<surface-slug>/`. A phase cannot begin until the preceding gate passes.
 
-| Phase | Output File | Gate Requirement |
-|---|---|---|
-| **0. Scope** | `00-scope.md` | Gate G0: Verbatim user request and mode (FULL or FOCUSED) recorded. |
-| **1. Research** | `01-design.md`, `02-inventory.md`, `03-findings.md`, `04-coverage.md` | Gate G1: 100% of surface files read in full; all relevant rules accounted for sequentially. |
-| **2. Plan** | `PLAN.md`, `concepts/` | Gate G2: Declutter decisions, wireframes, 3 interactive HTML concepts, and all findings assigned to slices. |
-| **3. Approval** | `PLAN.md` (§ Approval) | Gate G3: Explicit user approval with chosen concept (A, B, C, or blend) in conversation. No code edits before this gate. |
-| **4. Implement** | `05-progress.md`, `03-findings.md` | Gate G4: Slice-by-slice implementation with verified test outputs and commit hashes. |
-| **5. Verify** | `06-verify.md` | Gate G5: Zero open findings, typecheck clean, tests pass. |
+| Phase            | Output File                                                           | Gate Requirement                                                                                                         |
+| ---------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **0. Scope**     | `00-scope.md`                                                         | Gate G0: Verbatim user request and mode (FULL or FOCUSED) recorded.                                                      |
+| **1. Research**  | `01-design.md`, `02-inventory.md`, `03-findings.md`, `04-coverage.md` | Gate G1: 100% of surface files read in full; all relevant rules accounted for sequentially.                              |
+| **2. Plan**      | `PLAN.md`, `concepts/`                                                | Gate G2: Declutter decisions, wireframes, 3 interactive HTML concepts, and all findings assigned to slices.              |
+| **3. Approval**  | `PLAN.md` (§ Approval)                                                | Gate G3: Explicit user approval with chosen concept (A, B, C, or blend) in conversation. No code edits before this gate. |
+| **4. Implement** | `05-progress.md`, `03-findings.md`                                    | Gate G4: Slice-by-slice implementation with verified test outputs and commit hashes.                                     |
+| **5. Verify**    | `06-verify.md`                                                        | Gate G5: Zero open findings, typecheck clean, tests pass.                                                                |
 
 ## Rule Catalog Summary (312 Rules · 26 Categories)
 
 Rules are detailed with pass/fail criteria and grep recipes in [`references/rule-catalog.md`](./references/rule-catalog.md):
 
-| Domain | Category | Core Checks |
-|---|---|---|
-| **Layout & Hierarchy** | `LAY`, `HIE`, `RSP`, `DLG` | Headline wrap caps, hero viewport stability, single primary focal anchor, surface luminance depth tiers, zero horizontal overflow (320-1920px), scroll containment, safe-area insets. |
-| **States & Data** | `STA`, `LDG`, `PAG`, `TAB` | Redesigned skeletons matching new UI layout 1:1, empty states with recovery actions, backend pagination contracts, right-aligned tabular numerals, opaque sticky table headers. |
-| **Forms & Actions** | `MUT`, `FRM`, `UPL`, `ERR`, `NOT` | Double-submit guards, optimistic rollback, paste preservation, submit button safety, window drop containment, persistent error codes, hover-paused alert timers. |
-| **Engineering & A11y** | `HOOK`, `A11Y`, `NAV`, `PERF` | React 19 hook dependency safety, no stale closures, WCAG 2.2 AA contrast (4.5:1), visible focus rings, native buttons, command palette states, search request cancellation. |
-| **Craft & Copy** | `CON`, `CPY`, `SLOP`, `MOT`, `SOUL`, `HUM`, `I18N`, `THM`, `AI` | Page Theme Lock, Color Consistency Lock, Doppelrand concentric radius math, absolute zero em-dash ban, middle-dot rationing, eyebrow pill caps, motivated motion (<=250ms), cognitive load limits (max 7 items). |
+| Domain                 | Category                                                        | Core Checks                                                                                                                                                                                                      |
+| ---------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Layout & Hierarchy** | `LAY`, `HIE`, `RSP`, `DLG`                                      | Headline wrap caps, hero viewport stability, single primary focal anchor, surface luminance depth tiers, zero horizontal overflow (320-1920px), scroll containment, safe-area insets.                            |
+| **States & Data**      | `STA`, `LDG`, `PAG`, `TAB`                                      | Redesigned skeletons matching new UI layout 1:1, empty states with recovery actions, backend pagination contracts, right-aligned tabular numerals, opaque sticky table headers.                                  |
+| **Forms & Actions**    | `MUT`, `FRM`, `UPL`, `ERR`, `NOT`                               | Double-submit guards, optimistic rollback, paste preservation, submit button safety, window drop containment, persistent error codes, hover-paused alert timers.                                                 |
+| **Engineering & A11y** | `HOOK`, `A11Y`, `NAV`, `PERF`                                   | React 19 hook dependency safety, no stale closures, WCAG 2.2 AA contrast (4.5:1), visible focus rings, native buttons, command palette states, search request cancellation.                                      |
+| **Craft & Copy**       | `CON`, `CPY`, `SLOP`, `MOT`, `SOUL`, `HUM`, `I18N`, `THM`, `AI` | Page Theme Lock, Color Consistency Lock, Doppelrand concentric radius math, absolute zero em-dash ban, middle-dot rationing, eyebrow pill caps, motivated motion (<=250ms), cognitive load limits (max 7 items). |
 
 ## File Reference Map
 
@@ -84,7 +96,7 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 ├── assets/
 │   ├── cover/                        # Top cover banner
 │   ├── logo/                         # Brand identity and marks
-│   └── showcase/                     # Before/after comparison plates
+│   └── showcase/                     # Animated slop-to-fixed demo GIF
 ├── references/
 │   ├── taste-engineering.md          # Three Dials, brief inference, GSAP motion patterns
 │   ├── rule-catalog.md               # 312 auditable rule IDs with exact failure conditions
