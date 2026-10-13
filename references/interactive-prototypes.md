@@ -123,7 +123,7 @@ function showToast(message, variant = 'default') {
   toast.innerHTML = `<span>${message}</span><button type="button" data-close>&times;</button>`;
 
   let timer = null;
-  const startTimer = () => { timer = setTimeout(() => toast.remove(), 4000); };
+  const startTimer = () => { timer = setTimeout(() => toast.remove(), 8000); };
   const clearTimer = () => { if (timer) clearTimeout(timer); };
 
   toast.addEventListener('mouseenter', clearTimer);
@@ -161,7 +161,7 @@ function setupMutationButton(buttonId, successMessage) {
 
 ## 5. Switcher Shell Template (`concepts/index.html`)
 
-The switcher shell hosts all three concepts in an iframe, allowing instant keyboard cycling (`1`, `2`, `3`) and responsive viewport emulation (Mobile 375px, Tablet 768px, Desktop 1280px):
+The switcher shell hosts all three concepts in an iframe, allowing instant keyboard cycling (`1`, `2`, `3`) and responsive viewport emulation (Mobile 375px, Tablet 768px, Desktop 1280px). Shell chrome below uses placeholder dark values — replace them with the project's DESIGN.md tokens before showing the user (same zero-drift rule as §3):
 
 ```html
 <!DOCTYPE html>
@@ -209,10 +209,13 @@ The switcher shell hosts all three concepts in an iframe, allowing instant keybo
     const conceptBtns = document.querySelectorAll('#concept-tabs button');
     const viewportBtns = document.querySelectorAll('#viewport-tabs button');
 
+    // Set SINGLE_FILE = true when concepts are single files (concept-a.html …); false for modular folders
+    const SINGLE_FILE = false;
+
     function setConcept(name) {
       conceptBtns.forEach(b => b.classList.toggle('active', b.dataset.concept === name));
-      // Supports both modular folders and single files
-      iframe.src = name.includes('/') ? name : (window.location.pathname.includes('/') ? `${name}/index.html` : `${name}.html`);
+      // Modular folders use <name>/index.html; single-file mode uses <name>.html
+      iframe.src = SINGLE_FILE ? `${name}.html` : `${name}/index.html`;
     }
 
     function setViewport(vp) {

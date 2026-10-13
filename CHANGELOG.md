@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.1 (2026-10-13): Fix concept prototype contradictions and gate scope
+- Fixed:
+  - `references/interactive-prototypes.md`: toast recipe now uses 8000ms to match `NOT-01..NOT-05` (was 4000ms)
+  - `references/interactive-prototypes.md`: switcher `setConcept` replaced always-true `pathname.includes('/')` branch with explicit `SINGLE_FILE` flag
+  - `references/interactive-prototypes.md`: switcher shell template notes placeholder chrome must be replaced with project DESIGN.md tokens (§3 zero-drift rule)
+  - `references/harness.md`: Gate G2 concepts requirement scoped with `if layout changes` (was unconditional; trivial FOCUSED fixes no longer forced into 3 prototypes)
+- Reason: review of v4.0.0 found internal contradictions and an over-broad gate
+- Sources: `references/notifications-toasts.md` (≥8s toast rule)
+
 ## 4.0.0 (2026-10-13): Interactive HTML layout concepts, switcher shell, and pre-approval prototyping
 - Added:
   - Protocol and reference guide `references/interactive-prototypes.md` defining pre-approval interactive prototyping:
