@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.0.0 (2026-10-13): Interactive HTML layout concepts, switcher shell, and pre-approval prototyping
+- Added:
+  - Protocol and reference guide `references/interactive-prototypes.md` defining pre-approval interactive prototyping:
+    - Generation of 3 distinct layout concepts in `.ui-audit/<slug>/concepts/` (Concept A: High-Density Structured, Concept B: Modern SaaS Balanced, Concept C: Contextual Fluid)
+    - Sizing heuristic: single-file (`concept-{x}.html`) for compact surfaces (< 400 lines) vs modular multi-file (`concept-{x}/` with `index.html`, `styles.css`, `app.js`) for complex surfaces
+    - Project token fidelity: extraction of `DESIGN.md` CSS custom properties into prototypes
+    - Vanilla JS interactive recipes: accessible dialogs with backdrop/Esc traps, alerts/toasts with hover-pause, and simulated mutation loading states
+    - Lightweight concepts switcher shell `concepts/index.html` with responsive viewport emulation (Mobile 375px, Tablet 768px, Desktop 1280px) and keyboard cycling (`1`, `2`, `3`)
+  - Top repository cover banner `assets/cover/ui-redesign-cover.png` and developer metadata badges in `README.md`
+  - Rotated D caliper brand emblem in `assets/logo/concept-a-caliper.svg` and `assets/logo/concept-a-caliper.png`
+  - MIT License (`LICENSE`)
+- Changed:
+  - `SKILL.md`: Added `interactive-prototypes.md` to reference router table and updated Phase 2 description (kept under 100 lines: 96 lines)
+  - `references/phases.md`: Phase 2 (Plan) updated to mandate building the 3 interactive concepts in `concepts/`; Phase 3 (Approval) updated to direct the user to open `concepts/index.html` in their browser and record the chosen concept
+  - `references/harness.md`: Gate G2 updated to require verified, interactive HTML concepts in `concepts/` with zero syntax errors; Gate G3 updated to record user's chosen concept
+  - `references/plan-template.md`: Added interactive concepts links to §6 and chosen concept slot to § Approval
+  - `README.md`: Updated version badge to 4.0.0 and added `interactive-prototypes.md` to File Reference Map
+
 ## 3.2.0 (2026-10-13): Taste engineering, Three Dials, brief inference, and anti-slop rules
 - Added:
   - Reference guide `references/taste-engineering.md` synthesizing 13 skills from `Leonxlnx/taste-skill`:

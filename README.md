@@ -4,7 +4,7 @@
   # UI Redesign
 
   <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-3.2.0-indigo.svg" alt="Version 3.2.0" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.0.0-indigo.svg" alt="Version 4.0.0" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
     <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
     <a href="./phases.md"><img src="https://img.shields.io/badge/gates-G0..G5-purple.svg" alt="Gates G0..G5" /></a>
