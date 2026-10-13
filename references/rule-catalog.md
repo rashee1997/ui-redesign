@@ -1,6 +1,6 @@
 # Rule catalog
 
-Every finding cites one rule ID from here (or a DESIGN.md rule). In FULL mode every category below gets a row in `04-coverage.md`. In FOCUSED mode, only the categories mapped from the user's request are audited - completely.
+Every finding cites one rule ID from here (or a DESIGN.md rule). In FULL mode every category below is audited in strict sequential order across the 5 section reports in the `04-coverage/` directory (or legacy `04-coverage.md`). In FOCUSED mode, only the categories mapped from the user's request are audited - completely.
 
 These are defaults: when DESIGN.md or the codebase's own primitives decide something differently, they win (design-md.md). Details and fixes live in the linked guides.
 

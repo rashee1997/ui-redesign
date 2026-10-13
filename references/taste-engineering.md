@@ -22,7 +22,7 @@ Read the brief, audience context, and existing repository tokens before selectin
 
 ### A. Read these signals first
 1. **Page kind**: landing (SaaS, consumer, agency, event), portfolio (developer, designer), admin/internal tool, product dashboard, editorial/documentation.
-2. **Context & audience**: B2B enterprise procurement vs design-conscious consumer vs engineer scanning documentation. The audience dictates the density and aesthetic, not developer habit.
+2. **Context, archetype & mandatory external research**: B2B enterprise procurement vs high-volume internal operations cockpit vs design-conscious consumer vs engineer scanning documentation. The audience and app archetype dictate the density and aesthetic, not developer habit. Always research top-tier industry benchmarks using available search and documentation tools (e.g. Stripe, Linear, Retool, Veeva) before designing or prototyping.
 3. **Existing brand assets**: logo mark, color tokens, typography, photography. For redesigns, these are mandatory starting constraints, not optional inputs.
 4. **Quiet constraints**: WCAG accessibility targets, regulatory compliance, public sector trust requirements. These strictly override aesthetic preference.
 

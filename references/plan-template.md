@@ -21,7 +21,13 @@ Chosen Concept: <Concept A | Concept B | Concept C | custom blend>
 User Quote: <empty until the user approves - then quote their verbatim words and date>
 
 ## 1. Summary
-<3–5 lines: what's wrong today, what the redesign does, what stays the same.>
+<3-5 lines: what's wrong today, what the redesign does, what stays the same.>
+
+### App archetype, target audience & domain research
+- **Archetype**: <B2B SaaS | Internal Tool / Operations Cockpit | High-Density Workbench | Developer Tool | Consumer>
+- **Target Audience Persona**: <who uses this, cognitive environment, daily scan volume, time pressure, density tolerance>
+- **External Domain Benchmarks**: <market leaders and reference standards researched via search_web / docs (e.g. Stripe, Linear, Retool, Veeva)>
+- **Domain Interaction Conventions**: <table ergonomics, filter models, density, and workflow conventions identified from research>
 
 ## 2. Design language (project DESIGN.md)
 Source: <path to the project's DESIGN.md + linked files> | none, derived from code (<files>)
@@ -54,7 +60,7 @@ Source: <path to the project's DESIGN.md + linked files> | none, derived from co
 Legacy structure: <one line naming the current layout, e.g. "stacked cards with a stat row on top">
 
 ## 5. Findings
-*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 26 catalog categories and every rule ID have been individually audited in 04-coverage.md (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
+*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 26 catalog categories and every rule ID have been individually audited across the section reports in 04-coverage/ (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
 
 Row format: `- [Pn] <rule> <file:line> - <what> → <fix>` (ledger findings: `- F-0xx [Pn] <rule> …`). Shape of a good section — one or two rows per category, concrete file:line and fix in each:
 ### Breaks DESIGN.md rules

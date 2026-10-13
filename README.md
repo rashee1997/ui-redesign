@@ -4,7 +4,7 @@
 # UI Redesign
 
 <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.2.0-indigo.svg" alt="Version 4.2.0" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.3.0-indigo.svg" alt="Version 4.3.0" /></a>
     <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
     <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
@@ -14,16 +14,17 @@
   </p>
 </div>
 
-A skill for auditing, decluttering, and redesigning frontend user interfaces. Enforces project `DESIGN.md` tokens, human cognitive laws, WCAG 2.2 AA accessibility, responsive layout stability, and state integrity through a gate-enforced ledger.
+A skill for auditing, decluttering, and redesigning frontend user interfaces. Enforces project `DESIGN.md` tokens, human cognitive laws, WCAG 2.2 AA accessibility, responsive layout stability, and state integrity through a gate-enforced ledger. Always integrates the `antislop` skills family (`antislop`, `antislop-ui`, `antislop-copywriting`, `antislop-human`, `antislop-layoutmobile`, `antislop-code`) when available in the environment.
 
 ## What It Does
 
 1. **Reads Project Specifications**: Extracts semantic tokens and conventions from the repository's `DESIGN.md`.
-2. **Audits File-by-File**: Evaluates every component against 312 concrete rules across 26 categories.
-3. **Calibrates Aesthetics**: Sets density, motion, and layout variance using the Three Dials framework.
-4. **Declutters Before Restructure**: Runs a Keep/Remove/Merge/Demote/Defer/Move pass on all visible elements.
-5. **Shows 3 Interactive Concepts Before Approval**: Builds three clickable HTML prototypes (high-density, balanced SaaS, contextual fluid) with working dialogs, toasts, and mobile/tablet/desktop emulation in `.ui-audit/<slug>/concepts/` — the user opens `concepts/index.html` and picks a direction before any production code is touched.
-6. **Verifies Every Step**: Enforces a 6-gate ledger in `.ui-audit/<slug>/` where code edits require user approval and verified test output.
+2. **Discovers Archetype & Domain**: Classifies the product (B2B SaaS, internal operations cockpit, high-density workbench) and conducts mandatory external research (`search_web`, docs) to identify market standards before designing.
+3. **Audits File-by-File**: Evaluates every component against 312 concrete rules across 26 categories, documented in decomposed section reports in `04-coverage/`.
+4. **Calibrates Aesthetics**: Sets density, motion, and layout variance using the Three Dials framework.
+5. **Declutters Before Restructure**: Runs a Keep/Remove/Merge/Demote/Defer/Move pass on all visible elements.
+6. **Shows 3 Interactive Concepts Before Approval**: Builds three clickable HTML prototypes (high-density, balanced SaaS, contextual fluid) with working dialogs, toasts, and mobile/tablet/desktop emulation in `.ui-audit/<slug>/concepts/`: the user opens `concepts/index.html` and picks a direction before any production code is touched.
+7. **Verifies Every Step**: Enforces a 6-gate ledger in `.ui-audit/<slug>/` where code edits require user approval and verified test output.
 
 ## See It Work
 
@@ -67,7 +68,7 @@ All audit work is recorded in `.ui-audit/<surface-slug>/`. A phase cannot begin 
 | Phase            | Output File                                                           | Gate Requirement                                                                                                         |
 | ---------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | **0. Scope**     | `00-scope.md`                                                         | Gate G0: Verbatim user request and mode (FULL or FOCUSED) recorded.                                                      |
-| **1. Research**  | `01-design.md`, `02-inventory.md`, `03-findings.md`, `04-coverage.md` | Gate G1: 100% of surface files read in full; all relevant rules accounted for sequentially.                              |
+| **1. Research**  | `01-design.md`, `02-inventory.md`, `03-findings.md`, `04-coverage/`  | Gate G1: 100% of surface files read in full; archetype & external domain research documented; all 312 rules accounted for in 04-coverage/. |
 | **2. Plan**      | `PLAN.md`, `concepts/`                                                | Gate G2: Declutter decisions, wireframes, 3 interactive HTML concepts, and all findings assigned to slices.              |
 | **3. Approval**  | `PLAN.md` (§ Approval)                                                | Gate G3: Explicit user approval with chosen concept (A, B, C, or blend) in conversation. No code edits before this gate. |
 | **4. Implement** | `05-progress.md`, `03-findings.md`                                    | Gate G4: Slice-by-slice implementation with verified test outputs and commit hashes.                                     |

@@ -1,5 +1,32 @@
 # Changelog
 
+## 4.3.0 (2026-10-13): Decomposed Phase 1 coverage reports (04-coverage/), mandatory domain research & antislop integration
+- Added:
+  - Decomposed coverage directory architecture (`04-coverage/`) in `.ui-audit/<surface-slug>/` comprising:
+    - `00-summary.md`: Rollup matrix, category completion states, rule counts, and Gate G1 certification stamp
+    - `01-layout-hierarchy.md`: Section 1 coverage (LAY 18, HIE 15, RSP 15, DLG 14: 62 rules)
+    - `02-states-data.md`: Section 2 coverage (STA 11, LDG 11, PAG 14, TAB 7: 43 rules)
+    - `03-forms-actions.md`: Section 3 coverage (MUT 17, FRM 24, UPL 6, ERR 10, NOT 5: 62 rules)
+    - `04-engineering-a11y.md`: Section 4 coverage (HOOK 18, A11Y 20, NAV 12, PERF 7: 57 rules)
+    - `05-craft-copy.md`: Section 5 coverage (CON 11, CPY 13, SLOP 12, MOT 14, SOUL 14, HUM 8, I18N 6, THM 4, AI 6: 88 rules)
+  - Standardized section report header format: `# 04-coverage - <surface-slug> - <Section Title> (FULL: every rule ID in strict catalog order)`
+  - App Archetype & Audience Discovery pass in Phase 1a/1c: classify product archetype (B2B SaaS, internal operations cockpit, high-density workbench, consumer) and define user cognitive environment
+  - Mandatory External Domain Research requirement: agents must run external searches (`search_web`, docs) to benchmark top-tier market standards before planning or prototyping; no blind designing
+  - Mandatory Antislop Skills Protocol across all phases: always load and apply `antislop`, `antislop-ui`, `antislop-copywriting`, `antislop-human`, `antislop-layoutmobile`, `antislop-code` if available in the environment; otherwise skip gracefully
+  - Interactive Form & Input Validations in `concepts/`: prototypes include working form validation (`FRM-01`..`FRM-24`, `A11Y-18`), inline field errors linked via `aria-describedby`, live error clearing on typing, character counters, and password show/hide toggles
+  - Error Alerts & Prototype Simulation Test Bar in `concepts/`: prototypes provide an interactive test panel to toggle form errors, trigger 422/500 alert banners (`role="alert"`), and test hover-paused toast notifications (`NOT-01`..`NOT-05`) before approving plans
+- Changed:
+  - `references/interactive-prototypes.md`: Added §4 D (Interactive Form & Input Validations) and §4 E (Error Alerts & Simulation Test Bar) recipes
+  - `references/harness.md`: §1 ledger table, §2 Gate G1 & G2 conditions, §4 coverage ledger, and §5 red flags updated to require archetype/audience, external research, 04-coverage/ folder verification, and live form validations/alerts in concepts
+  - `references/phases.md`: Phase 1a/1c updated with archetype discovery and mandatory external research; Phase 1f updated to build decomposed section files during FULL audits; Phase 2 & 3 updated to require interactive form validations and error alerts in concepts; antislop skill loading directive added
+  - `references/plan-template.md`: Added §1.5 App archetype, target audience & domain research section to PLAN.md template; §5 findings reference updated to 04-coverage/
+  - `references/taste-engineering.md`: §1 context and audience updated to anchor dial presets to researched archetype and mandatory external benchmarks
+  - `references/static-audit.md`: Step 7 updated to walk rules into 04-coverage/ section reports
+  - `references/rule-catalog.md`: Header line 3 updated to reference section reports in 04-coverage/
+  - `SKILL.md`: Phase 1 output, Phase 2 concepts description, static analysis router, antislop loading directive, and non-negotiables updated while maintaining strict <=100 line limit (96 lines)
+  - `README.md`: Version badge bumped to 4.3.0; What It Does and 6-Gate Pipeline table updated with archetype research, antislop integration, and 04-coverage/
+- Reason: Eliminate AI context bloat and token truncation during Phase 1 full audits, ground UI planning in real domain research and user personas instead of blind prototyping, enable testing of form validations and error alerts in HTML concepts before approval, and enforce antislop skills whenever available
+
 ## 4.2.0 (2026-10-13): Animated slop-to-fixed demo GIF
 - Added:
   - `assets/showcase/ui-redesign-demo.gif`: animated checkout demo (findings pinned to rule IDs, morph to fixed UI, G0-G5 ledger ticks down to zero open)

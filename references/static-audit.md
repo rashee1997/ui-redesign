@@ -18,7 +18,7 @@ The audit is done by **reading code**, file by file, against the rule catalog. G
 4. Run grep recipes (§5) to catch anything the reading missed; open every hit.
 5. Optional: run the scripts for runtime evidence (§6).
 6. Falsify pass (harness.md §3).
-7. Build `04-coverage.md` (FULL mode): walk **every rule ID in `rule-catalog.md` in strict sequential order from LAY-01 through AI-06**. Record each rule as `VIOLATION` (with `F-xxx`), `PASS` (with concrete code proof `file:line`), or justified `N/A`. Verify Gate G1 before moving to plan.
+7. Build `04-coverage/` section reports (FULL mode): walk **every rule ID in `rule-catalog.md` in strict sequential order from LAY-01 through AI-06**, recording sections `01-layout-hierarchy.md` through `05-craft-copy.md` with `00-summary.md` rollup. Record each rule as `VIOLATION` (with `F-xxx`), `PASS` (with concrete code proof `file:line`), or justified `N/A`. Verify Gate G1 before moving to plan.
 ## 2. Tracing the surface
 
 Start at the route entry (`page.tsx`, `route.tsx`, `index.vue`, `+page.svelte`…), plus its `layout`, `loading`, `error`, `not-found` siblings. Then follow, recursively:

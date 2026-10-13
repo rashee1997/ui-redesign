@@ -2,6 +2,8 @@
 
 The short version is in SKILL.md; the enforcement (files, gates) is in harness.md. This file is the how-to for each phase. FOCUSED mode runs the same phases, limited to the categories mapped in `00-scope.md`.
 
+**Antislop skills integration**: Always load and apply the `antislop` skills family (`antislop`, `antislop-ui`, `antislop-copywriting`, `antislop-human`, `antislop-layoutmobile`, `antislop-code`) if available in the environment; otherwise skip gracefully.
+
 ## Contents
 1. Research
 2. Plan
@@ -12,27 +14,31 @@ The short version is in SKILL.md; the enforcement (files, gates) is in harness.m
 
 ## 1. Research
 
-**1a. Design language** → `01-design.md`. Find the project's DESIGN.md (any casing or folder; in a monorepo, the closest one to the page) and read all of it plus what it links to. Build the digest by topic with section references, list Gaps, list conflicts (design-md.md). Map each rule to its code name (CSS var, Tailwind class, primitive). Sample 2–3 of the app's best pages to see how the language is applied. Only these tokens and primitives may be used later.
+**1a. Design language, archetype & external domain research** → `01-design.md`.
+- **Project DESIGN.md**: Find the project's DESIGN.md (any casing or folder; in a monorepo, the closest one to the page) and read all of it plus what it links to. Build the digest by topic with section references, list Gaps, list conflicts (design-md.md). Map each rule to its code name (CSS var, Tailwind class, primitive). Sample 2-3 of the app's best pages to see how the language is applied. Only these tokens and primitives may be used later.
+- **App Archetype & Audience Discovery**: Classify the app type: B2B SaaS, internal operations cockpit, high-density compliance workbench, developer tool, or consumer app. Define the target audience persona, cognitive environment, scan frequency, time pressure, and density tolerance.
+- **Mandatory External Domain Research**: Run external research using available tools (`search_web`, docs search, competitive benchmarks) to investigate top-tier market standards for the domain (e.g. Stripe for billing, Linear for developer tools, Veeva/TrackWise for compliance, Retool/Palantir for internal operations). Document domain-specific interaction patterns, table behaviors, and workflow conventions in `01-design.md`. Never design blindly.
 
 **1b. Surface** → `02-inventory.md`. Trace from the route entry through the render tree, everything it opens (dialogs, sheets, menus, toasts, confirms), the data it reads (down to the query/API) and writes (down to the handler), shared state, and styles (static-audit.md §2). This is the familiarization pass: move through the surface as a user first, without judging. For > ~15 files, read groups with read-only subagents that return findings in the ledger format; you still own the ledger.
 
-**1c. The job.** List what users come here to do, in priority order, and name the single primary action. This list, not the current DOM order or database schema, decides the visual hierarchy and structure. For new features: define the mental model first (Sweller/Miller 3–4 chunks) before touching code. If no primary action can be named, that's the first finding (HIE-01).
+**1c. The job.** List what users come here to do, in priority order, and name the single primary action. This list, synthesized with the researched app archetype and audience mental model (not the current DOM order or database schema), decides the visual hierarchy and structure. For new features: define the mental model first (Sweller/Miller 3-4 chunks) before touching code. If no primary action can be named, that's the first finding (HIE-01).
 
 **1d. Static audit** → `03-findings.md`. Second pass: violations only. Read every inventory file fully (or inspect the proposed new feature specs/files) and run the per-file pass, then the cross-file passes, then the grep recipes (static-audit.md). Check DESIGN.md rules first (each violation cites the rule as `DM-n`), then evaluate **every rule in the catalog in strict sequential order from LAY-01 through AI-06 (including TAB-01..07, UPL-01..06, NOT-01..05, and NAV-11..12)**. For new feature UI implementations: verify that the proposed design violates zero rules from the catalog before implementation starts. Every single rule in scope must be verified against code. Fill the mutation audit block for every write (mutations-forms.md §4), the hook audit for every component (react-hooks.md §6), the scroll containment check (responsive-fluid.md §9), the human cognitive pass, the data table audit (tables-data-grids.md), the file upload audit (file-uploads.md), the notification toast audit (notifications-toasts.md), and the AI answer audit for every generated answer (ai-ux.md).
 
 **1e. Runtime evidence (optional).** If the app runs, `scripts/ui_audit.mjs` gives overflow/wrapping at many widths, layout shift, console errors, loading and pending-button behaviour. Pass the project's breakpoints and minimums (`--widths`, `--min-font`, `--min-target`). Add confirmed issues to the ledger; never close a category because the script found nothing. If the app can't run, say so.
 
-**1f. Falsify and complete coverage ledger.** Re-open each finding and try to prove it wrong (harness.md §3). FULL: build `04-coverage.md` detailing **every single rule ID in exact sequential order** (`LAY-01` through `AI-06`, including `TAB-01..07`, `UPL-01..06`, `NOT-01..05`, and `NAV-11..12`) without omitting, skipping, or jumping IDs, recording each as either a finding ID (`VIOLATION`), concrete line-referenced code proof (`PASS`), or explicit justified `N/A`. Verify Gate G1 passing conditions before writing `PLAN.md`.
+**1f. Falsify and complete coverage ledger.** Re-open each finding and try to prove it wrong (harness.md §3). FULL: build the `04-coverage/` directory (`00-summary.md` plus 5 section reports `01-layout-hierarchy.md` through `05-craft-copy.md`), detailing **every single rule ID in exact sequential order** (`LAY-01` through `AI-06`, including `TAB-01..07`, `UPL-01..06`, `NOT-01..05`, and `NAV-11..12`) without omitting, skipping, or jumping IDs, recording each as either a finding ID (`VIOLATION`), concrete line-referenced code proof (`PASS`), or explicit justified `N/A`. Verify Gate G1 passing conditions before writing `PLAN.md`.
 
 ## 2. Plan
 
-Write `PLAN.md` from plan-template.md. It must have:
+Write `PLAN.md` from plan-template.md. Ground all decisions in the researched app archetype, audience mental model, and domain benchmarks (no blind planning or generic card soup). It must have:
 - the mode, the verbatim request, the finding counts
+- app archetype, audience persona, and domain research summary
 - DESIGN.md digest summary, gaps with the defaults used, conflicts as questions
 - findings summarized by category with IDs (evidence stays in the ledger)
 - declutter table for every visible element (if redesigning) or cognitive chunking architecture (if designing a new UI feature)
 - wireframes at phone, tablet and desktop (the project's breakpoints if defined) and each dialog on phone and desktop
-- three interactive HTML layout concepts in `.ui-audit/<surface>/concepts/` (Concept A: High-Density Structured, Concept B: Modern SaaS Balanced, Concept C: Contextual Fluid) with working dialogs, toast alerts, and `concepts/index.html` switcher shell (`references/interactive-prototypes.md`)
+- three interactive HTML layout concepts in `.ui-audit/<surface>/concepts/` (Concept A: High-Density Structured, Concept B: Modern SaaS Balanced, Concept C: Contextual Fluid) with working dialogs, interactive form & input validations, error alert banners, toast notifications, and `concepts/index.html` switcher shell (`references/interactive-prototypes.md`)
 - layout mechanics per region (grid/flex, container vs media query, what collapses when)
 - copy table, consistency table, pagination contract (if any), loading/pending table (with matching skeletons mirroring final UI - never reusing legacy skeletons), mutations table
 - proposed new tokens/shared components/DESIGN.md changes (not done yet)
@@ -43,7 +49,7 @@ Keep scope honest: a declutter isn't permission to rebuild data flow. Backend ch
 
 ## 3. Approval
 
-Present a short summary: mode, top findings, links to the 3 interactive HTML concepts in `concepts/index.html`, declutter decisions, copy changes, backend changes, and slices. Direct the user to open `concepts/index.html` in their browser to test responsive views, dialogs, and alerts. Ask Approve / Change / Reject and record the selected concept (e.g. Concept A, B, C, or a blend). On "change", update the concepts/plan and ask again. Record the approval quote and chosen concept in `PLAN.md`. If the user said up front "don't wait", record that quote instead, but still write the plan first. Then Gate G3.
+Present a short summary: mode, top findings, links to the 3 interactive HTML concepts in `concepts/index.html`, declutter decisions, copy changes, backend changes, and slices. Direct the user to open `concepts/index.html` in their browser to test responsive views, dialogs, live form/input validations, and error alerts. Ask Approve / Change / Reject and record the selected concept (e.g. Concept A, B, C, or a blend). On "change", update the concepts/plan and ask again. Record the approval quote and chosen concept in `PLAN.md`. If the user said up front "don't wait", record that quote instead, but still write the plan first. Then Gate G3.
 
 ## 4. Implement
 

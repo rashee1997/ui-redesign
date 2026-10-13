@@ -10,7 +10,7 @@ Redesign or fix an existing UI so it is decluttered, clear, consistent, fully re
 
 **Updating the skill itself?** If the user asks to change this skill (add rules for issues found, new features or categories, fix guidance), don't redesign anything: follow `references/updating-skill.md` and skip everything below.
 
-**This skill is enforced by a ledger and gates. Read `references/harness.md` before doing anything else.** Each phase writes a file; a phase may not start until the previous gate passes. Skipping a step, or claiming one without its file entry, counts as not doing it.
+**This skill is enforced by a ledger and gates. Read `references/harness.md` before doing anything else.** Each phase writes a file; a phase may not start until the previous gate passes. Always load `antislop` skills (`antislop`, `antislop-ui`, `antislop-copywriting`, `antislop-human`, `antislop-layoutmobile`, `antislop-code`) if available; otherwise skip. Skipping a step or claiming one without its file entry counts as not doing it.
 
 ## Phase 0 - Scope (always first)
 
@@ -36,15 +36,15 @@ If it's truly unclear, ask one question; otherwise pick and state the mode in on
 
 | # | Phase | Do | Writes | Gate |
 |---|---|---|---|---|
-| 1 | Research | DESIGN.md → digest. Trace the surface and **read every file in full**. Static audit against **every rule ID in the catalog**. Optional runtime check. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage.md` (FULL) | G1 |
-| 2 | Plan | Plan from template. 3 interactive HTML layout concepts in `concepts/`. Declutter table + wireframes. | `PLAN.md`, `concepts/` | G2 |
+| 1 | Research | DESIGN.md, app archetype & mandatory external research → digest. Trace surface and **read every file in full**. Static audit against **all 312 catalog rules**. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage/` (FULL) | G1 |
+| 2 | Plan | Plan from template. 3 interactive HTML layout concepts in `concepts/` with live validations & error alerts. Wireframes grounded in domain research. | `PLAN.md`, `concepts/` | G2 |
 | 3 | Approval | Short summary, ask Approve / Change / Reject. **No source edits before approval.** Silence is not approval. | `PLAN.md` § Approval | G3 |
 | 4 | Implement | Slice by slice. Tokens and shared primitives only. Only ledger findings get fixed; new ones go into the ledger first. | `05-progress.md`, statuses in `03-findings.md` | G4 |
 | 5 | Verify | Typecheck/lint/tests run now; re-read every changed location; re-run checks; evidence per finding. | `06-verify.md` | G5: zero `open` findings |
 
 Step-by-step detail for each phase: `references/phases.md`.
 
-**Static analysis is the primary audit** (`references/static-audit.md`): read code file by file against every rule in `references/rule-catalog.md`. Every rule ID must be accounted for **in strict sequential order** in `04-coverage.md` (`VIOLATION` with finding, `PASS` with code proof, or justified `N/A`). Grep and the bundled scripts only produce candidates or runtime evidence; they never replace reading, and a script passing never proves a category clean.
+**Static analysis is the primary audit** (`references/static-audit.md`): read code file by file against every rule in `references/rule-catalog.md`. Every rule ID must be accounted for **in strict sequential order** across the 5 section reports in `04-coverage/` (`VIOLATION` with finding, `PASS` with code proof, or justified `N/A`). Grep and the bundled scripts only produce candidates or runtime evidence; they never replace reading, and a script passing never proves a category clean.
 
 ## Which reference, when
 
@@ -81,7 +81,8 @@ Read only what the current step needs.
 ## Non-negotiables
 
 - **Scope is respected.** FOCUSED touches only the named problems; FULL leaves no catalog category or individual rule ID unchecked.
-- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage.md` must account for every rule ID individually in exact numerical sequence (`LAY-01` through `AI-06`, including `TAB-01` to `TAB-07`, `UPL-01` to `UPL-06`, `NOT-01` to `NOT-05`, `NAV-11` to `NAV-12`, `HUM-01` to `HUM-08`, and `taste-engineering.md` standards) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
+- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage/` must account for every rule ID individually across its 5 section reports in exact numerical sequence (`LAY-01` through `AI-06`, including `TAB-01` to `TAB-07`, `UPL-01` to `UPL-06`, `NOT-01` to `NOT-05`, `NAV-11` to `NAV-12`, `HUM-01` to `HUM-08`, and `taste-engineering.md` standards) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
+- **App archetype & audience discovery precedes design.** Classify product archetype (SaaS / internal tool / consumer) and complete external domain research in `01-design.md`; never plan or prototype blindly.
 - **Every file in the surface is read in full** - child components, dialogs, hooks, and the API/server code behind lists and mutations.
 - **Every finding has a rule, quoted evidence, one fix, a severity and a status.** No finding without proof; no fix without a finding.
 - **Declutter before restructure.** A layout redesign decides Keep / Remove / Merge / Demote / Defer / Move for every visible element.

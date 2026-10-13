@@ -19,10 +19,10 @@ Create `.ui-audit/<surface-slug>/` at the start (add `.ui-audit/` to `.gitignore
 | File | Written in | Must contain (required slots) |
 |---|---|---|
 | `00-scope.md` | Phase 0 | the user's request **verbatim**; mode (FOCUSED / FULL); the target surface (route + entry file); for FOCUSED: the named issues as a numbered list, and which catalog categories they map to |
-| `01-design.md` | Phase 1 | DESIGN.md path(s) or "none"; the digest table; Gaps list; conflicts |
+| `01-design.md` | Phase 1 | DESIGN.md path(s) or "none"; the digest table; Gaps list; conflicts; app archetype (SaaS / internal tool / consumer) & audience profile; mandatory external domain research benchmarks |
 | `02-inventory.md` | Phase 1 | every file in the surface with: role, states it handles, **Read: ✔** (each file must be read in full - not grepped) |
 | `03-findings.md` | Phase 1 | the findings ledger (§3). Every finding has an ID |
-| `04-coverage.md` | Phase 1 (FULL only) | the rule-by-rule coverage ledger (§4) - every individual rule ID in `rule-catalog.md` accounted for with finding IDs or concrete verified pass evidence |
+| `04-coverage/` | Phase 1 (FULL only) | the rule-by-rule coverage ledger folder (§4): `00-summary.md` rollup plus 5 domain section reports (`01-layout-hierarchy.md`..`05-craft-copy.md`) - every individual rule ID in `rule-catalog.md` accounted for with finding IDs or concrete verified pass evidence (legacy single `04-coverage.md` accepted) |
 | `PLAN.md` | Phase 2 | the plan (plan-template.md); every finding ID appears in exactly one slice or in "Deferred" with a reason |
 | `05-progress.md` | Phase 4 | per slice: files changed, finding IDs closed, deviations, checks run with their output, commit SHA |
 | `06-verify.md` | Phase 5 | per finding ID: how it was verified (command output, file:line re-read, screenshot); final checklist results |
@@ -36,13 +36,13 @@ Before starting each phase, open the previous files and check the gate. If a gat
 | Gate | Condition to pass |
 |---|---|
 | G0 → Research | `00-scope.md` has the verbatim request, a mode, and a target surface |
-| G1 → Plan | every file in `02-inventory.md` is marked Read ✔; `01-design.md` has a digest or "none, derived from code"; FULL: every single rule ID from `rule-catalog.md` in `04-coverage.md` is accounted for **in exact sequential catalog order** (with finding IDs or concrete code file:line pass evidence - no blank cells, no unevidenced "clean", no lump category skips, no jumping or omitting IDs); FOCUSED: every named issue has ≥1 finding or a "could not reproduce - evidence" line, and every rule in its mapped categories is fully checked in catalog order |
-| G2 → Approval | `PLAN.md` exists; every finding ID is assigned to a slice or Deferred with a reason; wireframes present if layout changes; if layout changes, all 3 interactive HTML layout concepts exist in `.ui-audit/<surface>/concepts/` with working `index.html` switcher shell and zero syntax errors |
+| G1 → Plan | every file in `02-inventory.md` is marked Read ✔; `01-design.md` has a digest or "none", app archetype & target audience profile, and completed external domain research benchmarks; FULL: every single rule ID from `rule-catalog.md` across `04-coverage/` section reports (or legacy `04-coverage.md`) is accounted for **in exact sequential catalog order** (with finding IDs or concrete code file:line pass evidence - no blank cells, no unevidenced "clean", no lump category skips, no jumping or omitting IDs); FOCUSED: every named issue has ≥1 finding or a "could not reproduce - evidence" line, and every rule in its mapped categories is fully checked in catalog order |
+| G2 → Approval | `PLAN.md` exists; every finding ID is assigned to a slice or Deferred with a reason; wireframes present if layout changes; if layout changes, all 3 interactive HTML layout concepts exist in `.ui-audit/<surface>/concepts/` with working `index.html` switcher shell, live form/input validations, error alerts, and zero syntax errors |
 | G3 → Implement | the user approved in this conversation, specifying their chosen concept (Concept A, B, C, or custom blend; quote their words and selection in `PLAN.md` under "Approval") |
 | G4 → Verify | every slice in `05-progress.md` has its checks run with output pasted and a commit SHA |
 | G5 → Done | `03-findings.md` has **zero rows with status `open`**; every row is `fixed` (with verification in `06-verify.md`), `deferred` (with reason, approved or out of scope) or `rejected` (failed the proof rule); typecheck/lint/tests ran in this message and passed or pre-existing failures are named |
 
-State the gate result in one line when crossing it: `Gate G1: PASS - 14 files read, 26 categories audited, 312/312 rules individually accounted for in 04-coverage.md in strict catalog order, 23 findings.`
+State the gate result in one line when crossing it: `Gate G1: PASS - 14 files read, archetype/audience & external research documented in 01-design.md, 26 categories audited, 312/312 rules individually accounted for in 04-coverage/, 23 findings.`
 
 ## 3. Finding format and the proof rule
 
@@ -69,14 +69,25 @@ State the gate result in one line when crossing it: `Gate G1: PASS - 14 files re
 
 Before the plan, run a **falsify pass**: re-open each finding's file and try to prove it wrong (is it handled elsewhere? a wrapper? the primitive already does it? deliberate per DESIGN.md?). If it's wrong, set `rejected` with the reason. Never delete rows.
 
-## 4. Coverage ledger (FULL mode - strict rule-by-rule audit)
+## 4. Coverage ledger (FULL mode: strict rule-by-rule audit in 04-coverage/)
 
 A full audit must prove it examined **every individual rule in `rule-catalog.md` in strict sequential order from first to last**, not just high-level categories. Hand-waving ("checked all files, no issues"), blanket category passes, out-of-order evaluations, and lump reviews fail Gate G1 immediately.
 
-`04-coverage.md` must list every category in catalog order, and under each category, account for **every individual rule ID in exact numerical sequence**:
+To prevent context bloat and output token truncation, FULL audits decompose coverage into a dedicated folder: `.ui-audit/<surface-slug>/04-coverage/`:
+- `00-summary.md`: Rollup matrix, category completion states, rule counts, and Gate G1 certification stamp.
+- `01-layout-hierarchy.md`: Section 1 coverage (LAY 18, HIE 15, RSP 15, DLG 14: 62 rules).
+- `02-states-data.md`: Section 2 coverage (STA 11, LDG 11, PAG 14, TAB 7: 43 rules).
+- `03-forms-actions.md`: Section 3 coverage (MUT 17, FRM 24, UPL 6, ERR 10, NOT 5: 62 rules).
+- `04-engineering-a11y.md`: Section 4 coverage (HOOK 18, A11Y 20, NAV 12, PERF 7: 57 rules).
+- `05-craft-copy.md`: Section 5 coverage (CON 11, CPY 13, SLOP 12, MOT 14, SOUL 14, HUM 8, I18N 6, THM 4, AI 6: 88 rules).
+
+Every section report begins with a standardized top heading:
+`# 04-coverage - <surface-slug> - <Section Title> (FULL: every rule ID in strict catalog order)`
+
+Under each category in that section, account for **every individual rule ID in exact numerical sequence**:
 
 ```markdown
-### LAY - Layout & declutter
+### LAY - Layout & declutter (18 rules)
 | Rule ID | Rule Summary | Status | Findings / Evidence (file:line) |
 |---|---|---|---|
 | LAY-01 | No task-less elements | VIOLATION | F-001 (welcome banner in page.tsx:14) |
@@ -92,24 +103,28 @@ Status values:
 - `N/A`: only permitted when the concept does not exist in the surface (e.g. `MUT-*` or `FRM-*` on a strictly read-only surface with zero forms/writes, `DLG-*` when no dialogs exist). The `N/A` justification must explicitly state why the entire mechanism is absent.
 
 **Gate G1 failure conditions for coverage:**
-1. Any rule ID from `rule-catalog.md` omitted or checked out of sequence.
+1. Any rule ID from `rule-catalog.md` omitted or checked out of sequence across the 5 section files.
 2. Any `PASS` row lacking concrete `file:line` proof or specific implementation evidence.
-3. Lump reviews (e.g. `HOOK: all 14 files clean`) without walking each hook rule individually (`HOOK-01` through `HOOK-14`).
+3. Lump reviews (e.g. `HOOK: all 14 files clean`) without walking each hook rule individually (`HOOK-01` through `HOOK-18`).
 4. Claiming `N/A` when the relevant element exists in the surface.
 
-In FOCUSED mode, `00-scope.md` maps each named issue to its categories, and every single rule ID within those mapped categories must be audited with this exact rule-by-rule sequence and rigor.
+In FOCUSED mode, `00-scope.md` maps each named issue to its categories, and every single rule ID within those mapped categories must be audited with this exact rule-by-rule sequence and rigor (written to a matching section report or `04-coverage.md`).
+
 ## 5. Red flags and rationalizations
 
 If you catch yourself thinking one of these, stop and do the step.
 
 | Thought | Reality |
 |---|---|
+| "I will design wireframes without understanding who uses the app" | Blind design creates toy interfaces. Classify archetype and audience in 01-design.md first. |
+| "I don't need external research, I know what SaaS looks like" | Domain research reveals table patterns, compliance flows, and real user expectations. Run search_web or doc checks. |
+| "I will skip antislop skills" | Always load antislop, antislop-ui, antislop-copywriting, antislop-human, antislop-layoutmobile, antislop-code if available in the environment; otherwise skip. |
 | "It's a small page, I'll skip the ledger" | Small pages still have dialogs, states and mutations. The ledger takes minutes. |
 | "I read the main file, I get the idea" | Gate G1 needs every inventory file read. Bugs live in the child components and dialogs. |
 | "Grep found nothing, so the category is clean" | Grep finds candidates. Clean needs evidence of what you read. |
-| "Checked category at high level, no obvious bugs" | Gate G1 strictly requires every single rule ID evaluated with file:line evidence in `04-coverage.md`. Lump passes fail the gate. |
+| "Checked category at high level, no obvious bugs" | Gate G1 strictly requires every single rule ID evaluated with file:line evidence in `04-coverage/`. Lump passes fail the gate. |
 | "The category doesn't have many bugs, so I'll lump it" | Every rule ID must be listed with `PASS` (citing code proof), `VIOLATION` (citing finding ID), or justified `N/A`. |
-| "I will audit rules in my head and write findings only" | If a rule is not documented in `04-coverage.md`, it counts as skipped. |
+| "I will audit rules in my head and write findings only" | If a rule is not documented in `04-coverage/`, it counts as skipped. |
 | "The user asked for a redesign, not bug fixes" | In FULL mode the audit covers everything; bugs found go in the ledger. In FOCUSED mode they go in "Noticed, out of scope". Either way they're written down. |
 | "The user asked for X only, but Y is also bad, I'll fix it too" | FOCUSED means focused. Log Y under "Noticed, out of scope", don't touch it. |
 | "This is obviously fine, no need to verify" | Every `fixed` row needs a verification line in `06-verify.md`. |

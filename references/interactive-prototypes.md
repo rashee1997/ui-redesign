@@ -157,11 +157,113 @@ function setupMutationButton(buttonId, successMessage) {
 }
 ```
 
+### D. Interactive Form & Input Validations (`FRM-01`..`FRM-24`, `A11Y-18`)
+Prototypes must not feature dead or fake forms. Users must be able to test live form validations directly in the browser:
+- **Required fields & format validation**: Empty inputs trigger red borders (`border-destructive`), `aria-invalid="true"`, and inline error messages linked via `aria-describedby`.
+- **Live clearing on input**: Errors clear automatically when the user types to correct the field (`input` event).
+- **Character counters**: Textareas or inputs with `maxlength` display live character counters (`x/y chars`), warning users when approaching the limit.
+
+```javascript
+function setupFormValidation(formId) {
+  const form = document.getElementById(formId);
+  if (!form) return;
+
+  const validateField = (input) => {
+    const errorEl = document.getElementById(`${input.id}-error`);
+    let errorMessage = '';
+
+    if (input.hasAttribute('required') && !input.value.trim()) {
+      errorMessage = `${input.dataset.label || 'This field'} is required.`;
+    } else if (input.type === 'email' && input.value && !/^\S+@\S+\.\S+$/.test(input.value)) {
+      errorMessage = 'Enter a valid email address.';
+    } else if (input.minLength && input.value.length < input.minLength) {
+      errorMessage = `Must be at least ${input.minLength} characters.`;
+    }
+
+    if (errorMessage) {
+      input.setAttribute('aria-invalid', 'true');
+      if (errorEl) {
+        errorEl.textContent = errorMessage;
+        errorEl.classList.remove('hidden');
+        input.setAttribute('aria-describedby', errorEl.id);
+      }
+      return false;
+    } else {
+      input.removeAttribute('aria-invalid');
+      if (errorEl) {
+        errorEl.textContent = '';
+        errorEl.classList.add('hidden');
+      }
+      return true;
+    }
+  };
+
+  form.querySelectorAll('input, select, textarea').forEach((input) => {
+    input.addEventListener('blur', () => validateField(input));
+    input.addEventListener('input', () => {
+      if (input.getAttribute('aria-invalid') === 'true') validateField(input);
+    });
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let hasError = false;
+    form.querySelectorAll('input, select, textarea').forEach((input) => {
+      if (!validateField(input)) hasError = true;
+    });
+
+    if (hasError) {
+      showErrorAlert('Please fix the errors highlighted below before submitting.', 'Validation Failed');
+    } else {
+      showToast('Form submitted successfully!', 'success');
+      form.reset();
+    }
+  });
+}
+```
+
+### E. Error Alerts & Simulation Test Bar (`ERR-01`..`ERR-10`, `NOT-01`..`NOT-05`)
+Every concept must include a lightweight **Test Panel / Simulation Bar** so the user can test how the redesign handles errors and failures without needing backend APIs:
+- **Validation Failure Toggle**: Instantly highlights all invalid form inputs with inline error messages.
+- **Server Error Alert Banner**: Displays a persistent inline alert banner (`role="alert"`) with title, description, and recovery action ("Retry").
+- **Destructive Toast Alert**: Fires an 8-second hover-paused error toast.
+
+```javascript
+function showErrorAlert(message, title = 'Error') {
+  let alertContainer = document.getElementById('alert-banner-container');
+  if (!alertContainer) return;
+
+  alertContainer.innerHTML = `
+    <div class="alert alert-destructive" role="alert">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <h4 class="alert-title">${title}</h4>
+        <p class="alert-description">${message}</p>
+      </div>
+      <button type="button" class="alert-close" onclick="this.closest('.alert').remove()">&times;</button>
+    </div>
+  `;
+}
+
+// Concept Test Bar: lets users toggle states in the prototype
+function setupPrototypeTestBar() {
+  const bar = document.createElement('div');
+  bar.className = 'prototype-test-bar';
+  bar.innerHTML = `
+    <span><strong>Prototype Testing:</strong></span>
+    <button type="button" onclick="testValidationErrors()">Trigger Form Errors</button>
+    <button type="button" onclick="showErrorAlert('Network connection lost (Status 503). Retrying...', 'Connection Error')">Trigger Alert Banner</button>
+    <button type="button" onclick="showToast('422 Unprocessable: Request payload rejected by validation rules.', 'destructive')">Trigger Error Toast</button>
+  `;
+  document.body.prepend(bar);
+}
+```
+
 ---
 
 ## 5. Switcher Shell Template (`concepts/index.html`)
 
-The switcher shell hosts all three concepts in an iframe, allowing instant keyboard cycling (`1`, `2`, `3`) and responsive viewport emulation (Mobile 375px, Tablet 768px, Desktop 1280px). Shell chrome below uses placeholder dark values — replace them with the project's DESIGN.md tokens before showing the user (same zero-drift rule as §3):
+The switcher shell hosts all three concepts in an iframe, allowing instant keyboard cycling (`1`, `2`, `3`) and responsive viewport emulation (Mobile 375px, Tablet 768px, Desktop 1280px). Shell chrome below uses placeholder dark values: replace them with the project's DESIGN.md tokens before showing the user (same zero-drift rule as §3):
 
 ```html
 <!DOCTYPE html>
