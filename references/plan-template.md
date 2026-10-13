@@ -17,7 +17,8 @@ Request (verbatim): "<user's words>"
 Findings: <n> total - P0 <n> · P1 <n> · P2 <n> · P3 <n> (ledger: 03-findings.md)
 
 ## Approval
-<empty until the user approves - then quote their words and the date>
+Chosen Concept: <Concept A | Concept B | Concept C | custom blend>
+User Quote: <empty until the user approves - then quote their verbatim words and date>
 
 ## 1. Summary
 <3–5 lines: what's wrong today, what the redesign does, what stays the same.>
@@ -98,7 +99,13 @@ Baseline audit: overflow at <widths>; wrapped labels <n>; small targets <n>; bad
 | Element | Task it serves | Decision (Keep/Remove/Merge/Demote/Defer/Move) | Where it goes |
 |---|---|---|---|
 
-## 6. Proposed structure
+## 6. Proposed structure & Interactive concepts
+*Interactive HTML prototypes generated in `.ui-audit/<surface>/concepts/` (interactive-prototypes.md):*
+- **[Concepts Viewer Shell](./concepts/index.html)** (interactive switcher with mobile/tablet/desktop emulation)
+- **[Concept A: Structured / High-Density](./concepts/concept-a/index.html)** (or `concept-a.html`)
+- **[Concept B: Modern SaaS / Balanced](./concepts/concept-b/index.html)** (or `concept-b.html`)
+- **[Concept C: Contextual / Fluid](./concepts/concept-c/index.html)** (or `concept-c.html`)
+
 *Use the project's breakpoints if DESIGN.md defines them; otherwise phone ≈375, tablet ≈768, desktop ≥1280.*
 ### Phone (≈375px)
 ```

@@ -80,6 +80,7 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 │   ├── harness.md                    # Ledger protocol, gate criteria G0-G5, proof rules
 │   ├── static-audit.md               # File-by-file audit questions and grep candidate finders
 │   ├── plan-template.md              # PLAN.md template with declutter tables and wireframes
+│   ├── interactive-prototypes.md     # 3 HTML layout concepts, switcher shell, interactive dialogs
 │   ├── phases.md                     # Step-by-step instructions for Phases 0 through 5
 │   ├── craft.md                      # Anti-slop rules, cognitive load laws, and tactile craft
 │   ├── hierarchy-declutter.md        # Focal hierarchy, whitespace pacing, and layout rhythm

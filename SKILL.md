@@ -37,7 +37,7 @@ If it's truly unclear, ask one question; otherwise pick and state the mode in on
 | # | Phase | Do | Writes | Gate |
 |---|---|---|---|---|
 | 1 | Research | DESIGN.md → digest. Trace the surface and **read every file in full**. Static audit against **every rule ID in the catalog**. Optional runtime check. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage.md` (FULL) | G1 |
-| 2 | Plan | Plan from the template. Every finding ID in a slice or Deferred. Layout changes: declutter table + wireframes at phone/tablet/desktop. | `PLAN.md` | G2 |
+| 2 | Plan | Plan from template. 3 interactive HTML layout concepts in `concepts/`. Declutter table + wireframes. | `PLAN.md`, `concepts/` | G2 |
 | 3 | Approval | Short summary, ask Approve / Change / Reject. **No source edits before approval.** Silence is not approval. | `PLAN.md` § Approval | G3 |
 | 4 | Implement | Slice by slice. Tokens and shared primitives only. Only ledger findings get fixed; new ones go into the ledger first. | `05-progress.md`, statuses in `03-findings.md` | G4 |
 | 5 | Verify | Typecheck/lint/tests run now; re-read every changed location; re-run checks; evidence per finding. | `06-verify.md` | G5: zero `open` findings |
@@ -73,6 +73,7 @@ Read only what the current step needs.
 | MOT - motion, micro-interactions | `motion.md` |
 | SOUL, HUM - soulful craft, human laws | `craft.md` §§2–3 + §4 checklists |
 | Taste engineering & dials | `taste-engineering.md` - Three Dials, brief inference, archetypes |
+| Layout concepts & HTML prototypes | `interactive-prototypes.md` - 3 concepts, switcher shell, interactive dialogs/toasts |
 | Writing the plan | `plan-template.md` |
 | Updating this skill (not a UI) | `updating-skill.md` |
 | Optional runtime evidence (scripts are candidates, never verdicts) | `scripts/ui_audit.mjs`, `scripts/scan_patterns.mjs` |
