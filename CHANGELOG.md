@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.2 (2026-10-13): README covers interactive concepts
+- Changed:
+  - `README.md`: version badge to 4.0.2; `What It Does` documents the 3 interactive HTML concepts step; pipeline table G2/G3 rows mention `concepts/` and the chosen concept
+- Reason: README lagged behind the v4.0.0 concepts protocol and the v4.0.1 gate-scope fix
+
 ## 4.0.1 (2026-10-13): Fix concept prototype contradictions and gate scope
 - Fixed:
   - `references/interactive-prototypes.md`: toast recipe now uses 8000ms to match `NOT-01..NOT-05` (was 4000ms)
