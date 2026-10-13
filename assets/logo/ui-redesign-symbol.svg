@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">UI Redesign Logo Symbol</title>
+  <g id="symbol" fill="#09090B">
+    <!-- Concentric U cradle with optical horizon at Y=59 -->
+    <path d="M40 59 H76 V123 C76 151.719 99.281 175 128 175 C156.719 175 180 151.719 180 123 V59 H216 V123 C216 171.601 176.601 211 128 211 C79.399 211 40 171.601 40 123 Z"/>
+    <!-- Central I pillar / vernier caliper needle -->
+    <rect x="114" y="87" width="28" height="56" rx="14"/>
+    <!-- Precision focal lens dot aligned to U horizon -->
+    <circle cx="128" cy="59" r="14"/>
+  </g>
+</svg>

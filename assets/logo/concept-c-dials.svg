@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">UI Redesign Logo - Concept C (The Three Dials / Kinetic Spiral)</title>
+  <g id="symbol" fill="#09090B">
+    <!-- Outer Dial: Variance (wide sweeping arc R=96, thickness=24) -->
+    <path d="M128 32 C181.019 32 224 74.981 224 128 C224 181.019 181.019 224 128 224 H116 V200 H128 C167.765 200 200 167.765 200 128 C200 88.235 167.765 56 128 56 Z"/>
+    <!-- Middle Dial: Motion (medium arc R=68, thickness=20) -->
+    <path d="M128 68 C94.863 68 68 94.863 68 128 C68 161.137 94.863 188 128 188 V168 C105.909 168 88 150.091 88 128 C88 105.909 105.909 88 128 88 Z"/>
+    <!-- Inner Dial: Density (tight arc R=40, thickness=16) -->
+    <path d="M128 96 C145.673 96 160 110.327 160 128 H144 C144 119.163 136.837 112 128 112 Z"/>
+    <!-- Central precision core -->
+    <circle cx="128" cy="128" r="14"/>
+  </g>
+</svg>
