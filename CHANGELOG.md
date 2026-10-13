@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.2.0 (2026-10-13): Animated slop-to-fixed demo GIF
+- Added:
+  - `assets/showcase/ui-redesign-demo.gif`: animated checkout demo (findings pinned to rule IDs, morph to fixed UI, G0-G5 ledger ticks down to zero open)
+  - `README.md`: See It Work section with the demo GIF and slop-to-fixed rule table
+- Removed:
+  - `assets/showcase/set-dark-app.png`, `set-light-hero.png` (replaced by the demo GIF)
+- Reason: show the skill working on the public repo page
+
 ## 4.1.0 (2026-10-13): Slop vs fixed showcase, two realistic sets
 - Added:
   - `assets/showcase/set-dark-app.png`: realistic dark invoices app screen, slop (pill badge, gradient icon stat cards, glowing dot statuses, cards in cards, duplicate glow CTAs) vs fixed (one primary, toolbar, tabular amounts, visible kebabs, shared pager)
