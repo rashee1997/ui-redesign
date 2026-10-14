@@ -4,10 +4,10 @@ Every finding cites one rule ID from here (or a DESIGN.md rule). In FULL mode ev
 
 These are defaults: when DESIGN.md or the codebase's own primitives decide something differently, they win (design-md.md). Details and fixes live in the linked guides.
 
-Sources: this skill's own guides, Vercel Web Interface Guidelines, Christopher Alexander (A Pattern Language), Don Norman (The Design of Everyday Things, Emotional Design), Rauno Freiberg (Invisible Details), Emil Kowalski (Animations on the Web), Leonxlnx/taste-skill (taste-skill v2 experimental, redesign-skill, soft-skill, minimalist-skill, brutalist-skill, gpt-tasteskill, output-skill), impeccable (harden/distill/layout/audit), WCAG 2.2, TanStack Query and React docs, Front-End Checklist (thedaviddias), Jef Raskin (The Humane Interface), John Sweller (Cognitive Load Theory), Mark Weiser (Calm Technology), Daniel Kahneman (Peak-End Rule), Roman Kamushken (Data Table UI Design), BuiltUX (Toast Notification Doctrine), NN/g "AI Hallucinations" (Laubheimer 2025), Setproduct "Command Palette UI Design" (Kamushken 2026), Editorial Web Typography & Visual Hierarchy Research.
+Sources: this skill's own guides, Vercel Web Interface Guidelines, Christopher Alexander (A Pattern Language), Don Norman (The Design of Everyday Things, Emotional Design), Rauno Freiberg (Invisible Details), Emil Kowalski (Animations on the Web), Leonxlnx/taste-skill (taste-skill v2 experimental, redesign-skill, soft-skill, minimalist-skill, brutalist-skill, gpt-tasteskill, output-skill), impeccable (harden/distill/layout/audit), WCAG 2.2, TanStack Query and React docs, Front-End Checklist (thedaviddias), Jef Raskin (The Humane Interface), John Sweller (Cognitive Load Theory), Mark Weiser (Calm Technology), Daniel Kahneman (Peak-End Rule), Roman Kamushken (Data Table UI Design), BuiltUX (Toast Notification Doctrine), NN/g "AI Hallucinations" (Laubheimer 2025), NN/g "Wireflows" (Laubheimer 2016), NN/g "10 Design Guidelines for Reporting Errors in Forms" (Krause 2019), Baymard "Usability Testing of Inline Form Validation" (2024), Setproduct "Command Palette UI Design" (Kamushken 2026), Editorial Web Typography & Visual Hierarchy Research.
 
 ## Contents
-LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR · NOT · HOOK · A11Y · NAV · CON · CPY · SLOP · MOT · SOUL · HUM · PERF · I18N · THM · AI
+LAY · HIE · RSP · DLG · FLW · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR · NOT · HOOK · A11Y · NAV · CON · CPY · SLOP · MOT · SOUL · HUM · PERF · I18N · THM · AI
 
 ---
 
@@ -80,6 +80,12 @@ LAY · HIE · RSP · DLG · STA · LDG · PAG · TAB · MUT · FRM · UPL · ERR
 - DLG-12 Uncoordinated z-index layers or parent `overflow: hidden` clips popovers, menus, or renders toasts underneath dialogs
 - DLG-13 Tooltip appears directly under mouse cursor blocking clicks on the trigger, closes when cursor moves to interactive tooltip content, or lacks mobile touch alternative
 - DLG-14 Tooltip tautology: tooltip redundantly repeats the exact visible text of the button or label without adding context or shortcut
+
+## FLW - User flow & transitions → user-flow.md
+- FLW-01 Multi-step flow with no visible position or next-action signposting (stepper/wizard shows no current-step indicator, or the step has no single unambiguous next action - multiple equal-weight buttons or next action below the fold)
+- FLW-02 Transition without a validation gate: `handleNext` / `onNext` / `setStep(s + 1)` / submit advances the flow without running the step's declared validation (`safeParse`, `trigger()`, `isValid`)
+- FLW-03 Redundant flow step: intermediate confirm/summary screen offering no decision, consent, or review choice - it only re-displays data the system already holds or the user just typed
+- FLW-04 Transition failure loses flow position: the flow advances (or unmounts) before the step's request succeeds (`.then(() => next())` with no error branch), or failure surfaces only as a generic toast with no return to the failed step and no retained inputs
 
 ## STA - States & edge content → loading-states.md, ux-copy.md
 - STA-01 No empty state, or empty state with no next action

@@ -5,7 +5,7 @@ Write this as `.ui-audit/<surface>/PLAN.md` (see harness.md). Fill every section
 **Required slot:** every finding ID from `03-findings.md` must appear in exactly one slice in §13, or under "Deferred" with a reason. Gate G2 fails otherwise.
 
 ## Contents
-1. Summary · 2. Design language · 3. Declutter / cognitive chunking · 4. Wireframes · 5. Findings by category · 6. Structure & layout mechanics · 7. Copy changes · 8. Consistency · 9. Pagination contract · 10. Loading & pending · 11. Mutations & forms · 12. Proposed tokens & components · 13. Slices & rollout · 14. Out of scope & questions
+1. Summary · 2. Design language · 3. Declutter / cognitive chunking · 4. Task priority · 4b. User flow · 5. Findings by category · 6. Structure & layout mechanics · 7. Copy changes · 8. Consistency · 9. Pagination contract · 10. Loading & pending · 11. Mutations & forms · 12. Proposed tokens & components · 13. Slices & rollout · 14. Out of scope & questions
 
 ~~~~markdown
 # Redesign plan: <Page / feature name>
@@ -59,13 +59,25 @@ Source: <path to the project's DESIGN.md + linked files> | none, derived from co
 2. …
 Legacy structure: <one line naming the current layout, e.g. "stacked cards with a stat row on top">
 
+## 4b. User flow
+*Required when the surface has multi-step or state-changing flows (user-flow.md; Gate G2). One table per flow, before the wireframes. `N/A: single-screen, no state change` allowed.*
+
+### F-01 <flow name> (closes <finding IDs>)
+| Step | Entry | User action | Validation (file:line) | Pass → | Fail → (code, where it lands) |
+|---|---|---|---|---|---|
+| S1 | list view | click "New invoice" | - (navigation) | dialog opens | - |
+| S2 | dialog open | submit form | invoice-schema.ts:22 `safeParse` | POST → row in list, dialog closes | 409 `INVOICE_EXISTS` → inline FieldError under "Client" |
+
+Friction: path ok | next visible | back safe | interruption ok — or fix: <change to the table>
+
 ## 5. Findings
-*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 26 catalog categories and every rule ID have been individually audited across the section reports in 04-coverage/ (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
+*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 27 catalog categories and every rule ID have been individually audited across the section reports in 04-coverage/ (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
 
 Row format: `- [Pn] <rule> <file:line> - <what> → <fix>` (ledger findings: `- F-0xx [Pn] <rule> …`). Shape of a good section — one or two rows per category, concrete file:line and fix in each:
 ### Breaks DESIGN.md rules
 - [P2] file:line - <what> - breaks <rule, §section> → <fix>
 ### Hierarchy, responsive & layout
+- [P1] FLW-02 invoice-wizard.tsx:64 - `handleNext()` sets step 2 without `safeParse` → gate on schema, block with inline error
 - [P1] HIE-08 invoice-card.tsx:32 - duplicate Save in header and footer → single footer action
 - [P2] RSP-14 floating-bar.tsx:18 - bar touches home indicator → `pb-[max(1rem,env(safe-area-inset-bottom))]`
 - [P1] LAY-11 table-actions.tsx:88 - `sr-only` has unpositioned parent, phantom scroll → `relative` on cell wrapper

@@ -1,6 +1,6 @@
 ---
 name: ui-redesign
-description: Use whenever performing ANY UI/UX work - designing new UI/UX features, building views, modals, forms, or screens, or redesigning, decluttering, auditing, and fixing existing UI. Enforces human design theory (for humans not robots), cognitive load, Gestalt, calm technology, soulful craft, accessibility (WCAG AA), motion, loading/skeletons, forms, scroll containment, and UX copy. Applies whenever authoring, updating, or fixing any frontend user-facing code. Also use when updating this skill.
+description: Use whenever performing ANY UI/UX work - designing new UI/UX features, building views, modals, forms, screens, or user flows/steps, or redesigning, decluttering, auditing, and fixing existing UI. Enforces human design theory (for humans not robots), cognitive load, Gestalt, calm technology, soulful craft, accessibility (WCAG AA), motion, loading/skeletons, forms, flow transitions, scroll containment, and UX copy. Applies whenever authoring, updating, or fixing any frontend user-facing code. Also use when updating this skill.
 license: MIT
 ---
 
@@ -36,8 +36,8 @@ If it's truly unclear, ask one question; otherwise pick and state the mode in on
 
 | # | Phase | Do | Writes | Gate |
 |---|---|---|---|---|
-| 1 | Research | DESIGN.md, app archetype & mandatory external research → digest. Trace surface and **read every file in full**. Static audit against **all 312 catalog rules**. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage/` (FULL) | G1 |
-| 2 | Plan | Plan from template. 3 traced HTML concepts in `concepts/` (ledger tokens, verbatim copy) with switcher shell (dark mode & themes). Wireframes grounded in domain research. | `PLAN.md`, `concepts/` | G2 |
+| 1 | Research | DESIGN.md, app archetype & mandatory external research → digest. Trace surface and **read every file in full**. Static audit against **all 316 catalog rules**. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage/` (FULL) | G1 |
+| 2 | Plan | Plan from template incl. **flow tables + friction line before wireframes** (every state-changing flow; Gate G2). 3 traced HTML concepts in `concepts/` (ledger tokens, verbatim copy) with switcher shell (dark mode & themes). Wireframes grounded in domain research. | `PLAN.md`, `concepts/` | G2 |
 | 3 | Approval | Short summary, ask Approve / Change / Reject. **No source edits before approval.** Silence is not approval. | `PLAN.md` § Approval | G3 |
 | 4 | Implement | Slice by slice. Tokens and shared primitives only. Only ledger findings get fixed; new ones go into the ledger first. | `05-progress.md`, statuses in `03-findings.md` | G4 |
 | 5 | Verify | Typecheck/lint/tests run now; re-read every changed location; re-run checks; evidence per finding. | `06-verify.md` | G5: zero `open` findings |
@@ -58,6 +58,7 @@ Read only what the current step needs.
 | Auditing | `static-audit.md` + `rule-catalog.md` |
 | LAY, HIE - layout, hierarchy, declutter | `hierarchy-declutter.md`, `responsive-fluid.md` §9 (scroll) |
 | RSP, DLG - responsive, wrapping, dialogs, scroll containment | `responsive-fluid.md` (incl. §9 scroll) |
+| FLW - user flow, steps, transitions, friction | `user-flow.md` |
 | LDG, STA - loading, skeletons, pending buttons, states | `loading-states.md` |
 | PAG - lists, pagination | `pagination.md` |
 | TAB - tables, data grids | `tables-data-grids.md` |
@@ -81,7 +82,8 @@ Read only what the current step needs.
 ## Non-negotiables
 
 - **Scope is respected.** FOCUSED touches only the named problems; FULL leaves no catalog category or individual rule ID unchecked.
-- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage/` must account for every rule ID individually across its 5 section reports in exact numerical sequence (`LAY-01` through `AI-06`, including `TAB-01` to `TAB-07`, `UPL-01` to `UPL-06`, `NOT-01` to `NOT-05`, `NAV-11` to `NAV-12`, `HUM-01` to `HUM-08`, and `taste-engineering.md` standards) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
+- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage/` must account for every rule ID individually across its 5 section reports in exact numerical sequence (`LAY-01` through `AI-06`, including `FLW-01` to `FLW-04`, `TAB-01` to `TAB-07`, `UPL-01` to `UPL-06`, `NOT-01` to `NOT-05`, `NAV-11` to `NAV-12`, `HUM-01` to `HUM-08`, and `taste-engineering.md` standards) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
+- **Every state-changing flow gets a flow table before wireframes** (Gate G2): per step the entry, user action, validation `file:line`, pass → and fail → landing, plus the friction line; no step advances on invalid input and every failure names where the user lands (`references/user-flow.md`). `N/A: single-screen, no state change` allowed.
 - **App archetype & audience discovery precedes design.** Classify product archetype (SaaS / internal tool / consumer) and complete external domain research in `01-design.md`; never plan or prototype blindly.
 - **Every file in the surface is read in full** - child components, dialogs, hooks, and the API/server code behind lists and mutations.
 - **Every finding has a rule, quoted evidence, one fix, a severity and a status.** No finding without proof; no fix without a finding.

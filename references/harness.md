@@ -37,12 +37,12 @@ Before starting each phase, open the previous files and check the gate. If a gat
 |---|---|
 | G0 → Research | `00-scope.md` has the verbatim request, a mode, and a target surface |
 | G1 → Plan | every file in `02-inventory.md` is marked Read ✔; `01-design.md` has a digest or "none", app archetype & target audience profile, and completed external domain research benchmarks; FULL: every single rule ID from `rule-catalog.md` across `04-coverage/` section reports (or legacy `04-coverage.md`) is accounted for **in exact sequential catalog order** (with finding IDs or concrete code file:line pass evidence - no blank cells, no unevidenced "clean", no lump category skips, no jumping or omitting IDs); FOCUSED: every named issue has ≥1 finding or a "could not reproduce - evidence" line, and every rule in its mapped categories is fully checked in catalog order |
-| G2 → Approval | `PLAN.md` exists; every finding ID is assigned to a slice or Deferred with a reason; wireframes present if layout changes; if layout changes, all 3 interactive HTML layout concepts exist in `.ui-audit/<surface>/concepts/` with working `index.html` switcher shell, dark mode/theme toggling, interactive simulations, zero syntax errors, plus a filled token ledger and fidelity table (interactive-prototypes.md §7); G2 fails on any unlisted color value, invented toast/error/empty copy, untraced concept block, or shell chrome on placeholder tokens |
+| G2 → Approval | `PLAN.md` exists; every finding ID is assigned to a slice or Deferred with a reason; if the surface has multi-step or state-changing flows, `PLAN.md` §4b holds a flow table per flow (steps, validation `file:line`, pass/fail landing) plus its friction line, or `N/A: single-screen, no state change` (user-flow.md); wireframes present if layout changes; if layout changes, all 3 interactive HTML layout concepts exist in `.ui-audit/<surface>/concepts/` with working `index.html` switcher shell, dark mode/theme toggling, interactive simulations, zero syntax errors, plus a filled token ledger and fidelity table (interactive-prototypes.md §7); G2 fails on any unlisted color value, invented toast/error/empty copy, untraced concept block, or shell chrome on placeholder tokens |
 | G3 → Implement | the user approved in this conversation, specifying their chosen concept (Concept A, B, C, or custom blend; quote their words and selection in `PLAN.md` under "Approval") |
 | G4 → Verify | every slice in `05-progress.md` has its checks run with output pasted and a commit SHA |
 | G5 → Done | `03-findings.md` has **zero rows with status `open`**; every row is `fixed` (with verification in `06-verify.md`), `deferred` (with reason, approved or out of scope) or `rejected` (failed the proof rule); typecheck/lint/tests ran in this message and passed or pre-existing failures are named |
 
-State the gate result in one line when crossing it: `Gate G1: PASS - 14 files read, archetype/audience & external research documented in 01-design.md, 26 categories audited, 312/312 rules individually accounted for in 04-coverage/, 23 findings.`
+State the gate result in one line when crossing it: `Gate G1: PASS - 14 files read, archetype/audience & external research documented in 01-design.md, 27 categories audited, 316/316 rules individually accounted for in 04-coverage/, 23 findings.`
 
 ## 3. Finding format and the proof rule
 
@@ -75,7 +75,7 @@ A full audit must prove it examined **every individual rule in `rule-catalog.md`
 
 To prevent context bloat and output token truncation, FULL audits decompose coverage into a dedicated folder: `.ui-audit/<surface-slug>/04-coverage/`:
 - `00-summary.md`: Rollup matrix, category completion states, rule counts, and Gate G1 certification stamp.
-- `01-layout-hierarchy.md`: Section 1 coverage (LAY 18, HIE 15, RSP 15, DLG 14: 62 rules).
+- `01-layout-hierarchy.md`: Section 1 coverage (LAY 18, HIE 15, RSP 15, DLG 14, FLW 4: 66 rules).
 - `02-states-data.md`: Section 2 coverage (STA 11, LDG 11, PAG 14, TAB 7: 43 rules).
 - `03-forms-actions.md`: Section 3 coverage (MUT 17, FRM 24, UPL 6, ERR 10, NOT 5: 62 rules).
 - `04-engineering-a11y.md`: Section 4 coverage (HOOK 18, A11Y 20, NAV 12, PERF 7: 57 rules).
@@ -126,6 +126,7 @@ If you catch yourself thinking one of these, stop and do the step.
 | "Grep found nothing, so the category is clean" | Grep finds candidates. Clean needs evidence of what you read. |
 | "Checked category at high level, no obvious bugs" | Gate G1 strictly requires every single rule ID evaluated with file:line evidence in `04-coverage/`. Lump passes fail the gate. |
 | "The category doesn't have many bugs, so I'll lump it" | Every rule ID must be listed with `PASS` (citing code proof), `VIOLATION` (citing finding ID), or justified `N/A`. |
+| "The screens look fine, so the flow between them is fine" | Flow bugs live in transitions, not screens: walk each step's advance, validation gate, and failure landing (FLW-01..04), and record the flow table in `PLAN.md` §4b. |
 | "I will audit rules in my head and write findings only" | If a rule is not documented in `04-coverage/`, it counts as skipped. |
 | "The user asked for a redesign, not bug fixes" | In FULL mode the audit covers everything; bugs found go in the ledger. In FOCUSED mode they go in "Noticed, out of scope". Either way they're written down. |
 | "The user asked for X only, but Y is also bad, I'll fix it too" | FOCUSED means focused. Log Y under "Noticed, out of scope", don't touch it. |

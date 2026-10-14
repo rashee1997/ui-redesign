@@ -14,11 +14,11 @@ The audit is done by **reading code**, file by file, against the rule catalog. G
 
 1. Trace the surface → `02-inventory.md` (§2).
 2. Read every file in full, top to bottom, running the per-file pass (§3). Mark Read ✔.
-3. Run the cross-file passes (§4): consistency, data flow, state coverage.
+3. Run the cross-file passes (§4): consistency, data flow, state coverage, flow transitions.
 4. Run grep recipes (§5) to catch anything the reading missed; open every hit.
 5. Optional: run the scripts for runtime evidence (§6).
 6. Falsify pass (harness.md §3).
-7. Build `04-coverage/` section reports (FULL mode): walk **every rule ID in `rule-catalog.md` in strict sequential order from LAY-01 through AI-06**, recording sections `01-layout-hierarchy.md` through `05-craft-copy.md` with `00-summary.md` rollup. Record each rule as `VIOLATION` (with `F-xxx`), `PASS` (with concrete code proof `file:line`), or justified `N/A`. Verify Gate G1 before moving to plan.
+7. Build `04-coverage/` section reports (FULL mode): walk **every rule ID in `rule-catalog.md` in strict sequential order from LAY-01 through AI-06 (including FLW-01..04)**, recording sections `01-layout-hierarchy.md` through `05-craft-copy.md` with `00-summary.md` rollup. Record each rule as `VIOLATION` (with `F-xxx`), `PASS` (with concrete code proof `file:line`), or justified `N/A`. Verify Gate G1 before moving to plan.
 ## 2. Tracing the surface
 
 Start at the route entry (`page.tsx`, `route.tsx`, `index.vue`, `+page.svelte`…), plus its `layout`, `loading`, `error`, `not-found` siblings. Then follow, recursively:
@@ -54,6 +54,11 @@ Read the file once fully, then walk it with these questions. Record every hit as
 - Forms & validation: Are all inputs linked to labels via `htmlFor`/`id` (FRM-01)? Are validation errors linked via `aria-describedby` and flagged with `aria-invalid` (FRM-03, A11Y-18)? Is redundant data entry avoided (A11Y-19)? Is cognitive testing or paste-blocking present in auth (A11Y-20)?
 - ARIA semantics: Are native elements used first? Is `aria-hidden="true"` placed on any focusable element (A11Y-16)? Are interactive elements nested (A11Y-17)?
 - Announcements: Are toasts, dynamic updates, and async results announced via `role="alert"` or `role="status"` / `aria-live` (A11Y-09, ERR-05)? Are loading buttons flagged with `aria-busy` (LDG-05)?
+
+**Flow & transitions** - FLW (user-flow.md)
+- List every state-changing flow (primary task + create/edit/delete/retry). For each transition: does it run the step's validation before advancing (`FLW-02`)? On failure does the flow stay put with inputs kept, or does `.then(next)` already fire / unmount (`FLW-04`)?
+- Is current step + single next action visible on every step (`FLW-01`)? Does any intermediate step only re-display known data with no decision (`FLW-03`)? Do all terminal states (success / fail / no-permission / cancelled) have a way forward (STA-07, STA-10)?
+- Does Back restore the flow (NAV-02), avoid a back-button trap (NAV-09), and preserve drafts (FRM-24)? Does each fail cell land where attention is (FRM-03, ERR-05)?
 
 **State branches** - LDG, STA
 - For every async value: is there a loading, empty, error and success branch? What does each render? Is the loading branch a skeleton that matches the current layout, or is an old/legacy skeleton being reused (LDG-11)?
@@ -214,8 +219,12 @@ rg -n "toast\.(success|error|info|warning|custom)" $P
 rg -n "toast\.error.*duration:\s*[1-9]\d{2,3}\b" $P                           # vanishing error toasts <10s (NOT-01)
 rg -n "forEach.*toast\." $P                                                   # toast storm on batch operations (NOT-03)
 
-# Dialogs, overlays & search (DLG-11..14, NAV-06..08, NAV-11..12)
-rg -n "scrollbar-gutter" $P                                                   # modal scroll-lock layout shift (DLG-11)
+# User flow & transitions (FLW-01..04)
+rg -n "setStep|setCurrentStep|activeStep|handleNext|onNext|goToStep" $P        # stepper transitions: gated by validation (FLW-02)?
+rg -n "\.then\(\s*\(\)\s*=>\s*(next|setStep|router\.(push|replace))" $P        # advance with no error branch (FLW-04)
+rg -n "Step \d+ of \d+|stepper|wizard|aria-current=\"step\"" $P                # position signposting (FLW-01)
+
+# Dialogs, overlays & search (DLG-11..14, NAV-06..08, NAV-11..12)rg -n "scrollbar-gutter" $P                                                   # modal scroll-lock layout shift (DLG-11)
 rg -n "z-\[\d+\]|z-50|z-40|z-30" $P                                          # z-index layering conflicts (DLG-12)
 rg -n "<Tooltip|<TooltipContent" $P                                           # tooltip tautology & hover traps (DLG-13, DLG-14)
 rg -n "useDebounce|useQuery.*search|abortController" $P                       # search race conditions & cancellation (NAV-06)

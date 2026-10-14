@@ -1,5 +1,21 @@
 # Changelog
 
+## 6.0.0 (2026-10-14): UI flow audit & design - FLW category, flow tables at G2
+- Added:
+  - `references/user-flow.md` guide: flow table format (step, entry, action, validation `file:line`, pass →, fail → landing), the 4-check friction line (path ok / next visible / back safe / interruption ok), per-rule detect & fix for FLW-01..04, and 7 flow audit questions
+  - New catalog category **FLW - User flow & transitions** (inserted after DLG, before STA, staying inside the LAY-01..AI-06 walk): FLW-01 no step position/next-action signposting; FLW-02 transition without a validation gate; FLW-03 redundant flow step (re-displays known data, no decision); FLW-04 transition failure loses flow position (advance before success, toast-only failure)
+  - `PLAN.md` §4b "User flow" section (flow table + friction line, or `N/A: single-screen, no state change`) - **Gate G2 condition** in harness.md
+  - FLW example row in plan-template §5; "Flow & transitions" per-file block and 3 grep recipes (stepper transitions, `.then(advance)` without error branch, step signposting) in static-audit.md; flow walk in phases.md Phase 5 (6b); red flag "the screens look fine, so the flow between them is fine"
+  - SKILL.md: non-negotiable "Every state-changing flow gets a flow table before wireframes", router row `FLW → user-flow.md`, description triggers "user flows/steps" and "flow transitions"
+- Changed:
+  - `references/rule-catalog.md`: FLW section + Contents + Sources (NN/g Wireflows, NN/g error-form guidelines, Baymard inline validation)
+  - `references/harness.md`: Section 1 count 62 → 66 rules, G1 example 26 → 27 categories / 312 → 316 rules, G2 flow-table condition
+  - `references/phases.md`: 1c maps the flow before hierarchy; 1d/1f include FLW-01..04; Phase 2 requires flow tables before wireframes; slice order puts flow fixes right after structure; §6 quick-reference "Flow before screen" line
+  - `SKILL.md`: Phase 1 count 312 → 316, Phase 2 row mentions flow tables, non-negotiable sequence list includes FLW-01..04
+  - Rule totals: 312 → 316; categories 26 → 27 (plan-template §5 wording too)
+- Reason: user asked to include UI flow audit and design in this skill - screens were audited one at a time while the path between them (per-step validation gates, fail-path landing, redundant steps, step signposting) was never checked or planned
+- Sources: NN/g "Wireflows: A UX Deliverable for Workflows and Apps" https://www.nngroup.com/articles/wireflows/ (arrows from acting control to resulting state incl. error states, read 2026-10-14); NN/g "10 Design Guidelines for Reporting Errors in Forms" https://www.nngroup.com/articles/errors-forms-design-guidelines/ (inline errors next to field, never validate before input complete, dialogs sparingly, read 2026-10-14); Baymard "Usability Testing of Inline Form Validation" https://baymard.com/research-articles/inline-form-validation (submit-only errors force full stops, premature validation is the failure mode, read 2026-10-14); user approval this session (v6.0.0 plan)
+
 ## 5.0.0 (2026-10-13): Concept fidelity hardening - traced concepts, verbatim copy, G2 reject gate
 - Added:
   - Concept Fidelity Verification Protocol (`references/interactive-prototypes.md` §7): ledger completeness, hex hunt, structure trace, copy trace, shell check, data sanity, plus the fidelity table pasted into `PLAN.md` §6
