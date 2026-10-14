@@ -4,10 +4,10 @@
 # UI Redesign
 
 <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-7.1.0-indigo.svg" alt="Version 7.1.0" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-7.2.0-indigo.svg" alt="Version 7.2.0" /></a>
     <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
-    <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-322%20cataloged-emerald.svg" alt="322 Rules" /></a>
+    <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-323%20cataloged-emerald.svg" alt="323 Rules" /></a>
     <a href="./phases.md"><img src="https://img.shields.io/badge/gates-G0..G5-purple.svg" alt="Gates G0..G5" /></a>
     <a href="./references/accessibility.md"><img src="https://img.shields.io/badge/WCAG-2.2%20AA-sky.svg" alt="WCAG 2.2 AA" /></a>
     <a href="./references/taste-engineering.md"><img src="https://img.shields.io/badge/taste-Three%20Dials-amber.svg" alt="Three Dials" /></a>
@@ -20,7 +20,7 @@ A skill for auditing, decluttering, and redesigning frontend user interfaces. En
 
 1. **Reads Project Specifications**: Extracts semantic tokens and conventions from the repository's `DESIGN.md`.
 2. **Discovers Archetype & Domain**: Classifies the product (B2B SaaS, internal operations cockpit, high-density workbench) and conducts mandatory external research (`search_web`, docs) to identify market standards before designing.
-3. **Audits File-by-File**: Evaluates every component against 322 concrete rules across 27 categories. `scripts/verify_ledger.mjs` generates the coverage ledger and re-checks every `PASS` quote, `N/A` claim and finding against the real source files, so a hallucinated or rubber-stamped audit fails.
+3. **Audits File-by-File**: Evaluates every component against 323 concrete rules across 27 categories. `scripts/verify_ledger.mjs` generates the coverage ledger and re-checks every `PASS` quote, `N/A` claim and finding against the real source files, so a hallucinated or rubber-stamped audit fails.
 4. **Calibrates Aesthetics**: Sets density, motion, and layout variance using the Three Dials framework.
 5. **Declutters Before Restructure**: Runs a Keep/Remove/Merge/Demote/Defer/Move pass on all visible elements.
 6. **Builds One Interactive Concept, Tweaked With You**: Picks the best direction from the archetype and research (three one-line directions are compared in text), builds a single clickable HTML prototype with working dialogs, toasts, dark mode and phone/tablet/desktop views, then edits that same concept and the plan in place for every tweak you ask for, logging each in a Revision log. Nothing is built in code until you approve a specific revision.
@@ -74,7 +74,7 @@ All audit work is recorded in `.ui-audit/<surface-slug>/`. A phase cannot begin 
 | **4. Implement** | `05-progress.md`, `03-findings.md`                                    | Gate G4: Slice-by-slice implementation with verified test outputs and commit hashes.                                     |
 | **5. Verify**    | `06-verify.md`                                                        | Gate G5: the G5 script passes (zero open, fixed findings verified in source, commit SHAs real), typecheck clean, tests pass.                                                                |
 
-## Rule Catalog Summary (322 Rules · 27 Categories)
+## Rule Catalog Summary (323 Rules · 27 Categories)
 
 Rules are detailed with pass/fail criteria and grep recipes in [`references/rule-catalog.md`](./references/rule-catalog.md):
 
@@ -100,9 +100,10 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 │   └── showcase/                     # Animated slop-to-fixed demo GIF
 ├── references/
 │   ├── taste-engineering.md          # Three Dials, brief inference, GSAP motion patterns
-│   ├── rule-catalog.md               # 322 auditable rule IDs with exact failure conditions
+│   ├── rule-catalog.md               # 323 auditable rule IDs with exact failure conditions
 │   ├── harness.md                    # Ledger protocol, gate criteria G0-G5, proof rules
-│   ├── static-audit.md               # File-by-file audit questions and grep candidate finders
+│   ├── static-audit.md               # File-by-file audit questions, cross-file passes, scripts
+│   ├── grep-recipes.md               # rg candidate finders by area (every hit must be read)
 │   ├── plan-template.md              # PLAN.md template with declutter tables and wireframes
 │   ├── interactive-prototypes.md     # One concept, direction choice, fidelity rules, tweak loop
 │   ├── platform-quality.md           # PERF, I18N, THM guide and newer platform rules (forced-colors, :user-invalid, View Transitions, LCP, 403, 429)

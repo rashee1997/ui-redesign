@@ -36,7 +36,7 @@ const WINDOW = 5;
 const MIN_QUOTE = 6;
 const MIN_REASON = 15;
 const MAX_ERRORS = 40;
-const MAX_REUSE = 4;
+const MAX_REUSE = 6;
 const STATUSES = ['VIOLATION', 'PASS', 'N/A'];
 const FINDING_STATUSES = ['open', 'fixed', 'deferred', 'rejected'];
 
@@ -270,6 +270,27 @@ function g1() {
   return stamp;
 }
 
+/** Elements carrying data-copy: { src, text } with the text of the whole element, nested same-name tags included. */
+function copyBlocks(html) {
+  const out = [];
+  for (const open of html.matchAll(/<(\w+)\b[^>]*\bdata-copy="([^"]+)"[^>]*>/g)) {
+    const tag = open[1];
+    const tags = new RegExp(`<(/?)${tag}\\b[^>]*>`, 'g');
+    tags.lastIndex = open.index + open[0].length;
+    let depth = 1;
+    let end = html.length;
+    for (let m = tags.exec(html); m; m = tags.exec(html)) {
+      depth += m[1] ? -1 : /\/>$/.test(m[0]) ? 0 : 1;
+      if (depth === 0) {
+        end = m.index;
+        break;
+      }
+    }
+    out.push({ src: open[2], text: html.slice(open.index + open[0].length, end).replace(/<[^>]+>/g, ' ') });
+  }
+  return out;
+}
+
 function g2() {
   const plan = read(path.join(surface, 'PLAN.md'));
   if (plan === null) return fail('PLAN.md missing'), 'Gate G2 script: FAIL';
@@ -295,9 +316,9 @@ function g2() {
       const loc = m[1].match(LOC);
       if (!loc || !inv.has(loc[1])) fail(`concepts/${f}: data-trace "${m[1]}" is not an inventory file:line`);
     }
-    for (const m of text.matchAll(/<(\w+)[^>]*data-copy="([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g)) {
-      const loc = m[2].match(LOC);
-      const e = loc ? quoteError(loc[1], Number(loc[2]), m[3].replace(/<[^>]+>/g, '')) : `bad data-copy "${m[2]}"`;
+    for (const block of copyBlocks(text)) {
+      const loc = block.src.match(LOC);
+      const e = loc ? quoteError(loc[1], Number(loc[2]), block.text) : `bad data-copy "${block.src}"`;
       if (e) fail(`concepts/${f}: ${e}`);
     }
     if (f === 'index.html' && !/data-trace=/.test(text)) fail('concepts/index.html has no data-trace blocks');

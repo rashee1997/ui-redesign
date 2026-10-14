@@ -114,7 +114,8 @@ Fix: guard before the request and treat the literal `'undefined'`/`'null'` as ab
 - **HOOK-07**: hooks inside `if`, loops, after an early `return`, or in non-component functions. Common in refactors: `if (!data) return <Skeleton/>` placed above a `useState` → crash when data arrives. Move all hooks above early returns.
 - **HOOK-10 Keys**: `key={index}` on lists that can be reordered, filtered, inserted into or deleted from → inputs and state stick to the wrong row. Use a stable id. Never `key={Math.random()}` (remounts every render).
 - **HOOK-11 Hydration**: rendering `new Date()`, `Math.random()`, `window`/`localStorage` values, or locale-dependent formatting during SSR → mismatch. Render on the client after mount (`useEffect` + state, or `useSyncExternalStore`), or pass the value from the server. `suppressHydrationWarning` only on the exact element with a known benign difference (e.g. a timestamp).
-- `"use client"` boundaries: hooks used in a file without `"use client"` in the App Router is a build error; adding `"use client"` high up turns a whole server tree into client code - put it on the smallest interactive leaf.
+- **PERF-09 `"use client"` boundaries**: hooks used in a file without `"use client"` in the App Router is a build error; adding `"use client"` at the top of `page.tsx`, `layout.tsx` or a large container turns a whole server tree into client code (bigger bundle, slower INP). Put it on the smallest interactive leaf; a file with the directive and no hooks, state or event handlers of its own is the signal.
+- **PERF-07 heavy updates**: wrap non-urgent state updates that re-render large trees in `startTransition` (or `useDeferredValue`), and yield long tasks with `scheduler.yield()` where available, so input handlers return within the 200 ms INP budget.
 
 ## 6. Audit procedure
 

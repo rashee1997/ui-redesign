@@ -49,7 +49,7 @@ const add = (key, file, line, text) => { (hits[key] ||= []).push(`${file}:${line
 const count = (key, val) => { (counts[key] ||= {}); counts[key][val] = (counts[key][val] || 0) + 1; };
 
 for (const file of files) {
-  const src = fs.readFileSync(file, 'utf8');
+  const src = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
   const lines = src.split('\n');
   const near = (i, n) => lines.slice(i, i + n).join('\n');
   const offsets = []; { let o = 0; for (const l of lines) { offsets.push(o); o += l.length + 1; } }

@@ -1,5 +1,21 @@
 # Changelog
 
+## 7.2.0 (2026-10-14): Script fixes, static-audit split, PERF-09, INP budget
+- Added:
+  - PERF-09 (`"use client"` at route/layout level or on a hook-less container) in `rule-catalog.md`, `platform-quality.md` §1, `react-hooks.md` §5.
+  - `references/grep-recipes.md`: the §5 recipes moved out of `static-audit.md` (328 → 171 lines) plus recipes for FRM-25, A11Y-21, MOT-15, PERF-08, PERF-09, STA-12, ERR-11.
+  - `ui_audit.mjs`: `leakedAbsolute` and `nestedScrollers` checks (documented in `responsive-fluid.md` §9 but never implemented), added to the result and the Markdown summary (columns and detail sections).
+- Changed:
+  - PERF-07 latency budget ~250 ms → 200 ms (INP "good" threshold) and now names `startTransition` / `scheduler.yield()`.
+  - `verify_ledger.mjs`: `data-copy` parsing now matches the element's real closing tag (nested same-name tags no longer truncate the text; tag boundaries become spaces); `MAX_REUSE` 4 → 6 so one `<Button>`/`<input>` line can legitimately cover several rules. Fixture-tested: nested valid copy passes, invented nested copy fails.
+  - `scan_patterns.mjs`: CRLF normalised on read so tag offsets do not drift on Windows files (syntax-checked only).
+  - `transition-all` removed from the code snippets in `motion.md` (§2A, §2E) and `craft.md` that contradicted MOT-02.
+- Fixed: a recipe in the dialogs/search block was swallowed into a comment line (`scrollbar-gutter`, DLG-11); README version/rule-count badges.
+- Not done (deliberately): retiring eight "duplicate" rules (several merges were not true duplicates: A11Y-20 ≠ FRM-15, A11Y-19 ≠ FLW-03); FRM-26 `field-sizing` (not Baseline), DLG-15 native popover/anchor preference, THM-05 `contrast-color()` (too new/against "project primitives win"); A11Y-22 (WCAG 3.2.6 is Level A, not AA); `hierarchy-declutter.md` (252 lines) and the `AI` Contents entry already fine.
+- Reason: user-supplied update list, triaged against the files before editing.
+- Sources: web.dev "Interaction to Next Paint (INP)" (good ≤ 200 ms at p75; read 2026-10-14).
+- Caveat: `ui_audit.mjs` changes were syntax-checked only; Playwright is not installed here, so the two new checks have not run in a browser.
+
 ## 7.1.0 (2026-10-14): Parallel subagent audit with an audited-by ledger line
 - Added: `harness.md` §6 "Parallel audit with subagents": one read-only subagent per coverage section (up to five, one turn), each told to return its coverage and findings tables as text; the lead writes the files, renumbers finding ids, falsifies every negative claim (missing / absent / N/A / VIOLATION) and re-dispatches only failing sections. No Agent tool: the lead audits in order.
 - Changed: `scripts/verify_ledger.mjs` - `init` writes `Audited by: TODO` into every section file; `check` fails a missing or `TODO` line (`Audited by: <agent/model or lead>; files read: <paths>`). Fixture-tested: five missing lines are reported; a stale fixture missing the six new rules is caught as catalog drift.

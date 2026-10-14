@@ -18,7 +18,8 @@ Defaults only: DESIGN.md and the project's own primitives win. This guide gives 
 | PERF-03 | `onChange` firing a request or heavy computation per keystroke | debounce 150-250 ms, abort the stale request, defer non-urgent state with `useDeferredValue` |
 | PERF-04 | row components re-render on any row change: inline object/array props, index keys | stable props and keys, `memo` the row only after measuring |
 | PERF-05 | large `backdrop-filter` / blur surfaces; permanent `will-change` | limit blur to small overlays; set `will-change` only during the animation |
-| PERF-06 / 07 | >100 options or >200 rows rendered at once; keystroke-to-paint over ~250 ms | virtualize or paginate; debounce and abort the async source |
+| PERF-06 / 07 | >100 options or >200 rows rendered at once; keystroke-to-paint over 200 ms (INP "good" threshold); heavy `setState` in an input handler with no `startTransition` | virtualize or paginate; debounce and abort the async source; `startTransition` / `scheduler.yield()` (react-hooks.md §5) |
+| PERF-09 | `"use client"` first line of `page.tsx` / `layout.tsx` / a large container that has no hooks, state or handlers | move the directive down to the smallest interactive leaf; keep the static subtree on the server |
 
 ## 2. I18N - locale and formatting
 
@@ -56,4 +57,4 @@ Defaults only: DESIGN.md and the project's own primitives win. This guide gives 
 
 ## 5. Sources
 
-MDN `:user-invalid` (Baseline Nov 2023; read 2026-10-14); MDN `forced-colors` (forced property list, `box-shadow` forced to none, tweak-not-redesign guidance; read 2026-10-14); web.dev "Optimize Largest Contentful Paint" and "Fetch Priority API" (never lazy-load the LCP image, `fetchpriority="high"`); web.dev "Same-document view transitions have become Baseline Newly available" (2025-10-16); MDN `Document.startViewTransition()` and `prefers-reduced-motion`; MDN `Retry-After`.
+MDN `:user-invalid` (Baseline Nov 2023; read 2026-10-14); MDN `forced-colors` (forced property list, `box-shadow` forced to none, tweak-not-redesign guidance; read 2026-10-14); web.dev "Optimize Largest Contentful Paint" and "Fetch Priority API" (never lazy-load the LCP image, `fetchpriority="high"`); web.dev "Same-document view transitions have become Baseline Newly available" (2025-10-16); MDN `Document.startViewTransition()` and `prefers-reduced-motion`; MDN `Retry-After`; web.dev "Interaction to Next Paint" (good ≤ 200 ms) and React docs `startTransition` / `"use client"` (read 2026-10-14).

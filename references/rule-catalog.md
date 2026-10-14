@@ -361,7 +361,8 @@ LAY · HIE · RSP · DLG · FLW · STA · LDG · PAG · TAB · MUT · FRM · UPL
 - PERF-04 Whole lists re-render on one row change (unstable props/keys)
 - PERF-05 Big blur/backdrop-filter surfaces; `will-change` left on
 - PERF-06 Large selectable lists, dropdown menus, or combobox options (>100 items) rendered into DOM without virtualization or pagination
-- PERF-07 Interaction latency over budget: keystroke-to-paint or palette rank over ~250ms on lists >200 items, with no virtualization and no debounced (150-250ms) + aborted async source
+- PERF-07 Interaction latency over budget: keystroke-to-paint or palette rank over 200ms (the Core Web Vitals INP "good" threshold) on lists >200 items, with no virtualization and no debounced (150-250ms) + aborted async source, or a heavy state update with no `startTransition` / `scheduler.yield()`
+- PERF-09 Client boundary too high: `"use client"` at the top of a route-level or layout-level file (`page.tsx`, `layout.tsx`) or a large container with no hooks, state or event handlers of its own, pulling static server subtrees into the client bundle (platform-quality.md §1)
 - PERF-08 LCP image lazy-loaded or de-prioritised: above-the-fold image with `loading="lazy"`, no priority prop, no `fetchpriority="high"`, or set as a CSS background (platform-quality.md §4)
 
 ## I18N - Locale & formatting → platform-quality.md §2

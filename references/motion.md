@@ -37,7 +37,7 @@ A button that doesn't react on press feels dead and causes duplicate clicks:
 ```tsx
 // Subtle scale depression + active tone on press
 <Button
-  className="transition-all duration-100 ease-out active:scale-[0.98] active:brightness-95 motion-reduce:active:scale-100"
+  className="transition-[transform,filter,background-color,border-color,color,opacity] duration-100 ease-out active:scale-[0.98] active:brightness-95 motion-reduce:active:scale-100"
 >
   Save changes
 </Button>
@@ -81,7 +81,7 @@ Animating `height: auto` directly thrashes layout. Use CSS grid rows for zero-ja
 Dropdowns must scale subtly from their trigger attachment point, not from screen center:
 ```tsx
 <DropdownMenuContent
-  className="origin-(--radix-dropdown-menu-content-transform-origin) transition-all duration-150 ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 motion-reduce:animate-none"
+  className="origin-(--radix-dropdown-menu-content-transform-origin) transition-[opacity,transform] duration-150 ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 motion-reduce:animate-none"
 />
 ```
 

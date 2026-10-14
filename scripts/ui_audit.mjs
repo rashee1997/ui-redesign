@@ -140,6 +140,7 @@ function pageChecks({ scopeSelector, minFont, minTarget }) {
     viewport: vw,
     pageOverflow: Math.max(0, document.documentElement.scrollWidth - vw),
     offscreen: [], contentSpill: [], wrappedLabels: [], clippedText: [], smallTargets: [], tinyText: [], unsizedImages: [],
+    leakedAbsolute: [], nestedScrollers: [],
     spinners: [], badSpinners: [], cls: Math.round((window.__cls || 0) * 1000) / 1000,
   };
   // Spinners: anything rotating via CSS animation or with animate-spin. Uses the untransformed layout size.
@@ -174,6 +175,22 @@ function pageChecks({ scopeSelector, minFont, minTarget }) {
     // Tiny text
     if (directText(el) && parseFloat(cs.fontSize) < minFont && res.tinyText.length < LIMIT) {
       res.tinyText.push({ el: sel(el), fontSize: cs.fontSize, text: text(el).slice(0, 40) });
+    }
+    // Scroll containment (responsive-fluid.md §9): absolute/fixed element below the fold anchored to <body> leaks page height
+    if (r.bottom > window.innerHeight + 1 && (cs.position === 'absolute' || cs.position === 'fixed') && el.offsetParent === document.body && res.leakedAbsolute.length < LIMIT) {
+      res.leakedAbsolute.push({ el: sel(el), position: cs.position, bottom: Math.round(r.bottom), text: text(el).slice(0, 60) });
+    }
+    // Scroll containment: a vertical scroller that sits inside another vertical scroller (not the document)
+    if (/(auto|scroll)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight + 1 && res.nestedScrollers.length < LIMIT) {
+      let outer = el.parentElement;
+      while (outer && outer !== document.documentElement && outer !== document.scrollingElement) {
+        const ocs = getComputedStyle(outer);
+        if (/(auto|scroll)/.test(ocs.overflowY) && outer.scrollHeight > outer.clientHeight + 1) break;
+        outer = outer.parentElement;
+      }
+      if (outer && outer !== document.documentElement && outer !== document.scrollingElement) {
+        res.nestedScrollers.push({ el: sel(el), outer: sel(outer), scrollHeight: el.scrollHeight, clientHeight: el.clientHeight });
+      }
     }
   }
 
@@ -386,10 +403,10 @@ async function settle(page) {
   const n = (a) => (a ? a.length : 0);
   let md = `# UI audit — ${report.createdAt}\n\n`;
   for (const p of report.pages) {
-    md += `## ${p.url}\n\n| Width | Page overflow | Off-screen | Spill | Wrapped labels | Clipped | Small targets | Tiny text | Unsized img | Bad spinners | CLS | Console errors | Failed req |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|\n`;
+    md += `## ${p.url}\n\n| Width | Page overflow | Off-screen | Spill | Wrapped labels | Clipped | Small targets | Tiny text | Unsized img | Bad spinners | Leaked abs | Nested scrollers | CLS | Console errors | Failed req |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n`;
     for (const w of p.widths) {
-      if (w.error) { md += `| ${w.width} | ${w.error} |||||||||\n`; continue; }
-      md += `| ${w.width} | ${w.pageOverflow ? `**${w.pageOverflow}px**` : 0} | ${n(w.offscreen)} | ${n(w.contentSpill)} | ${n(w.wrappedLabels)} | ${n(w.clippedText)} | ${n(w.smallTargets)} | ${n(w.tinyText)} | ${n(w.unsizedImages)} | ${n(w.badSpinners)} | ${w.cls > 0.1 ? `**${w.cls}**` : w.cls} | ${n(w.consoleErrors)} | ${n(w.failedRequests)} |\n`;
+      if (w.error) { md += `| ${w.width} | ${w.error} |||||||||||\n`; continue; }
+      md += `| ${w.width} | ${w.pageOverflow ? `**${w.pageOverflow}px**` : 0} | ${n(w.offscreen)} | ${n(w.contentSpill)} | ${n(w.wrappedLabels)} | ${n(w.clippedText)} | ${n(w.smallTargets)} | ${n(w.tinyText)} | ${n(w.unsizedImages)} | ${n(w.badSpinners)} | ${n(w.leakedAbsolute)} | ${n(w.nestedScrollers)} | ${w.cls > 0.1 ? `**${w.cls}**` : w.cls} | ${n(w.consoleErrors)} | ${n(w.failedRequests)} |\n`;
     }
     const details = (key, label) => {
       const seen = new Map();
@@ -406,7 +423,8 @@ async function settle(page) {
     md += details('offscreen', 'Elements outside the viewport') + details('contentSpill', 'Content spilling out of its box') +
       details('wrappedLabels', 'Short labels that wrapped') + details('clippedText', 'Text clipped without ellipsis') +
       details('smallTargets', `Tap targets under ${opts.minTarget}px`) + details('tinyText', `Text under ${opts.minFont}px`) +
-      details('unsizedImages', 'Images without size') + details('badSpinners', 'Spinners not round or spinning with text') + details('consoleErrors', 'Console errors') + details('failedRequests', 'Failed requests');
+      details('unsizedImages', 'Images without size') + details('badSpinners', 'Spinners not round or spinning with text') +
+      details('leakedAbsolute', 'Absolute/fixed elements below the fold anchored to body (phantom scroll, LAY-11)') + details('nestedScrollers', 'Vertical scroller inside another vertical scroller (LAY-12)') + details('consoleErrors', 'Console errors') + details('failedRequests', 'Failed requests');
     if (p.dialogs.length) {
       md += `\n### Dialogs / sheets / menus\n| Trigger | Width | Fits W | Fits H | Focus inside | Esc closes | Overflow issues | Wrapped | Small targets | Note |\n|---|---|---|---|---|---|---|---|---|---|\n`;
       for (const d of p.dialogs) {

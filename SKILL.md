@@ -55,7 +55,7 @@ Read only what the current step needs.
 | Start (always) | `harness.md` - ledger, gates, finding format, red flags |
 | Running each phase | `phases.md` |
 | Reading DESIGN.md | `design-md.md` |
-| Auditing | `static-audit.md` + `rule-catalog.md` |
+| Auditing | `static-audit.md` + `rule-catalog.md`; candidate finders in `grep-recipes.md` |
 | LAY, HIE - layout, hierarchy, declutter | `hierarchy-declutter.md`, `responsive-fluid.md` §9 (scroll) |
 | RSP, DLG - responsive, wrapping, dialogs, scroll containment | `responsive-fluid.md` (incl. §9 scroll) |
 | FLW - user flow, steps, transitions, friction | `user-flow.md` |

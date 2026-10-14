@@ -66,7 +66,7 @@ Stripping slop stops bad design; without craft the result is a sterile void. Fin
 ```
 - **CTA button text fit on desktop (SOUL-11)**: Button text must never wrap to multiple lines at desktop viewports. Shorten labels to 1–3 words or widen container.
 - **Italic descender clearance (SOUL-12)**: When using display italic type with descenders (`y`, `g`, `j`, `p`, `q`), `leading-none` clips glyph bottoms. Use `leading-[1.1]` minimum and reserve bottom clearance (`pb-1` or `mb-1`).
-- **Press depression**: every control answers within 100ms — `active:scale-[0.98]`, no dead buttons (SOUL-01, SOUL-09). Recipe: `transition-all duration-100 ease-out hover:brightness-105 active:scale-[0.98] active:brightness-95`, always with a visible `focus-visible` ring and `motion-reduce` off-ramps.
+- **Press depression**: every control answers within 100ms — `active:scale-[0.98]`, no dead buttons (SOUL-01, SOUL-09). Recipe: `transition-[transform,filter,background-color,border-color,color,opacity] duration-100 ease-out hover:brightness-105 active:scale-[0.98] active:brightness-95`, always with a visible `focus-visible` ring and `motion-reduce` off-ramps.
 - **Optical alignment**: asymmetric icons/badges get micro-offsets (`translate-x-[1px]`), not geometric centering (SOUL-03).
 - **State continuity**: skeletons are 1:1 structural twins of the final layout (see loading-states.md); loading→content crossfades calmly, no pops or CLS (SOUL-04).
 - **Tonal depth**: elevation through surface tiers + hairlines, never muddy drop-shadow soup (SOUL-06).
