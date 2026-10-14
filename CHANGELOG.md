@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.1 (2026-10-14): README stale rule counts
+- Changed: `README.md` badge, intro, G1 gate row, catalog summary heading, file-map entry: 312 → 316 rules, 26 → 27 categories; Layout & Hierarchy summary row gains `FLW` and the flow-table check.
+- Reason: 6.0.0 updated every other count site but missed README (Correction cascade: fix every place the wrong statement appears); filed as PATCH because 6.0.0 was already tagged and packaged.
+- Sources: this session - grep for `312|26 categor` across the skill after the 6.0.0 commit found README.md:10, 23, 71, 77, 103.
+
 ## 6.0.0 (2026-10-14): UI flow audit & design - FLW category, flow tables at G2
 - Added:
   - `references/user-flow.md` guide: flow table format (step, entry, action, validation `file:line`, pass →, fail → landing), the 4-check friction line (path ok / next visible / back safe / interruption ok), per-rule detect & fix for FLW-01..04, and 7 flow audit questions

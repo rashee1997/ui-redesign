@@ -7,7 +7,7 @@
     <a href="./README.md"><img src="https://img.shields.io/badge/version-4.3.2-indigo.svg" alt="Version 4.3.2" /></a>
     <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
-    <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-312%20cataloged-emerald.svg" alt="312 Rules" /></a>
+    <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-316%20cataloged-emerald.svg" alt="316 Rules" /></a>
     <a href="./phases.md"><img src="https://img.shields.io/badge/gates-G0..G5-purple.svg" alt="Gates G0..G5" /></a>
     <a href="./references/accessibility.md"><img src="https://img.shields.io/badge/WCAG-2.2%20AA-sky.svg" alt="WCAG 2.2 AA" /></a>
     <a href="./references/taste-engineering.md"><img src="https://img.shields.io/badge/taste-Three%20Dials-amber.svg" alt="Three Dials" /></a>
@@ -20,7 +20,7 @@ A skill for auditing, decluttering, and redesigning frontend user interfaces. En
 
 1. **Reads Project Specifications**: Extracts semantic tokens and conventions from the repository's `DESIGN.md`.
 2. **Discovers Archetype & Domain**: Classifies the product (B2B SaaS, internal operations cockpit, high-density workbench) and conducts mandatory external research (`search_web`, docs) to identify market standards before designing.
-3. **Audits File-by-File**: Evaluates every component against 312 concrete rules across 26 categories, documented in decomposed section reports in `04-coverage/`.
+3. **Audits File-by-File**: Evaluates every component against 316 concrete rules across 27 categories, documented in decomposed section reports in `04-coverage/`.
 4. **Calibrates Aesthetics**: Sets density, motion, and layout variance using the Three Dials framework.
 5. **Declutters Before Restructure**: Runs a Keep/Remove/Merge/Demote/Defer/Move pass on all visible elements.
 6. **Shows 3 Interactive Concepts Before Approval**: Builds three clickable HTML prototypes (high-density, balanced SaaS, contextual fluid) with working dialogs, toasts, and mobile/tablet/desktop emulation in `.ui-audit/<slug>/concepts/`: the user opens `concepts/index.html` and picks a direction before any production code is touched.
@@ -68,19 +68,19 @@ All audit work is recorded in `.ui-audit/<surface-slug>/`. A phase cannot begin 
 | Phase            | Output File                                                           | Gate Requirement                                                                                                         |
 | ---------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | **0. Scope**     | `00-scope.md`                                                         | Gate G0: Verbatim user request and mode (FULL or FOCUSED) recorded.                                                      |
-| **1. Research**  | `01-design.md`, `02-inventory.md`, `03-findings.md`, `04-coverage/`  | Gate G1: 100% of surface files read in full; archetype & external domain research documented; all 312 rules accounted for in 04-coverage/. |
+| **1. Research**  | `01-design.md`, `02-inventory.md`, `03-findings.md`, `04-coverage/`  | Gate G1: 100% of surface files read in full; archetype & external domain research documented; all 316 rules accounted for in 04-coverage/. |
 | **2. Plan**      | `PLAN.md`, `concepts/`                                                | Gate G2: Declutter decisions, wireframes, 3 interactive HTML concepts, and all findings assigned to slices.              |
 | **3. Approval**  | `PLAN.md` (§ Approval)                                                | Gate G3: Explicit user approval with chosen concept (A, B, C, or blend) in conversation. No code edits before this gate. |
 | **4. Implement** | `05-progress.md`, `03-findings.md`                                    | Gate G4: Slice-by-slice implementation with verified test outputs and commit hashes.                                     |
 | **5. Verify**    | `06-verify.md`                                                        | Gate G5: Zero open findings, typecheck clean, tests pass.                                                                |
 
-## Rule Catalog Summary (312 Rules · 26 Categories)
+## Rule Catalog Summary (316 Rules · 27 Categories)
 
 Rules are detailed with pass/fail criteria and grep recipes in [`references/rule-catalog.md`](./references/rule-catalog.md):
 
 | Domain                 | Category                                                        | Core Checks                                                                                                                                                                                                      |
 | ---------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Layout & Hierarchy** | `LAY`, `HIE`, `RSP`, `DLG`                                      | Headline wrap caps, hero viewport stability, single primary focal anchor, surface luminance depth tiers, zero horizontal overflow (320-1920px), scroll containment, safe-area insets.                            |
+| **Layout & Hierarchy** | `LAY`, `HIE`, `RSP`, `DLG`, `FLW`                                | Headline wrap caps, hero viewport stability, single primary focal anchor, surface luminance depth tiers, zero horizontal overflow (320-1920px), scroll containment, safe-area insets, flow-table per-step validation gates & fail-path landing. |
 | **States & Data**      | `STA`, `LDG`, `PAG`, `TAB`                                      | Redesigned skeletons matching new UI layout 1:1, empty states with recovery actions, backend pagination contracts, right-aligned tabular numerals, opaque sticky table headers.                                  |
 | **Forms & Actions**    | `MUT`, `FRM`, `UPL`, `ERR`, `NOT`                               | Double-submit guards, optimistic rollback, paste preservation, submit button safety, window drop containment, persistent error codes, hover-paused alert timers.                                                 |
 | **Engineering & A11y** | `HOOK`, `A11Y`, `NAV`, `PERF`                                   | React 19 hook dependency safety, no stale closures, WCAG 2.2 AA contrast (4.5:1), visible focus rings, native buttons, command palette states, search request cancellation.                                      |
@@ -100,7 +100,7 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 │   └── showcase/                     # Animated slop-to-fixed demo GIF
 ├── references/
 │   ├── taste-engineering.md          # Three Dials, brief inference, GSAP motion patterns
-│   ├── rule-catalog.md               # 312 auditable rule IDs with exact failure conditions
+│   ├── rule-catalog.md               # 316 auditable rule IDs with exact failure conditions
 │   ├── harness.md                    # Ledger protocol, gate criteria G0-G5, proof rules
 │   ├── static-audit.md               # File-by-file audit questions and grep candidate finders
 │   ├── plan-template.md              # PLAN.md template with declutter tables and wireframes
