@@ -157,6 +157,8 @@ function checkCoverage(rules, findings, inventory) {
       fail(`04-coverage/${file}.md missing (run: init)`);
       continue;
     }
+    const by = text.match(/^Audited by:\s*(.*)$/m);
+    if (!by || !by[1].trim() || /^TODO/i.test(by[1].trim())) fail(`${file}: missing "Audited by: <agent/model or lead>; files read: <paths>" line`);
     const rows = tableRows(text).filter((c) => /^[A-Z0-9]+-\d{2}$/.test(c[0]));
     const got = rows.map((c) => c[0]);
     const i = expected.findIndex((r, k) => got[k] !== r.id);
@@ -235,7 +237,7 @@ function init() {
     const list = sectionRules(rules, cats);
     const target = path.join(dir, `${file}.md`);
     if (!list.length || (fs.existsSync(target) && !flag('force'))) continue;
-    const out = [`# 04-coverage - ${path.basename(surface)} - ${title} (every rule ID in catalog order)`, ''];
+    const out = [`# 04-coverage - ${path.basename(surface)} - ${title} (every rule ID in catalog order)`, '', 'Audited by: TODO', ''];
     for (const cat of cats.filter((c) => list.some((r) => r.cat === c))) {
       out.push(`### ${cat}`, '| Rule ID | Rule summary | Status | Evidence |', '|---|---|---|---|');
       for (const r of list.filter((x) => x.cat === cat)) out.push(`| ${r.id} | ${r.summary.slice(0, 90).replace(/\|/g, '/')} | TODO | |`);

@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0 (2026-10-14): Parallel subagent audit with an audited-by ledger line
+- Added: `harness.md` §6 "Parallel audit with subagents": one read-only subagent per coverage section (up to five, one turn), each told to return its coverage and findings tables as text; the lead writes the files, renumbers finding ids, falsifies every negative claim (missing / absent / N/A / VIOLATION) and re-dispatches only failing sections. No Agent tool: the lead audits in order.
+- Changed: `scripts/verify_ledger.mjs` - `init` writes `Audited by: TODO` into every section file; `check` fails a missing or `TODO` line (`Audited by: <agent/model or lead>; files read: <paths>`). Fixture-tested: five missing lines are reported; a stale fixture missing the six new rules is caught as catalog drift.
+- Reason: user asked for subagents to audit different scopes and for the ledger to record who audited what.
+- Sources: this project's own run history (subagents are refused when they write report files; an auditor falsely claimed a rate limiter was absent).
+
 ## 7.0.0 (2026-10-14): Script-verified gates, one tweakable concept, platform rules
 - Added:
   - `scripts/verify_ledger.mjs` (`init`, `check --gate g1|g2|g5`): generates `04-coverage/` with every catalog rule in order; re-opens the source to verify `PASS path:line "quote"`, rejects false `N/A grep:/regex/`, mismatched finding/rule links, omitted or reordered rules, rubber-stamping (>4 rules on one `path:line`), unquoted or misplaced finding evidence, concept colour literals outside the token ledger, untraced `data-trace` blocks, non-verbatim `data-copy` strings, "fixed" findings whose old evidence is still present, and unknown commit SHAs. Prints a random spot-check list for an independent verifier. Tested on a fixture: baseline passes; fake quote, wrong line, omitted row, TODO, false N/A, wrong rule and rubber-stamp each fail.
