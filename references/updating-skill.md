@@ -39,7 +39,7 @@ If the skill-creator skill is available, invoke it to perform this update: it ca
 | **New rule in an existing category** (e.g. a new form bug) | `rule-catalog.md` (next free ID in that category); the category's guide (what it is, why, the fix, an example) | `static-audit.md` (per-file question and/or grep recipe if it's detectable in code); the guide's checklist; `phases.md` §6 if it's a key rule |
 | **New category** (e.g. "File uploads", "Charts", "Auth screens") | `rule-catalog.md` (new prefix, Contents line, section); a new reference file if the detail is more than ~30 lines; SKILL.md "Which reference, when" row; `static-audit.md` per-file pass + grep recipes; `plan-template.md` findings subsection (and a table if the plan needs decisions for it); `phases.md` (implement slice order, verify step) | `harness.md` red flags if agents are likely to skip it; SKILL.md description (if it adds a new trigger area) |
 | **New feature area / stack support** (e.g. Vue, React Native, Svelte) | new reference file; SKILL.md router row; `static-audit.md` (tracing + recipes for that stack); affected rules in `rule-catalog.md` (mark stack-specific rules) | category guides that need a stack-specific note |
-| **Workflow or gate change** (new phase step, new ledger file, new gate condition) | `harness.md` (ledger table, gates, red flags); SKILL.md phases table; `phases.md`; `plan-template.md` | final report section in SKILL.md |
+| **Workflow or gate change** (new phase step, new ledger file, new gate condition) | `harness.md` (ledger table, gates, red flags); SKILL.md phases table; `phases.md`; `plan-template.md`; `scripts/verify_ledger.mjs` (a gate's mechanical check changes with the gate, with a fixture test) | final report section in SKILL.md |
 | **Scope/mode change** (FOCUSED/FULL behaviour) | SKILL.md Phase 0 table; `harness.md` (coverage, gates); `phases.md` | `plan-template.md` |
 | **Correction** (guidance was wrong or outdated) | every place the wrong statement appears (grep for it - code snippets, checklists, quick references) | |
 | **DESIGN.md handling** | `design-md.md`; SKILL.md "Order of authority" only if precedence changes | `plan-template.md` §2 |
@@ -51,7 +51,7 @@ When in doubt whether a file is affected, grep for the category prefix (e.g. `FR
 
 - **SKILL.md stays short** (aim ≤ ~100 lines): scope modes, authority order, phases table, router, non-negotiables, final report. All detail goes in `references/`. Add only a router row or a one-line non-negotiable there.
 - **Strict rule enforceability**: Every new rule must be deterministic, falsifiable, and auditable against concrete code constructs. Avoid subjective or vague rules. If a rule cannot be audited with clear `PASS` vs `VIOLATION` criteria in static code review, refine it until it can.
-- **Gate & coverage integrity**: Never loosen Gate G1–G5 conditions or allow lumped/blanket exemptions. Every rule added to `rule-catalog.md` automatically becomes a mandatory item in `04-coverage.md` for FULL audits.
+- **Gate & coverage integrity**: Never loosen Gate G1–G5 conditions or allow lumped/blanket exemptions. Every rule added to `rule-catalog.md` automatically becomes a generated, mandatory row in `04-coverage/` (the script reads the catalog). Never hard-code rule counts or ranges in docs: say "every catalog rule"; the script prints the real numbers. A new category must be added to the section map at the top of `scripts/verify_ledger.mjs`, or its rules fall out of the ledger.
 - **New reference files**: start with the "Defaults only" note (DESIGN.md wins), add a Contents list if over ~100 lines, split if over ~300 lines. Name by topic in kebab-case. Link them from SKILL.md's router and from related guides.
 - **Rule IDs are permanent**: append new IDs; never renumber or reuse. To remove a rule, keep the line and mark it `(retired - reason)`. Findings in old ledgers must still resolve.
 - **Every rule** has: a short statement of the problem, how to detect it (code signal), and the fix - the fix lives in the guide, the one-liner in the catalog.
@@ -75,7 +75,11 @@ grep -oh '^- [A-Z0-9]*-[0-9][0-9]' $D/references/rule-catalog.md | sort | uniq -
 for id in $(grep -oh '\b[A-Z0-9]\{2,5\}-[0-9][0-9]\b' $D/references/*.md | sort -u); do grep -q -- "- $id " $D/references/rule-catalog.md || echo "UNKNOWN ID: $id"; done
 # 4. Sizes
 wc -l $D/SKILL.md $D/references/*.md
-# 5. Stale terms from the change (old names, removed files)
+# 5. Script still works on a fixture: init, fill, check g1 passes; a fake quote, an omitted row, a false N/A and rubber-stamping each fail
+node $D/scripts/verify_ledger.mjs init <fixture-surface> && node $D/scripts/verify_ledger.mjs check <fixture-surface> --gate g1
+# 6. Counts and versions: catalog rule count equals the README badge and summary; README version badge equals the newest CHANGELOG heading
+grep -c '^- [A-Z0-9]*-[0-9][0-9]' $D/references/rule-catalog.md; grep -n 'rules-[0-9]*%20\|version-[0-9.]*-' $D/README.md
+# 7. Stale terms from the change (old names, removed files)
 grep -rn "<old term>" $D
 ```
 Expected false positives: "MISSING" for ledger file names (`00-scope.md` … `06-verify.md`) and project file names (`design-system.md`, `style-guide.md`); "UNKNOWN ID" for examples like `F-001` or `DM-1`. Anything else is a real problem.

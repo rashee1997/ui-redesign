@@ -1,5 +1,18 @@
 # Changelog
 
+## 7.0.0 (2026-10-14): Script-verified gates, one tweakable concept, platform rules
+- Added:
+  - `scripts/verify_ledger.mjs` (`init`, `check --gate g1|g2|g5`): generates `04-coverage/` with every catalog rule in order; re-opens the source to verify `PASS path:line "quote"`, rejects false `N/A grep:/regex/`, mismatched finding/rule links, omitted or reordered rules, rubber-stamping (>4 rules on one `path:line`), unquoted or misplaced finding evidence, concept colour literals outside the token ledger, untraced `data-trace` blocks, non-verbatim `data-copy` strings, "fixed" findings whose old evidence is still present, and unknown commit SHAs. Prints a random spot-check list for an independent verifier. Tested on a fixture: baseline passes; fake quote, wrong line, omitted row, TODO, false N/A, wrong rule and rubber-stamp each fail.
+  - `references/platform-quality.md`: detect/fix text for PERF, I18N, THM (previously no guide) and six new rules: STA-12 permission-denial dead end, ERR-11 429/`Retry-After`, FRM-25 `:user-invalid`, A11Y-21 forced-colors, MOT-15 View Transitions + reduced motion, PERF-08 LCP image. Catalog 316 → 322 rules.
+  - Independent verifier mandatory at G1 and G5 (harness §6); red flags against unscripted "checked every rule" claims, line reuse, and second concepts.
+- Changed:
+  - Concepts: three prototypes → one, tweaked in place (`interactive-prototypes.md` rewritten, 265 → ~110 lines); directions compared as three one-line text options in `PLAN.md` §6; Revision log; G3 approves a specific revision (`Approved rev N`); `data-trace` / `data-copy` attributes make fidelity machine-checkable.
+  - Gates G1, G2, G3, G5 now require the script's PASS line (`harness.md`, `SKILL.md`, `phases.md`, `plan-template.md`, `static-audit.md`, `README.md`).
+  - Debloat: hard-coded rule counts and ID ranges removed from docs (the script reads the catalog); `phases.md` §6 duplicate rule list replaced by 8 principles (115 → 95 lines); coverage-related red-flag rows consolidated.
+  - Fixes: `updating-skill.md` stale `04-coverage.md` text; README version badge (4.3.2 → 7.0.0); `updating-skill.md` verification adds script fixture, count and badge checks.
+- Reason: user asked for research-backed fixes to the skill's flaws: the AI could claim it followed every rule without proof, three concepts were bloat, and some guidance was stale.
+- Sources: NN/g "Parallel & Iterative Design + Competitive Testing" (Fessenden 2024; parallel ideas stay cheap, the merged design is iterated; iteration alone risks local maxima); MDN `:user-invalid`, `forced-colors`, `startViewTransition`, `prefers-reduced-motion`; web.dev LCP, Fetch Priority, same-document view transitions Baseline (2025-10-14). All read 2026-10-14.
+
 ## 6.0.1 (2026-10-14): README stale rule counts
 - Changed: `README.md` badge, intro, G1 gate row, catalog summary heading, file-map entry: 312 → 316 rules, 26 → 27 categories; Layout & Hierarchy summary row gains `FLW` and the flow-table check.
 - Reason: 6.0.0 updated every other count site but missed README (Correction cascade: fix every place the wrong statement appears); filed as PATCH because 6.0.0 was already tagged and packaged.

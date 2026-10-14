@@ -4,10 +4,10 @@
 # UI Redesign
 
 <p>
-    <a href="./README.md"><img src="https://img.shields.io/badge/version-4.3.2-indigo.svg" alt="Version 4.3.2" /></a>
+    <a href="./README.md"><img src="https://img.shields.io/badge/version-7.0.0-indigo.svg" alt="Version 7.0.0" /></a>
     <a href="#usage"><img src="https://img.shields.io/badge/install-npx%20skills%20add-171717.svg" alt="Install with npx skills add" /></a>
     <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
-    <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-316%20cataloged-emerald.svg" alt="316 Rules" /></a>
+    <a href="./references/rule-catalog.md"><img src="https://img.shields.io/badge/rules-322%20cataloged-emerald.svg" alt="322 Rules" /></a>
     <a href="./phases.md"><img src="https://img.shields.io/badge/gates-G0..G5-purple.svg" alt="Gates G0..G5" /></a>
     <a href="./references/accessibility.md"><img src="https://img.shields.io/badge/WCAG-2.2%20AA-sky.svg" alt="WCAG 2.2 AA" /></a>
     <a href="./references/taste-engineering.md"><img src="https://img.shields.io/badge/taste-Three%20Dials-amber.svg" alt="Three Dials" /></a>
@@ -20,10 +20,10 @@ A skill for auditing, decluttering, and redesigning frontend user interfaces. En
 
 1. **Reads Project Specifications**: Extracts semantic tokens and conventions from the repository's `DESIGN.md`.
 2. **Discovers Archetype & Domain**: Classifies the product (B2B SaaS, internal operations cockpit, high-density workbench) and conducts mandatory external research (`search_web`, docs) to identify market standards before designing.
-3. **Audits File-by-File**: Evaluates every component against 316 concrete rules across 27 categories, documented in decomposed section reports in `04-coverage/`.
+3. **Audits File-by-File**: Evaluates every component against 322 concrete rules across 27 categories. `scripts/verify_ledger.mjs` generates the coverage ledger and re-checks every `PASS` quote, `N/A` claim and finding against the real source files, so a hallucinated or rubber-stamped audit fails.
 4. **Calibrates Aesthetics**: Sets density, motion, and layout variance using the Three Dials framework.
 5. **Declutters Before Restructure**: Runs a Keep/Remove/Merge/Demote/Defer/Move pass on all visible elements.
-6. **Shows 3 Interactive Concepts Before Approval**: Builds three clickable HTML prototypes (high-density, balanced SaaS, contextual fluid) with working dialogs, toasts, and mobile/tablet/desktop emulation in `.ui-audit/<slug>/concepts/`: the user opens `concepts/index.html` and picks a direction before any production code is touched.
+6. **Builds One Interactive Concept, Tweaked With You**: Picks the best direction from the archetype and research (three one-line directions are compared in text), builds a single clickable HTML prototype with working dialogs, toasts, dark mode and phone/tablet/desktop views, then edits that same concept and the plan in place for every tweak you ask for, logging each in a Revision log. Nothing is built in code until you approve a specific revision.
 7. **Verifies Every Step**: Enforces a 6-gate ledger in `.ui-audit/<slug>/` where code edits require user approval and verified test output.
 
 ## See It Work
@@ -68,13 +68,13 @@ All audit work is recorded in `.ui-audit/<surface-slug>/`. A phase cannot begin 
 | Phase            | Output File                                                           | Gate Requirement                                                                                                         |
 | ---------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | **0. Scope**     | `00-scope.md`                                                         | Gate G0: Verbatim user request and mode (FULL or FOCUSED) recorded.                                                      |
-| **1. Research**  | `01-design.md`, `02-inventory.md`, `03-findings.md`, `04-coverage/`  | Gate G1: 100% of surface files read in full; archetype & external domain research documented; all 316 rules accounted for in 04-coverage/. |
-| **2. Plan**      | `PLAN.md`, `concepts/`                                                | Gate G2: Declutter decisions, wireframes, 3 interactive HTML concepts, and all findings assigned to slices.              |
-| **3. Approval**  | `PLAN.md` (§ Approval)                                                | Gate G3: Explicit user approval with chosen concept (A, B, C, or blend) in conversation. No code edits before this gate. |
+| **1. Research**  | `01-design.md`, `02-inventory.md`, `03-findings.md`, `04-coverage/`  | Gate G1: 100% of surface files read in full; archetype & external domain research documented; the G1 script passes (every rule row, every quote found in the source). |
+| **2. Plan**      | `PLAN.md`, `concepts/`                                                | Gate G2: the G2 script passes (one concept, no unlisted colours, verbatim copy, traced blocks), flow tables, all findings assigned to slices.              |
+| **3. Approval**  | `PLAN.md` (§ Approval)                                                | Gate G3: Explicit user approval of a specific concept revision (`Approved rev N`). No code edits before this gate. |
 | **4. Implement** | `05-progress.md`, `03-findings.md`                                    | Gate G4: Slice-by-slice implementation with verified test outputs and commit hashes.                                     |
-| **5. Verify**    | `06-verify.md`                                                        | Gate G5: Zero open findings, typecheck clean, tests pass.                                                                |
+| **5. Verify**    | `06-verify.md`                                                        | Gate G5: the G5 script passes (zero open, fixed findings verified in source, commit SHAs real), typecheck clean, tests pass.                                                                |
 
-## Rule Catalog Summary (316 Rules · 27 Categories)
+## Rule Catalog Summary (322 Rules · 27 Categories)
 
 Rules are detailed with pass/fail criteria and grep recipes in [`references/rule-catalog.md`](./references/rule-catalog.md):
 
@@ -100,11 +100,12 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 │   └── showcase/                     # Animated slop-to-fixed demo GIF
 ├── references/
 │   ├── taste-engineering.md          # Three Dials, brief inference, GSAP motion patterns
-│   ├── rule-catalog.md               # 316 auditable rule IDs with exact failure conditions
+│   ├── rule-catalog.md               # 322 auditable rule IDs with exact failure conditions
 │   ├── harness.md                    # Ledger protocol, gate criteria G0-G5, proof rules
 │   ├── static-audit.md               # File-by-file audit questions and grep candidate finders
 │   ├── plan-template.md              # PLAN.md template with declutter tables and wireframes
-│   ├── interactive-prototypes.md     # 3 HTML layout concepts, switcher shell, interactive dialogs
+│   ├── interactive-prototypes.md     # One concept, direction choice, fidelity rules, tweak loop
+│   ├── platform-quality.md           # PERF, I18N, THM guide and newer platform rules (forced-colors, :user-invalid, View Transitions, LCP, 403, 429)
 │   ├── phases.md                     # Step-by-step instructions for Phases 0 through 5
 │   ├── craft.md                      # Anti-slop rules, cognitive load laws, and tactile craft
 │   ├── hierarchy-declutter.md        # Focal hierarchy, whitespace pacing, and layout rhythm
@@ -124,6 +125,7 @@ Rules are detailed with pass/fail criteria and grep recipes in [`references/rule
 │   ├── pagination.md                 # Pagination contracts, URL state, cursor mechanics
 │   └── updating-skill.md             # Self-maintenance guidelines and verification tests
 └── scripts/
+    ├── verify_ledger.mjs             # Gate checker: init + check G1/G2/G5 against the real source
     ├── scan_patterns.mjs             # Candidate discovery scanner
     └── ui_audit.mjs                  # Playwright runtime audit engine
 ```

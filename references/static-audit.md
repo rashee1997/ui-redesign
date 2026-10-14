@@ -18,7 +18,7 @@ The audit is done by **reading code**, file by file, against the rule catalog. G
 4. Run grep recipes (§5) to catch anything the reading missed; open every hit.
 5. Optional: run the scripts for runtime evidence (§6).
 6. Falsify pass (harness.md §3).
-7. Build `04-coverage/` section reports (FULL mode): walk **every rule ID in `rule-catalog.md` in strict sequential order from LAY-01 through AI-06 (including FLW-01..04)**, recording sections `01-layout-hierarchy.md` through `05-craft-copy.md` with `00-summary.md` rollup. Record each rule as `VIOLATION` (with `F-xxx`), `PASS` (with concrete code proof `file:line`), or justified `N/A`. Verify Gate G1 before moving to plan.
+7. Build the coverage ledger (FULL; FOCUSED with `--categories`): `verify_ledger.mjs init`, fill every row with a `PASS path:line "quote"`, `VIOLATION F-xxx` or `N/A grep:/regex/ reason`, run `check --gate g1` until PASS, then give the spot-check list to the independent verifier (harness.md §4, §6).
 ## 2. Tracing the surface
 
 Start at the route entry (`page.tsx`, `route.tsx`, `index.vue`, `+page.svelte`…), plus its `layout`, `loading`, `error`, `not-found` siblings. Then follow, recursively:
@@ -322,6 +322,7 @@ If the project has lint rules for these (eslint-plugin-react-hooks, jsx-a11y), r
 
 The bundled scripts are optional helpers, never the audit itself:
 - `scripts/scan_patterns.mjs` - a quick candidate list (spinners, unbounded queries, missing pending states, variant counts). Treat like grep.
+- `scripts/verify_ledger.mjs` - the gate checker (not a candidate finder): `init`, `check --gate g1|g2|g5`. It re-opens the source files and fails on any claim it cannot find; its PASS line is the only accepted gate evidence.
 - `scripts/ui_audit.mjs` - needs the app running. Use it for **runtime evidence**: horizontal overflow and wrapped labels at many widths, layout shift, console/network errors, what loading looks like, pending buttons. Use its output to confirm or add findings and in Phase 5 for before/after numbers.
 
 If the app can't run, say so and rely on the static audit; never skip findings because the script couldn't confirm them.

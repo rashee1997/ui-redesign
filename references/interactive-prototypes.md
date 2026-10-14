@@ -1,265 +1,105 @@
-# Interactive Layout Concepts & HTML Prototypes
+# Interactive concept (one prototype, tweaked in place)
 
-Before writing production code or locking in the redesign plan at Gate G3, the agent builds **three distinct, interactive HTML layout concepts** inside `.ui-audit/<surface-slug>/concepts/`. The user opens `concepts/index.html` in their browser to test responsive behavior, trigger dialogs, fire alerts, and select their preferred direction.
+Defaults only: DESIGN.md wins. Before the plan is approved the agent builds **one** interactive HTML concept in `.ui-audit/<surface>/concepts/` - the direction it judges best for this archetype and audience - and the user tweaks it until they approve. The user opens `concepts/index.html`, tests responsive widths, dialogs, toasts and themes, and says what to change.
 
----
+## Contents
+1. Why one concept
+2. Choosing the direction
+3. Files and shell
+4. Fidelity rules (anti-hallucination)
+5. Required behaviours
+6. The tweak loop
+7. G2/G3 and the script check
 
-## 1. Directory Structure & Sizing Heuristic
+## 1. Why one concept
 
-To prevent agent token limits, output truncation, and messy code, choose the file architecture based on the surface complexity:
+Three finished prototypes triple the tokens spent, the code to keep faithful and the review burden, and users end up comparing polish instead of structure. NN/g's research (Fessenden 2024, after Nielsen) finds parallel design pays off when the alternatives are **cheap and rough**, then the best parts are merged and iterated; and that iteration alone gains about 22-38% usability per round but can climb to a local maximum. So this skill splits the two:
 
-```
-.ui-audit/<surface-slug>/concepts/
-├── index.html                        # Switcher shell & responsive viewport emulator
-│
-│   ── Compact Surface (< 400 lines total markup/styles) ──
-├── concept-a.html                    # Self-contained Concept A (HTML + CSS + JS)
-├── concept-b.html                    # Self-contained Concept B
-├── concept-c.html                    # Self-contained Concept C
-│
-│   ── Complex / Large Surface (>= 400 lines or multi-dialog/complex data) ──
-├── concept-a/
-│   ├── index.html                    # Semantic HTML markup and domain data
-│   ├── styles.css                    # DESIGN.md tokens and component styling
-│   └── app.js                        # Working dialogs, alerts, and interactions
-├── concept-b/
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
-└── concept-c/
-    ├── index.html
-    ├── styles.css
-    └── app.js
-```
+- **Divergence stays cheap and textual**: three one-line directions with a phone/desktop ASCII wireframe each in `PLAN.md` §6 (no code).
+- **Convergence is built once**: one interactive concept, refined by iteration. Merging an idea from a rejected direction is allowed on request.
 
-### Heuristic
-- **Single-File Mode (`concept-{x}.html`)**: Used when the audited surface has ≤ 2 dialogs, simple lists, or compact forms. The entire concept lives in one clean file with embedded `<style>` and `<script>`.
-- **Modular Multi-File Mode (`concept-{x}/`)**: Mandatory when the surface includes complex data grids, multiple modal workflows, side drawers, rich filter bars, or exceeds 400 lines. Splitting ensures crisp, non-truncated code generation.
+## 2. Choosing the direction
 
----
+1. Read the archetype, audience and domain research in `01-design.md`, then set the Three Dials (`taste-engineering.md`) from them, not from taste.
+2. Write the three candidate directions in `PLAN.md` §6 using the table below as the vocabulary; mark one **Chosen direction** and give the one-sentence reason tied to the audience (scan frequency, density tolerance, time pressure).
+3. Build only the chosen one.
 
-## 2. The Three Distinct Mental Models
-
-Never generate superficial re-skins (e.g. three identical card grids with different colors). The three concepts must explore fundamentally different layout architectures, anchored in the Three Dials framework (`references/taste-engineering.md`):
-
-| Concept | Architectural Mental Model | Three Dials Calibration | Typical Layout Patterns |
+| Direction | Mental model | Dials | Fits |
 |---|---|---|---|
-| **Concept A** | **Structured & High-Density**<br>Precision data cockpit | `VARIANCE` 2-3<br>`MOTION` 2-3<br>`DENSITY` 8-9 | Strict 12-column grid, compact table rows with tabular numerals, sticky opaque headers, inline table actions, minimal whitespace, keyboard shortcuts visible. |
-| **Concept B** | **Modern SaaS & Progressive**<br>Balanced, guided workflow | `VARIANCE` 5-6<br>`MOTION` 4-5<br>`DENSITY` 4-5 | Clear visual hierarchy, grouped card surfaces, sticky bottom action bar, slide-out drawer sheets for secondary details, standard modal dialogs, airy padding. |
-| **Concept C** | **Contextual & Fluid**<br>Master-detail / Canvas | `VARIANCE` 7-8<br>`MOTION` 3-4<br>`DENSITY` 5-6 | Split-pane / two-column layout, sticky contextual inspector sidebar, command palette trigger, progressive disclosure accordions, quick preview flyouts. |
+| Structured | Precision data cockpit: 12-col grid, compact rows, `tabular-nums`, sticky opaque headers, inline actions | VARIANCE 2-3, MOTION 2-3, DENSITY 8-9 | compliance, operations, high-frequency scanning |
+| Balanced | Guided workflow: clear hierarchy, grouped surfaces, sticky action bar, drawers for detail | VARIANCE 5-6, MOTION 4-5, DENSITY 4-5 | B2B SaaS, mixed expert and occasional users |
+| Contextual | Master-detail: split pane, inspector, palette trigger, progressive disclosure | VARIANCE 7-8, MOTION 3-4, DENSITY 5-6 | exploratory or research-heavy work |
 
----
+A re-skin of the same layout is not a direction. If the user says "show me another direction", build it as a second revision, never alongside.
 
-## 3. Production Token Fidelity & Anti-Hallucination Rules
+## 3. Files and shell
 
-Every concept must look like the real application, not a generic template:
-
-1. **Token ledger first (no invented colors):**
-   Build the ledger in `PLAN.md` §2 before writing any concept CSS: every token name from `DESIGN.md` mapped to its exact code name and literal value (`var(--background)` → `#ffffff`, `bg-accent`, `rounded-lg`, font stack). Copy values character-for-character from `tokens.css` / `globals.css` / `@theme` / `tailwind.config.*`, never from memory. Map both light (`:root`) and dark (`.dark`, `[data-theme="dark"]`) sets, and use only ledger entries (CSS vars, Tailwind classes, primitives) in concepts and in the switcher shell. Banned in `concepts/`: any hex / `rgb()` / `oklch()` / `from-purple` / `bg-gradient` / glow / arbitrary `-[...]` value absent from the ledger. The shell chrome placeholder values in §5 must be replaced with ledger tokens before showing the user:
-   ```css
-   :root {
-     --background: #ffffff;
-     --foreground: #09090b;
-     --card: #f4f4f5;
-     --border: #e4e4e7;
-   }
-   .dark, [data-theme="dark"] {
-     --background: #09090b;
-     --foreground: #f4f4f5;
-     --card: #121215;
-     --border: #27272a;
-   }
-   ```
-2. **Zero Arbitrary Palette Drift**: Never inject unvetted purples, neon glows, or random hex values unless that exact value sits in the ledger with its DESIGN.md section citation.
-3. **Inventory-traced structure (no invented UI)**: Every concept block, dialog, action, field, and status must trace to one `02-inventory.md` row (`file:line`). No invented routes, tabs, fields, filters, roles, or workflows. Same primary action label and placement logic as `PLAN.md` §4; same dialog container type and widths as the wireframes. Record the trace in the fidelity table (§7): concept block → inventory `file:line` → finding ID (or "existing, kept").
-4. **Realistic Domain Data from the codebase**: Zero "Lorem Ipsum", "User 1", "Test Item", or "Acme Ltd" filler unless that literal exists in the codebase. Entity names, field names, status enums, timestamps, amounts, and counts must come from the traced files, API samples, or fixtures. Status badges use only statuses the code emits, with the code's casing and colors.
-5. **Verbatim feedback copy (no hallucinated toasts/errors)**: Every toast, alert banner, inline error, empty state, and validation message in concepts must be copied verbatim from the codebase (grep `toast.`, `<Alert`, `error.tsx`, Zod messages) or from the approved `PLAN.md` §7 copy table. Banned prototype-only copy: invented error codes (`ERR_xxx`, `Reference: ...`), generic "Action completed successfully.", generic "Please resolve highlighted errors before submitting.", generic "Something went wrong". The simulation test bar (§4.5) fires only these verbatim strings.
-6. **Accessible Native Controls**: Use native `<button type="button">`, `<dialog>`, `<input>`, `<label>`, and semantic headings (`<h1>`..`<h3>`). Div-based fake buttons are banned.
-7. **Real Inline SVGs**: Use crisp inline SVGs (e.g. Lucide icons matching the app) with proper `size-4` / `size-5` dimensions. No emoji icons, no second icon set.
-
----
-
-## 4. Required Interactive Behaviors
-
-Prototypes must be physically testable in the browser without backend dependencies. Every concept must simulate:
-
-1. **Dialogs & Sheets**: Working `<dialog>` elements or drawer panels with backdrop click, close triggers (`[data-close]`), and Escape dismissal.
-2. **Form & Input Validations (`FRM-01`..`FRM-24`, `A11Y-18`)**: Real inputs with `required` and format checks. Blur and submit triggers set `aria-invalid="true"`, show inline error messages linked via `aria-describedby`, and clear errors on input (`input` listener).
-3. **Mutations & Loading (`MUT-01`..`MUT-13`)**: Mutation buttons show an inline spinner, disable during simulated async work (~600ms), and restore upon completion.
-4. **Alerts & Toasts (`NOT-01`..`NOT-05`, `ERR-01`..`ERR-10`)**: Persistent inline error alert banners (`role="alert"`) with title and recovery action; toast notifications that pause timeout on mouse hover/focus.
-5. **Simulation Test Bar**: A compact fixed top or bottom strip (`.prototype-test-bar`) with trigger buttons to let the user simulate states instantly (e.g. "Trigger Form Errors", "Show Error Banner", "Fire Error Toast").
-6. **Dark Mode & Themes (`THM-01`..`THM-04`)**: All concepts must support light and dark modes (and project theme variants). Toggling themes must flip CSS variables cleanly without broken contrast, unstyled flashes, or illegible text.
-
-### Unified Interaction Pattern
-
-A single minimal script wires up dialogs, toasts, mutation buttons, and validation:
-
-```javascript
-// Minimal interaction helper for HTML prototypes
-function setupPrototypeInteractions() {
-  // Dialogs & drawers
-  document.querySelectorAll('[data-dialog-target]').forEach(btn => {
-    const dialog = document.getElementById(btn.dataset.dialogTarget);
-    btn.onclick = () => dialog?.showModal?.() || dialog?.classList.remove('hidden');
-  });
-  document.querySelectorAll('[data-close]').forEach(btn => {
-    btn.onclick = () => btn.closest('dialog')?.close?.() || btn.closest('.modal')?.classList.add('hidden');
-  });
-
-  // Simulated mutation buttons
-  document.querySelectorAll('[data-mutation]').forEach(btn => {
-    btn.onclick = () => {
-      const orig = btn.innerHTML;
-      btn.disabled = true;
-      btn.setAttribute('aria-busy', 'true');
-      btn.innerHTML = '<span class="spinner"></span> Saving...';
-      setTimeout(() => {
-        btn.disabled = false;
-        btn.removeAttribute('aria-busy');
-        btn.innerHTML = orig;
-        showPrototypeToast('Action completed successfully.', 'success');
-      }, 600);
-    };
-  });
-
-  // Form validation simulation
-  document.querySelectorAll('form[data-validate]').forEach(form => {
-    form.onsubmit = (e) => {
-      e.preventDefault();
-      const invalid = form.querySelectorAll(':invalid, [aria-invalid="true"]');
-      if (invalid.length) {
-        showPrototypeAlert('Please resolve highlighted errors before submitting.');
-      } else {
-        showPrototypeToast('Form submitted successfully.', 'success');
-      }
-    };
-  });
-}
-
-function showPrototypeToast(msg, variant = 'default') {
-  const container = document.getElementById('toast-container') || document.body;
-  const t = document.createElement('div');
-  t.className = `toast toast-${variant}`;
-  t.setAttribute('role', 'alert');
-  t.innerHTML = `<span>${msg}</span><button type="button" data-close>&times;</button>`;
-  let timer = setTimeout(() => t.remove(), 8000);
-  t.onmouseenter = () => clearTimeout(timer);
-  t.onmouseleave = () => { timer = setTimeout(() => t.remove(), 4000); };
-  t.querySelector('[data-close]').onclick = () => t.remove();
-  container.appendChild(t);
-}
-
-function showPrototypeAlert(msg, title = 'Validation Error') {
-  const container = document.getElementById('alert-banner-container');
-  if (!container) return;
-  container.innerHTML = `<div class="alert alert-destructive" role="alert"><strong>${title}:</strong> ${msg}</div>`;
-}
+```
+.ui-audit/<surface>/concepts/
+├── index.html     # the concept itself (+ viewport/theme bar)
+├── styles.css     # optional, ledger tokens only
+└── app.js         # optional, only when index.html would pass ~400 lines
 ```
 
----
-
-## 5. Switcher Shell Template (`concepts/index.html`)
-
-The switcher shell hosts all three concepts in an iframe, allowing instant keyboard cycling (`1`, `2`, `3`) and responsive viewport emulation (Mobile 375px, Tablet 768px, Desktop 1280px). Shell chrome below uses placeholder dark values: replace them with the project's DESIGN.md tokens before showing the user (same zero-drift rule as §3):
+Keep exactly one concept; the script fails G2 on `concept-b*`. The viewer bar is the only chrome: viewport (375 / 768 / full) and theme toggle, styled **only** with ledger variables (no literal colours, no fallbacks):
 
 ```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UI Redesign Concepts Viewer</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; background: var(--background, #09090b); color: var(--foreground, #f4f4f5); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-    header { background: var(--card, #121215); border-bottom: 1px solid var(--border, #27272a); padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
-    .segmented { display: inline-flex; background: #18181b; border: 1px solid #27272a; border-radius: 0.5rem; padding: 2px; gap: 2px; }
-    .segmented button { background: transparent; border: none; color: #a1a1aa; padding: 0.4rem 0.85rem; border-radius: 0.35rem; font-size: 0.85rem; cursor: pointer; }
-    .segmented button.active { background: #27272a; color: #fff; font-weight: 600; }
-    .viewport { flex: 1; display: flex; justify-content: center; align-items: center; padding: 1rem; background: #050507; }
-    iframe { border: 1px solid #27272a; border-radius: 0.5rem; background: #fff; height: 100%; transition: width 0.2s ease; }
-    iframe.desktop { width: 100%; max-width: 1440px; }
-    iframe.tablet { width: 768px; }
-    iframe.mobile { width: 375px; }
-  </style>
-</head>
-<body>
-  <header>
-    <div><strong>UI Redesign: Concepts</strong> <span style="color:#71717a;font-size:0.8rem;margin-left:0.5rem;">Keys 1, 2, 3 · T (Theme)</span></div>
-    <div class="segmented" id="concept-tabs">
-      <button class="active" data-c="concept-a">Concept A: Structured</button>
-      <button data-c="concept-b">Concept B: Balanced</button>
-      <button data-c="concept-c">Concept C: Contextual</button>
-    </div>
-    <div class="segmented" id="vp-tabs">
-      <button data-vp="mobile">Mobile (375px)</button>
-      <button data-vp="tablet">Tablet (768px)</button>
-      <button class="active" data-vp="desktop">Desktop</button>
-    </div>
-    <div class="segmented" id="theme-tabs">
-      <button class="active" data-th="dark">Dark</button>
-      <button data-th="light">Light</button>
-    </div>
-  </header>
-  <div class="viewport"><iframe id="preview" class="desktop" src="concept-a/index.html"></iframe></div>
-  <script>
-    const iframe = document.getElementById('preview');
-    const SINGLE_FILE = false; // set true if using concept-a.html single-file mode
-    function setConcept(name) {
-      document.querySelectorAll('#concept-tabs button').forEach(b => b.classList.toggle('active', b.dataset.c === name));
-      iframe.src = SINGLE_FILE ? `${name}.html` : `${name}/index.html`;
-    }
-    function setVp(vp) {
-      document.querySelectorAll('#vp-tabs button').forEach(b => b.classList.toggle('active', b.dataset.vp === vp));
-      iframe.className = vp;
-    }
-    function setTheme(th) {
-      document.querySelectorAll('#theme-tabs button').forEach(b => b.classList.toggle('active', b.dataset.th === th));
-      document.documentElement.className = th;
-      try { iframe.contentDocument.documentElement.className = th; } catch (e) {}
-    }
-    document.querySelectorAll('#concept-tabs button').forEach(b => b.onclick = () => setConcept(b.dataset.c));
-    document.querySelectorAll('#vp-tabs button').forEach(b => b.onclick = () => setVp(b.dataset.vp));
-    document.querySelectorAll('#theme-tabs button').forEach(b => b.onclick = () => setTheme(b.dataset.th));
-    window.onkeydown = (e) => {
-      if (['1','2','3'].includes(e.key)) setConcept(`concept-${['a','b','c'][e.key - 1]}`);
-      if (e.key === 't' || e.key === 'T') {
-        const cur = document.querySelector('#theme-tabs button.active')?.dataset.th;
-        setTheme(cur === 'dark' ? 'light' : 'dark');
-      }
-    };
-  </script>
-</body>
-</html>
+<header class="viewer-bar" data-trace="<inventory file:line of the page header>">
+  <div role="group" aria-label="Viewport"><button type="button" data-vp="375">Phone</button><button type="button" data-vp="768">Tablet</button><button type="button" data-vp="">Desktop</button></div>
+  <button type="button" data-theme-toggle>Theme</button>
+</header>
+<main id="stage"><iframe id="frame" src="surface.html" title="Concept"></iframe></main>
+<script>
+  const frame = document.getElementById('frame');
+  document.querySelectorAll('[data-vp]').forEach(b => b.onclick = () => { frame.style.width = b.dataset.vp ? b.dataset.vp + 'px' : '100%'; });
+  document.querySelector('[data-theme-toggle]').onclick = () => {
+    const next = document.documentElement.classList.toggle('dark');
+    try { frame.contentDocument.documentElement.classList.toggle('dark', next); } catch (e) {}
+  };
+</script>
 ```
 
----
+For a compact surface, inline the concept in `index.html` instead of an iframe.
 
-## 6. Gate Criteria & Workflow Integration
+## 4. Fidelity rules (anti-hallucination)
 
-1. **Phase 2 (Plan)**: In addition to drafting `PLAN.md`, the agent builds the three concepts in `.ui-audit/<surface-slug>/concepts/`.
-2. **Gate G2 Requirement**: `PLAN.md` exists, findings mapped, token ledger (§2) and fidelity table (§7) filled, and all 3 interactive concepts exist, verified free of console syntax errors, and linkable from `PLAN.md`. G2 **fails** on any hallucination: a hex / `rgb()` / `oklch()` / gradient / arbitrary value in `concepts/` absent from the ledger; a toast / alert / error / empty-state string not verbatim from the codebase or `PLAN.md` §7; a concept block, dialog, field, or status with no `02-inventory.md` `file:line` trace; "Lorem Ipsum" / "User 1" / "Test Item" filler; or shell chrome still on placeholder tokens.
-3. **Phase 3 (Approval)**: The agent outputs the local link to `.ui-audit/<surface-slug>/concepts/index.html`. The user opens the file, tests interactions, and selects their choice.
-4. **Gate G3 Requirement**: User's approved choice (e.g. "Approved Concept B" or "Concept A with Concept B dialog") is quoted in `PLAN.md` before Phase 4 begins.
+The script `scripts/verify_ledger.mjs check <surface> --gate g2` enforces the starred rules.
 
----
+1. **\* Token ledger first.** In `PLAN.md` §2 map every DESIGN.md token to its code name and literal value, light and dark, copied from `tokens.css` / `globals.css` / `@theme`, never from memory. Concepts may use only ledger entries. Every hex / `rgb()` / `hsl()` / `oklch()` literal in `concepts/` must appear in `PLAN.md`; gradients, glows and arbitrary `-[...]` values are banned.
+2. **\* Inventory-traced structure.** Every block, dialog, action, field and status carries `data-trace="path:line"` naming a `02-inventory.md` file. No invented routes, tabs, fields, filters, roles or workflows.
+3. **\* Verbatim feedback copy.** Every toast, alert, inline error, empty state and validation string is an element with `data-copy="path:line"` whose text appears within 5 lines of that source line (or a row of the `PLAN.md` §7 copy table: use `data-copy="PLAN.md:<line>"`). Invented error codes, "Action completed successfully." and "Something went wrong" are banned.
+4. **\* Realistic data.** Entity names, statuses, amounts and counts come from the codebase or fixtures; "Lorem ipsum", "User 1", "Test Item" and "Acme" fail G2 unless the literal exists in the repo and is named in `PLAN.md`.
+5. **Native, accessible controls.** `<button type="button">`, `<dialog>`, `<label>`, real headings; inline SVG icons from the app's icon set; no emoji icons.
+6. **Dual theme.** Define light (`:root`) and dark (`.dark`, `[data-theme="dark"]`) variables from the ledger; the toggle must flip without contrast loss (THM-01..04).
 
-## 7. Concept Fidelity Verification Protocol (run before asking for approval)
+## 5. Required behaviours
 
-Do these checks in order; fix and re-run until all pass. Paste the result into `PLAN.md` §6:
+Physically testable with no backend:
 
-1. **Ledger completeness**: every color, font, radius, and spacing value used in `concepts/` appears in the `PLAN.md` §2 token ledger with its DESIGN.md section and code name. No value from memory.
-2. **Hex hunt**: list every hex / `rgb()` / `oklch()` literal in `concepts/` and show its ledger row. An unlisted literal is a violation, not a style choice.
-3. **Structure trace**: every concept block, dialog, action, and field cites its `02-inventory.md` `file:line`. An untraced block is removed, not kept as "exploration".
-4. **Copy trace**: every toast / alert / inline error / empty-state string cites its source `file:line` or `PLAN.md` §7 row. The error-toast demo fires the codebase's real error (e.g. the real 422/500 text), never an invented code.
-5. **Shell check**: `concepts/index.html` chrome uses ledger tokens only; no placeholder `#09090b` / `#27272a` / `#a1a1aa` unless those exact values are in the ledger.
-6. **Data sanity**: entity names, statuses, amounts, and counts are plausible against the inventory and pagination totals. No "Acme Ltd $1,200" style filler.
+- Dialogs and sheets open and close (backdrop, `[data-close]`, Esc) and trap focus.
+- Forms: blur and submit set `aria-invalid`, show the verbatim inline error via `aria-describedby`, clear on input; submit with errors moves focus to the first error (FRM-03/04).
+- Mutation buttons show a round spinner, disable and keep size for ~600 ms (MUT-01, LDG-05..07).
+- Toasts pause on hover and focus; critical errors persist as `role="alert"` banners with a recovery action (NOT-01/02).
+- A fixed `.prototype-test-bar` with buttons that fire each state (form errors, error banner, empty, loading skeleton, permission denied) using only the verbatim strings from §4.3.
+- The flow tables in `PLAN.md` §4b are walkable: no step advances on invalid input and each failure lands where the table says (FLW-01..04).
 
-Fidelity table (one row per concept block, in `PLAN.md` §6):
+Keep helpers small; one `showToast(src)` that reads its text from a `data-copy` element is enough.
 
-```markdown
-| Concept block | Inventory source (file:line) | Tokens used (ledger names) | Feedback copy source (file:line or §7 row) |
-|---|---|---|---|
-| Invoices table row | components/invoices/table.tsx:42 | bg-card, border, text-sm, tabular-nums | - |
-| Save-failure toast | components/invoices/form.tsx:118 | bg-destructive, text-destructive-foreground | form.tsx:118 verbatim |
-```
+## 6. The tweak loop
+
+Each user message about the concept is one revision:
+
+1. Quote the user's words in a new row of `PLAN.md` **Revision log** (`Rev N | user words | what changed | files`).
+2. Classify the change: visual, copy, structure or flow. Edit the concept **in place**; never fork a second concept.
+3. Update every `PLAN.md` section the change touches (declutter table, flow table, wireframes, copy table, slices, ledger) in the same turn so the plan and the prototype never disagree.
+4. A change that adds an element, string or token must first add its source (inventory row, `PLAN.md` §7 row, ledger row), then the markup.
+5. Re-run `node <skill>/scripts/verify_ledger.mjs check <surface> --gate g2`; paste its output. Fix failures before showing the revision.
+6. Reply with a 3-line summary: what changed, what was untouched, what to look at. Do not re-explain the whole plan.
+
+If a requested tweak breaks a catalog rule or DESIGN.md, build it, log the conflict in the revision row and name the rule; the user decides.
+
+## 7. G2/G3 and the script check
+
+- **G2**: `PLAN.md` complete, the one concept exists, and `verify_ledger.mjs check --gate g2` prints PASS (no unlisted colour literal, every `data-trace` in the inventory, every `data-copy` verbatim, no filler, one concept only, flow section present, Revision log present).
+- **G3**: the user approves a specific revision; quote their words and write `Approved rev N` under `PLAN.md` Approval. Any later tweak after approval reopens the loop.
+- Sources: NN/g "Parallel & Iterative Design + Competitive Testing = High Usability" (Fessenden, 2024-12-03; read 2026-10-14).

@@ -10,7 +10,7 @@ Redesign or fix an existing UI so it is decluttered, clear, consistent, fully re
 
 **Updating the skill itself?** If the user asks to change this skill (add rules for issues found, new features or categories, fix guidance), don't redesign anything: follow `references/updating-skill.md` and skip everything below.
 
-**This skill is enforced by a ledger and gates. Read `references/harness.md` before doing anything else.** Each phase writes a file; a phase may not start until the previous gate passes. Always load `antislop` skills (`antislop`, `antislop-ui`, `antislop-copywriting`, `antislop-human`, `antislop-layoutmobile`, `antislop-code`) if available; otherwise skip. Skipping a step or claiming one without its file entry counts as not doing it.
+**This skill is enforced by a ledger, gates and a script.** Read `references/harness.md` before doing anything else. Each phase writes a file; a phase may not start until the previous gate passes, and a gate counts only when `scripts/verify_ledger.mjs` prints PASS for it (it re-opens the source and rejects claims it cannot find). Always load the `antislop` skills (`antislop`, `antislop-ui`, `antislop-copywriting`, `antislop-human`, `antislop-layoutmobile`, `antislop-code`) if available; otherwise skip. A step without its file entry, or a gate without the script's output, counts as not done.
 
 ## Phase 0 - Scope (always first)
 
@@ -36,15 +36,15 @@ If it's truly unclear, ask one question; otherwise pick and state the mode in on
 
 | # | Phase | Do | Writes | Gate |
 |---|---|---|---|---|
-| 1 | Research | DESIGN.md, app archetype & mandatory external research → digest. Trace surface and **read every file in full**. Static audit against **all 316 catalog rules**. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage/` (FULL) | G1 |
-| 2 | Plan | Plan from template incl. **flow tables + friction line before wireframes** (every state-changing flow; Gate G2). 3 traced HTML concepts in `concepts/` (ledger tokens, verbatim copy) with switcher shell (dark mode & themes). Wireframes grounded in domain research. | `PLAN.md`, `concepts/` | G2 |
-| 3 | Approval | Short summary, ask Approve / Change / Reject. **No source edits before approval.** Silence is not approval. | `PLAN.md` § Approval | G3 |
+| 1 | Research | DESIGN.md, app archetype & external research → digest. Trace surface, **read every file in full**. Audit every catalog rule via the generated `04-coverage/` ledger. Falsify pass. | `01-design.md` `02-inventory.md` `03-findings.md` `04-coverage/` | G1 (script) |
+| 2 | Plan | Plan from template: **flow tables + friction line before wireframes**, three one-line directions in text, **one** traced interactive concept (ledger tokens, verbatim copy, dark mode). | `PLAN.md`, `concepts/` | G2 (script) |
+| 3 | Approval | Short summary, ask Approve / Change / Reject. **Change = tweak loop**: edit the one concept and plan in place, log it in the Revision log. **No source edits before approval** of a specific revision. | `PLAN.md` § Approval, Revision log | G3 |
 | 4 | Implement | Slice by slice. Tokens and shared primitives only. Only ledger findings get fixed; new ones go into the ledger first. | `05-progress.md`, statuses in `03-findings.md` | G4 |
-| 5 | Verify | Typecheck/lint/tests run now; re-read every changed location; re-run checks; evidence per finding. | `06-verify.md` | G5: zero `open` findings |
+| 5 | Verify | Typecheck/lint/tests run now; re-read every changed location; evidence per finding; independent verifier on the diff. | `06-verify.md` | G5 (script): zero `open` |
 
 Step-by-step detail for each phase: `references/phases.md`.
 
-**Static analysis is the primary audit** (`references/static-audit.md`): read code file by file against every rule in `references/rule-catalog.md`. Every rule ID must be accounted for **in strict sequential order** across the 5 section reports in `04-coverage/` (`VIOLATION` with finding, `PASS` with code proof, or justified `N/A`). Grep and the bundled scripts only produce candidates or runtime evidence; they never replace reading, and a script passing never proves a category clean.
+**Static analysis is the primary audit** (`references/static-audit.md`): read code file by file against every rule in `references/rule-catalog.md`. `verify_ledger.mjs init` generates the coverage files with every rule ID in order; each row is `PASS path:line "quote"`, `VIOLATION F-xxx` or `N/A grep:/regex/ reason`, and `check` fails any quote it cannot find, any false `N/A`, any omission. Grep and the other scripts only produce candidates or runtime evidence.
 
 ## Which reference, when
 
@@ -74,25 +74,26 @@ Read only what the current step needs.
 | MOT - motion, micro-interactions | `motion.md` |
 | SOUL, HUM - soulful craft, human laws | `craft.md` §§2–3 + §4 checklists |
 | Taste engineering & dials | `taste-engineering.md` - Three Dials, brief inference, archetypes |
-| Layout concepts & HTML prototypes | `interactive-prototypes.md` - 3 traced concepts, switcher shell, interactive dialogs/toasts, fidelity protocol |
+| The interactive concept and the tweak loop | `interactive-prototypes.md` - one concept, direction choice, fidelity rules, tweak loop |
+| PERF, I18N, THM and newer platform rules (FRM-25, A11Y-21, MOT-15, PERF-08, STA-12, ERR-11) | `platform-quality.md` |
 | Writing the plan | `plan-template.md` |
 | Updating this skill (not a UI) | `updating-skill.md` |
-| Optional runtime evidence (scripts are candidates, never verdicts) | `scripts/ui_audit.mjs`, `scripts/scan_patterns.mjs` |
+| Gate checks (required) and runtime evidence (optional) | `scripts/verify_ledger.mjs` (gates); `scripts/ui_audit.mjs`, `scripts/scan_patterns.mjs` (candidates, never verdicts) |
 
 ## Non-negotiables
 
 - **Scope is respected.** FOCUSED touches only the named problems; FULL leaves no catalog category or individual rule ID unchecked.
-- **Every rule ID is audited in strict sequential order.** In FULL mode, `04-coverage/` must account for every rule ID individually across its 5 section reports in exact numerical sequence (`LAY-01` through `AI-06`, including `FLW-01` to `FLW-04`, `TAB-01` to `TAB-07`, `UPL-01` to `UPL-06`, `NOT-01` to `NOT-05`, `NAV-11` to `NAV-12`, `HUM-01` to `HUM-08`, and `taste-engineering.md` standards) with concrete line-referenced proof or finding IDs. Blanket category-level skips, out-of-order evaluations, or unverified "clean" claims fail Gate G1.
+- **Every rule is accounted for, and the script says so.** FULL mode: every catalog rule has a row in `04-coverage/` and `verify_ledger.mjs check --gate g1` passes; FOCUSED: the same for the mapped categories (`--categories`). Lumped passes, unquoted `PASS`, unverifiable `N/A` and a hand-written "G1: PASS" fail the gate.
 - **Every state-changing flow gets a flow table before wireframes** (Gate G2): per step the entry, user action, validation `file:line`, pass → and fail → landing, plus the friction line; no step advances on invalid input and every failure names where the user lands (`references/user-flow.md`). `N/A: single-screen, no state change` allowed.
 - **App archetype & audience discovery precedes design.** Classify product archetype (SaaS / internal tool / consumer) and complete external domain research in `01-design.md`; never plan or prototype blindly.
 - **Every file in the surface is read in full** - child components, dialogs, hooks, and the API/server code behind lists and mutations.
 - **Every finding has a rule, quoted evidence, one fix, a severity and a status.** No finding without proof; no fix without a finding.
 - **Declutter before restructure.** A layout redesign decides Keep / Remove / Merge / Demote / Defer / Move for every visible element.
 - **Skeletons match redesigned UI.** When layout or components change, skeletons are redesigned in tandem to match the new UI - never reuse legacy skeletons.
-- **Concepts are traced, not invented.** Every value in `concepts/` cites the token ledger, every block cites inventory `file:line`, every toast/error/empty string is verbatim from the codebase; hallucinations fail G2.
+- **One concept, traced, tweaked in place.** Every colour cites the token ledger (`PLAN.md`), every block has `data-trace` to an inventory `file:line`, every feedback string `data-copy` from the codebase; the G2 script rejects the rest. User tweaks edit the same concept and the plan together.
 - **Behaviour is preserved.** Handlers, data hooks, routes, test ids and accessible names keep working. Backend changes (e.g. pagination) only as planned and approved, with every caller updated.
 - **Out-of-surface or risky problems** (auth, data integrity, other features) are logged and deferred, not fixed silently.
-- **Evidence before claims.** Never write "done", "fixed" or "works" without the command output, re-read line or screenshot that proves it, produced in this message.
+- **Evidence before claims.** Never write "done", "fixed", "checked" or "works" without the command output, re-read line or script PASS line produced in this message. A second reader (harness.md §6) re-reads the script's spot-check rows at G1 and the diff at G5.
 
 ## Final report (after G5)
 

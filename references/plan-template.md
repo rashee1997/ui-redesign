@@ -17,8 +17,8 @@ Request (verbatim): "<user's words>"
 Findings: <n> total - P0 <n> · P1 <n> · P2 <n> · P3 <n> (ledger: 03-findings.md)
 
 ## Approval
-Chosen Concept: <Concept A | Concept B | Concept C | custom blend>
-User Quote: <empty until the user approves - then quote their verbatim words and date>
+Chosen direction: <Structured | Balanced | Contextual | custom> - <one-sentence reason tied to the audience>
+Approved: <empty until the user approves - then `Approved rev N` and their verbatim words with date>
 
 ## 1. Summary
 <3-5 lines: what's wrong today, what the redesign does, what stays the same.>
@@ -71,7 +71,7 @@ Legacy structure: <one line naming the current layout, e.g. "stacked cards with 
 Friction: path ok | next visible | back safe | interruption ok — or fix: <change to the table>
 
 ## 5. Findings
-*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode, all 27 catalog categories and every rule ID have been individually audited across the section reports in 04-coverage/ (Gate G1). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
+*Summary by category with IDs; the full evidence lives in 03-findings.md. In FULL mode every catalog rule has a verified row in 04-coverage/ (Gate G1 script PASS). In FOCUSED mode, list only in-scope categories, plus a "Noticed, out of scope" list (not fixed). Severity is rated in the second pass (harness.md §3): record rows severity-free during the audit, P-rate the complete list after.*
 
 Row format: `- [Pn] <rule> <file:line> - <what> → <fix>` (ledger findings: `- F-0xx [Pn] <rule> …`). Shape of a good section — one or two rows per category, concrete file:line and fix in each:
 ### Breaks DESIGN.md rules
@@ -117,20 +117,29 @@ Baseline audit: overflow at <widths>; wrapped labels <n>; small targets <n>; bad
 | Element | Task it serves | Decision (Keep/Remove/Merge/Demote/Defer/Move) | Where it goes |
 |---|---|---|---|
 
-## 6. Proposed structure & Interactive concepts
-*Interactive HTML prototypes generated in `.ui-audit/<surface>/concepts/` (interactive-prototypes.md):*
-- **[Concepts Viewer Shell](./concepts/index.html)** (interactive switcher with mobile/tablet/desktop emulation)
-- **[Concept A: Structured / High-Density](./concepts/concept-a/index.html)** (or `concept-a.html`)
-- **[Concept B: Modern SaaS / Balanced](./concepts/concept-b/index.html)** (or `concept-b.html`)
-- **[Concept C: Contextual / Fluid](./concepts/concept-c/index.html)** (or `concept-c.html`)
+## 6. Proposed structure & the interactive concept
+*One interactive HTML concept in `.ui-audit/<surface>/concepts/index.html`, tweaked in place (interactive-prototypes.md). Directions are compared here in text, not in code.*
 
-### Concept fidelity (fails G2 if incomplete)
-*Token ledger lives in §2 above; every value below cites a ledger name, every block cites inventory, every feedback string cites its source (interactive-prototypes.md §7).*
-| Concept block | Inventory source (file:line) | Tokens used (ledger names) | Feedback copy source (file:line or §7 row) |
+### Directions considered
+| Direction | One-line model | Why chosen / not chosen (audience, density, time pressure) |
+|---|---|---|
+| Structured | … | … |
+| Balanced | … | **chosen** - … |
+| Contextual | … | … |
+
+- **[Concept](./concepts/index.html)** - current revision: <N>
+
+### Revision log
+*One row per user tweak; the user's words verbatim. Rows are never deleted.*
+| Rev | User words | What changed (concept + plan sections) | Files | G2 script |
+|---|---|---|---|---|
+| 1 | initial build | - | concepts/index.html | PASS |
+
+### Concept fidelity (the G2 script checks this)
+*The token ledger lives in §2. In the concept: every colour literal is in the ledger, every block has `data-trace="file:line"`, every feedback string has `data-copy="file:line"` (interactive-prototypes.md §4).*
+| Concept block | `data-trace` source (file:line) | Tokens used (ledger names) | `data-copy` source (file:line or §7 row) |
 |---|---|---|---|
 | … | … | … | … |
-- Hex hunt: <every hex/rgb/oklch literal in `concepts/` with its ledger row, or "none beyond ledger">
-- Shell chrome: <ledger tokens only, placeholders replaced>
 
 *Use the project's breakpoints if DESIGN.md defines them; otherwise phone ≈375, tablet ≈768, desktop ≥1280.*
 ### Phone (≈375px)
@@ -240,6 +249,7 @@ Baseline audit: overflow at <widths>; wrapped labels <n>; small targets <n>; bad
 
 ## 14. Verification
 - Every finding ID gets a line in 06-verify.md (how it was verified)
+- Gate scripts: `node <skill>/scripts/verify_ledger.mjs check .ui-audit/<slug> --gate g1|g2|g5` (paste each last line)
 - Commands: <typecheck / lint / test scripts from package.json>
 - Optional scan: `node <skill>/scripts/scan_patterns.mjs --path … --out .ui-audit/scan-after.md`
 - Optional runtime audit (if the app runs): `node <skill>/scripts/ui_audit.mjs --url … --out .ui-audit/after --loading-shot --press … [--open …]`
